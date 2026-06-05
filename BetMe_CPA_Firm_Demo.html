@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>BetMe InvoiceTrack — CPA Firm Portal · Korey Malek CPA</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f8fafc;--bg2:#fff;--bg3:#f1f5f9;--bg4:#e2e8f0;
+  --text:#0f172a;--text2:#475569;--text3:#94a3b8;
+  --bd:#e2e8f0;--bd2:#cbd5e1;
+  --teal:#00c896;--teal2:#00a87e;--tbg:rgba(0,200,150,.08);--tb:rgba(0,200,150,.25);
+  --amber:#f59e0b;--abg:rgba(245,158,11,.1);--ab:rgba(245,158,11,.3);
+  --red:#ef4444;--rbg:rgba(239,68,68,.1);--rb:rgba(239,68,68,.3);
+  --blue:#3b82f6;--bbg:rgba(59,130,246,.1);--bb:rgba(59,130,246,.3);
+  --navy:#0f1923;--navy2:#1a2636;--navy3:#243447;
+  --r:8px;--rl:12px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:13px;min-height:100vh}
+.screen{display:none;min-height:100vh}.screen.active{display:block}
+
+/* LOGIN */
+.ls{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);min-height:100vh;display:flex;align-items:center;justify-content:center}
+.lc{background:var(--bg2);border-radius:var(--rl);padding:36px 40px;width:380px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.ll{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:24px}
+.logo{width:40px;height:40px;background:var(--teal);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:var(--navy)}
+.lt{font-size:20px;font-weight:600;text-align:center;margin-bottom:4px}
+.ls2{font-size:12px;color:var(--text2);text-align:center;margin-bottom:22px}
+.fg{margin-bottom:14px}
+.fl{font-size:11px;font-weight:500;color:var(--text2);margin-bottom:4px;display:block;letter-spacing:.03em}
+input[type=email],input[type=password],input[type=text],input[type=number],select,textarea{width:100%;background:var(--bg3);border:1px solid var(--bd);border-radius:var(--r);padding:8px 11px;font-size:12px;color:var(--text);font-family:inherit;outline:none;transition:border-color .1s}
+input:focus,select:focus,textarea:focus{border-color:var(--teal);background:var(--bg2)}
+.lbtn{width:100%;background:var(--teal);border:none;border-radius:var(--r);color:var(--navy);font-size:13px;font-weight:600;padding:11px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s}
+.lbtn:hover{background:var(--teal2)}
+.creds{background:var(--bg3);border:1px solid var(--bd);border-radius:var(--r);padding:11px 13px;margin-top:14px}
+.cr-t{font-size:10px;font-weight:600;color:var(--text2);margin-bottom:6px;letter-spacing:.04em}
+.cr-r{display:flex;justify-content:space-between;font-size:11px;padding:3px 0}
+.cr-v{color:var(--teal);font-weight:500;font-family:monospace}
+
+/* APP */
+.app{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+.topbar{display:flex;align-items:center;gap:8px;padding:0 16px;height:48px;background:var(--navy);border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0}
+.tl{width:26px;height:26px;background:var(--teal);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--navy)}
+.tb{font-size:12px;font-weight:500;color:#f0f4f8;margin-right:6px}
+.tdiv{width:1px;height:18px;background:rgba(255,255,255,.12)}
+.tf{font-size:11px;color:#8fa3b8;display:flex;align-items:center;gap:5px}
+.tfb{font-size:9px;padding:2px 7px;border-radius:10px;background:rgba(0,200,150,.12);color:var(--teal);margin-left:4px}
+.tsep{flex:1}
+.tn{width:30px;height:30px;border-radius:6px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;cursor:pointer;color:#8fa3b8;font-size:17px;position:relative}
+.tnb{position:absolute;top:-3px;right:-3px;width:14px;height:14px;background:var(--amber);border-radius:50%;font-size:8px;font-weight:700;color:var(--navy);display:flex;align-items:center;justify-content:center}
+.tu{display:flex;align-items:center;gap:6px;cursor:pointer;padding:4px 8px;border-radius:var(--r)}
+.tu:hover{background:rgba(255,255,255,.06)}
+.tav{width:26px;height:26px;border-radius:50%;background:var(--bbg);border:1px solid var(--bb);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;color:var(--blue)}
+.tun{font-size:11px;color:#e2e8f0}
+.bk{background:transparent;border:1px solid rgba(255,255,255,.1);border-radius:var(--r);color:#8fa3b8;font-size:10px;padding:4px 10px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:4px;margin-left:4px;transition:all .1s}
+.bk:hover{background:rgba(255,255,255,.06)}
+
+.body{display:flex;flex:1;overflow:hidden}
+.sb{width:195px;background:var(--navy2);border-right:1px solid rgba(255,255,255,.07);flex-shrink:0;overflow-y:auto;display:flex;flex-direction:column}
+.ss{font-size:9px;color:#4a6480;padding:10px 13px 3px;letter-spacing:.08em;font-weight:600}
+.si{display:flex;align-items:center;gap:6px;padding:6px 13px;font-size:11px;color:#8fa3b8;cursor:pointer;border-left:2px solid transparent;transition:all .1s;user-select:none}
+.si:hover{background:rgba(255,255,255,.04);color:#e2e8f0}
+.si.active{color:var(--teal);background:rgba(0,200,150,.07);border-left-color:var(--teal)}
+.si i{font-size:15px}
+.sb-badge{font-size:8px;padding:1px 5px;border-radius:8px;margin-left:auto;font-weight:600}
+.bw{background:var(--abg);color:var(--amber);border:1px solid var(--ab)}
+.bok{background:var(--tbg);color:var(--teal);border:1px solid var(--tb)}
+.cchip{margin:3px 9px;padding:6px 9px;border-radius:var(--r);border:1px solid rgba(255,255,255,.07);cursor:pointer;transition:all .1s}
+.cchip:hover{border-color:rgba(255,255,255,.15);background:rgba(255,255,255,.03)}
+.cchip.sel{border-color:var(--tb);background:rgba(0,200,150,.05)}
+.ccn{font-size:11px;font-weight:500;color:#e2e8f0}
+.ccm{font-size:9px;color:#4a6480;margin-top:1px}
+.sdot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:4px;vertical-align:middle}
+.dok{background:var(--teal)}.dw{background:var(--amber)}.dn{background:#4a6480}
+.sbot{margin-top:auto;padding:10px}
+.sbb{width:100%;background:transparent;border:1px solid rgba(255,255,255,.1);border-radius:var(--r);color:#8fa3b8;font-size:10px;padding:7px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:5px}
+.sbb:hover{background:rgba(255,255,255,.05)}
+
+.main{flex:1;overflow-y:auto;background:var(--bg3);padding:16px}
+.pg{display:none}.pg.active{display:block}
+
+/* GUIDE */
+.guide{background:linear-gradient(90deg,rgba(0,200,150,.06),transparent);border-left:3px solid var(--teal);border-radius:0 var(--r) var(--r) 0;padding:9px 13px;margin-bottom:13px;font-size:10px;color:var(--text2);line-height:1.6;display:flex;gap:9px}
+.guide i{color:var(--teal);font-size:15px;flex-shrink:0;margin-top:1px}
+
+/* CARDS */
+.card{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--rl);margin-bottom:12px;overflow:hidden}
+.ch{padding:9px 13px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.ct{font-size:12px;font-weight:500}
+.cs{font-size:10px;color:var(--text2)}
+.cp{padding:13px}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:13px}
+.met{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);padding:11px 13px}
+.mv{font-size:21px;font-weight:600;line-height:1.1}
+.ml{font-size:9px;color:var(--text2);margin-top:2px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:11px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:11px}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed}
+.tbl th{text-align:left;padding:7px 10px;border-bottom:1px solid var(--bd);font-weight:500;font-size:9px;color:var(--text3);letter-spacing:.04em}
+.tbl td{padding:7px 10px;border-bottom:1px solid var(--bd);vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr.cr:hover td{background:var(--bg3);cursor:pointer}
+
+/* PILLS */
+.pill{display:inline-block;font-size:8px;padding:2px 6px;border-radius:20px;font-weight:500}
+.p-ok{background:#dcfce7;color:#166534}.p-warn{background:#fef3c7;color:#92400e}
+.p-info{background:#dbeafe;color:#1e40af}.p-neu{background:var(--bg3);color:var(--text2);border:1px solid var(--bd)}
+.p-err{background:#fee2e2;color:#991b1b}
+.badge{font-size:9px;padding:2px 7px;border-radius:var(--r);font-weight:500}
+.bt{background:var(--tbg);color:var(--teal2);border:1px solid var(--tb)}
+.bb2{background:var(--bbg);color:var(--blue);border:1px solid var(--bb)}
+.ba{background:var(--abg);color:var(--amber);border:1px solid var(--ab)}
+.bg2{background:var(--bg3);color:var(--text2);border:1px solid var(--bd)}
+
+.ok{color:var(--teal)}.warn{color:var(--amber)}.bad{color:var(--red)}.blue{color:var(--blue)}
+
+/* BUTTONS */
+.btn{background:var(--bg2);border:1px solid var(--bd2);border-radius:var(--r);color:var(--text2);font-size:11px;padding:5px 12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:4px;transition:all .1s;white-space:nowrap}
+.btn:hover{background:var(--bg3)}
+.btn-p{background:var(--teal);border-color:var(--teal);color:var(--navy);font-weight:600}
+.btn-p:hover{background:var(--teal2)}
+.btn-d{border-color:var(--rb);color:var(--red)}
+.btn-d:hover{background:var(--rbg)}
+.btn-b{border-color:var(--bb);color:var(--blue)}
+.btn-b:hover{background:var(--bbg)}
+.row{display:flex;align-items:flex-start;gap:7px;padding:6px 0;border-bottom:1px solid var(--bd);font-size:11px}
+.row:last-child{border-bottom:none}
+
+/* INVOICE DETAIL SPLIT */
+.inv-split{display:grid;grid-template-columns:1fr 340px;gap:12px;min-height:480px}
+.pdf-panel{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--rl);overflow:hidden;display:flex;flex-direction:column}
+.pdf-toolbar{background:var(--bg3);border-bottom:1px solid var(--bd);padding:8px 12px;display:flex;align-items:center;gap:8px;font-size:10px;color:var(--text2);flex-wrap:wrap}
+.pdf-body{flex:1;overflow-y:auto;padding:16px;background:#f8f8f8;display:flex;justify-content:center}
+.pdf-doc{background:#fff;border-radius:4px;width:100%;max-width:380px;padding:18px;font-size:9px;color:#222;box-shadow:0 1px 4px rgba(0,0,0,.12);line-height:1.6}
+.pdf-hdr{font-size:12px;font-weight:700;color:#0f172a;margin-bottom:2px}
+.pdf-addr{font-size:8px;color:#64748b;margin-bottom:10px}
+.pdf-rule{border:none;border-top:2px solid #0f172a;margin:8px 0}
+.pdf-kv{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
+.pdf-label{font-size:7px;color:#94a3b8;text-transform:uppercase;letter-spacing:.04em;margin-bottom:1px}
+.pdf-lh{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2px;font-size:7px;color:#94a3b8;border-bottom:1px solid #e2e8f0;padding-bottom:3px;margin-bottom:4px}
+.pdf-lr{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2px;padding:3px 0;border-bottom:1px solid #f1f5f9;font-size:8px;color:#374151}
+.pdf-tots{margin-top:10px;border-top:1px solid #e2e8f0;padding-top:6px}
+.pdf-tr{display:flex;justify-content:space-between;font-size:8px;color:#4b5563;margin-bottom:2px}
+.pdf-tf{font-weight:700;color:#0f172a;font-size:9px;border-top:1px solid #cbd5e1;padding-top:3px;margin-top:3px}
+.data-panel{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--rl);overflow:hidden;display:flex;flex-direction:column}
+.dp-section{padding:10px 13px;border-bottom:1px solid var(--bd)}
+.dp-section:last-child{border-bottom:none}
+.dp-lbl{font-size:9px;color:var(--text3);letter-spacing:.06em;margin-bottom:7px;font-weight:500}
+.frow{display:flex;justify-content:space-between;align-items:flex-start;padding:4px 0;border-bottom:1px solid var(--bd);font-size:10px;gap:8px}
+.frow:last-child{border-bottom:none}
+.fn{color:var(--text2);flex-shrink:0}
+.fv{font-weight:500;text-align:right;max-width:55%;word-break:break-word;white-space:normal}
+.fv-ok{color:var(--teal);font-weight:500;text-align:right}
+.fv-w{color:var(--amber);font-weight:500;text-align:right}
+.fv-b{color:var(--red);font-weight:500;text-align:right}
+
+/* NOTES */
+.note-item{background:var(--bg3);border-radius:var(--r);padding:8px 10px;margin-bottom:6px;font-size:10px}
+.note-meta{font-size:9px;color:var(--text3);margin-bottom:3px}
+.note-txt{color:var(--text)}
+
+/* GL CODING */
+.gl-badge{display:inline-flex;align-items:center;gap:4px;font-size:9px;padding:2px 8px;border-radius:20px;border:1px solid var(--bd);background:var(--bg3);cursor:pointer;margin:2px}
+.gl-badge:hover{border-color:var(--tb);background:var(--tbg)}
+.gl-badge.sel{border-color:var(--tb);background:var(--tbg);color:var(--teal2)}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--teal);color:var(--navy);font-size:12px;font-weight:600;padding:10px 18px;border-radius:var(--r);z-index:9999;display:none;box-shadow:0 4px 14px rgba(0,200,150,.3)}
+
+/* BREADCRUMB */
+.bc{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2);margin-bottom:12px}
+.bc span{cursor:pointer;color:var(--teal)}.bc span:hover{text-decoration:underline}
+.bc-sep{color:var(--text3)}
+
+/* VENDOR TABLE */
+.vendor-card{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--rl);padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:all .1s;display:flex;align-items:center;gap:12px}
+.vendor-card:hover{border-color:var(--bd2);box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.vendor-card.sel{border-color:var(--tb);background:var(--tbg)}
+.va{width:38px;height:38px;border-radius:var(--r);background:var(--bbg);border:1px solid var(--bb);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--blue);flex-shrink:0}
+.vn{font-size:12px;font-weight:500}
+.vm{font-size:10px;color:var(--text2);margin-top:1px}
+.bar-t{height:4px;background:var(--bg4);border-radius:2px;overflow:hidden;margin-top:3px;width:80px}
+.bar-f{height:4px;border-radius:2px;background:var(--teal)}
+.bar-w2{background:var(--amber)}
+
+/* TL */
+.tlrow{display:flex;gap:7px;padding:4px 0;font-size:10px;align-items:flex-start}
+.tld{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.td-ok{background:var(--teal)}.td-w{background:var(--amber)}.td-n{background:var(--bd2)}
+.tlt{font-size:9px;color:var(--text3);min-width:60px}
+
+/* MODAL */
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center}
+.mo.open{display:flex}
+.md{background:var(--bg2);border-radius:var(--rl);padding:22px;max-width:480px;width:90%;max-height:85vh;overflow-y:auto;position:relative}
+.md-t{font-size:16px;font-weight:600;margin-bottom:3px}
+.md-s{font-size:11px;color:var(--text2);margin-bottom:16px}
+.mc{position:absolute;top:14px;right:14px;background:none;border:none;font-size:18px;cursor:pointer;color:var(--text3)}
+
+/* DOWNLOAD ACTIONS */
+.dl-row{display:flex;align-items:center;justify-content:space-between;padding:10px 13px;border-bottom:1px solid var(--bd);font-size:11px}
+.dl-row:last-child{border-bottom:none}
+.dl-info{flex:1}
+.dl-name{font-weight:500;margin-bottom:2px}
+.dl-desc{font-size:9px;color:var(--text2)}
+.dl-btns{display:flex;gap:5px;flex-shrink:0}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="screen active" id="s-login">
+<div class="ls">
+<div class="lc">
+  <div class="ll">
+    <div class="logo">B</div>
+    <span style="font-size:16px;font-weight:600">BetMe InvoiceTrack</span>
+  </div>
+  <div class="lt">CPA Firm Portal</div>
+  <div class="ls2">Sign in to manage your client portfolio</div>
+  <div class="fg"><label class="fl">EMAIL ADDRESS</label><input type="email" value="k.malek@koreymalekcpa.com"></div>
+  <div class="fg"><label class="fl">PASSWORD</label><input type="password" value="KMalek2026!"></div>
+  <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:14px">
+    <label style="display:flex;align-items:center;gap:5px;cursor:pointer;color:var(--text2)"><input type="checkbox" style="width:13px;height:13px;accent-color:var(--teal)" checked> Remember me</label>
+    <a href="#" style="color:var(--teal);text-decoration:none">Forgot password?</a>
+  </div>
+  <button class="lbtn" onclick="goto('s-app')"><i class="ti ti-login"></i> Sign in</button>
+  <div style="text-align:center;margin:12px 0;font-size:11px;color:var(--text3);position:relative"><hr style="border-color:var(--bd)"><span style="background:var(--bg2);position:relative;padding:0 10px;margin-top:-8px;display:inline-block">Demo credentials</span></div>
+  <div class="creds">
+    <div class="cr-t">PRE-FILLED — JUST CLICK SIGN IN</div>
+    <div class="cr-r"><span style="color:var(--text3)">Firm</span><span class="cr-v">Korey Malek CPA</span></div>
+    <div class="cr-r"><span style="color:var(--text3)">Email</span><span class="cr-v">k.malek@koreymalekcpa.com</span></div>
+    <div class="cr-r"><span style="color:var(--text3)">Password</span><span class="cr-v">KMalek2026!</span></div>
+    <div class="cr-r"><span style="color:var(--text3)">Plan</span><span class="cr-v">Firm Pro · White-label</span></div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- APP -->
+<div class="screen" id="s-app">
+<div class="app">
+<div class="topbar">
+  <div class="tl">B</div><span class="tb">InvoiceTrack</span>
+  <div class="tdiv"></div>
+  <div class="tf">
+    <div style="width:18px;height:18px;background:var(--bbg);border:1px solid var(--bb);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:var(--blue)">KM</div>
+    Korey Malek CPA<span class="tfb">Firm Pro · White-label</span>
+  </div>
+  <div class="tsep"></div>
+  <div class="tn" onclick="toast('4 exceptions need review across your portfolio')"><i class="ti ti-bell" aria-hidden="true"></i><div class="tnb">4</div></div>
+  <div class="tu"><div class="tav">KM</div><span class="tun">Korey Malek, CPA</span></div>
+  <button class="bk" onclick="goto('s-login')"><i class="ti ti-logout" aria-hidden="true"></i> Sign out</button>
+</div>
+
+<div class="body">
+<div class="sb">
+  <div class="ss">Portfolio</div>
+  <div class="si active" data-p="portfolio" onclick="nav(this)"><i class="ti ti-layout-dashboard" aria-hidden="true"></i>Dashboard</div>
+  <div class="si" data-p="exceptions" onclick="nav(this)"><i class="ti ti-alert-triangle" aria-hidden="true"></i>Exceptions <span class="sb-badge bw">4</span></div>
+  <div class="si" data-p="downloads" onclick="nav(this)"><i class="ti ti-download" aria-hidden="true"></i>Downloads & Reports</div>
+  <div class="ss">Jump to client</div>
+  <div class="cchip sel" onclick="navClient('acme')"><div><span class="sdot dok"></span><span class="ccn">Acme Hardware LLC</span></div><div class="ccm">47 inv · Growth plan</div></div>
+  <div class="cchip" onclick="navClient('rivera')"><div><span class="sdot dok"></span><span class="ccn">Rivera & Sons</span></div><div class="ccm">31 inv · Scale plan</div></div>
+  <div class="cchip" onclick="navClient('gulf')"><div><span class="sdot dw"></span><span class="ccn">Gulf Realty Group</span></div><div class="ccm">4 exceptions ⚠</div></div>
+  <div class="cchip" onclick="navClient('metro')"><div><span class="sdot dok"></span><span class="ccn">Metro Supplies</span></div><div class="ccm">22 inv · Starter</div></div>
+  <div class="ss">Firm tools</div>
+  <div class="si" data-p="billing" onclick="nav(this)"><i class="ti ti-receipt" aria-hidden="true"></i>Firm billing</div>
+  <div class="si" data-p="whitelabel" onclick="nav(this)"><i class="ti ti-palette" aria-hidden="true"></i>White-label</div>
+  <div class="si" data-p="approval" onclick="nav(this)"><i class="ti ti-check" aria-hidden="true"></i>Approval rules</div>
+  <div class="sbot"><button class="sbb" onclick="goto('s-login')"><i class="ti ti-logout" aria-hidden="true"></i> Sign out</button></div>
+</div>
+
+<div class="main"><div id="pages"></div></div>
+</div>
+</div>
+</div>
+
+<!-- APPROVE MODAL -->
+<div class="mo" id="mo-approve">
+<div class="md">
+  <button class="mc" onclick="closeModal()"><i class="ti ti-x" aria-hidden="true"></i></button>
+  <div class="md-t">Review exception invoice</div>
+  <div class="md-s">CM838572P · Stingray Chevrolet · -$674.29</div>
+  <div style="background:var(--abg);border:1px solid var(--ab);border-radius:var(--r);padding:9px 11px;font-size:10px;color:#92400e;margin-bottom:14px"><i class="ti ti-alert-triangle" aria-hidden="true"></i> <strong>Credit note.</strong> Negative -$674.29. Post as credit memo in QuickBooks to reduce AP balance.</div>
+  <div class="g2">
+    <div><div class="fl">DOC TYPE</div><input type="text" value="CREDIT_NOTE" style="border-color:var(--ab)"></div>
+    <div><div class="fl">TOTAL</div><input type="text" value="-$674.29" style="border-color:var(--ab)"></div>
+    <div><div class="fl">VENDOR</div><input type="text" value="Stingray Chevrolet"></div>
+    <div><div class="fl">GL ACCOUNT</div><select><option>5010 · COGS</option><option>2000 · AP</option></select></div>
+  </div>
+  <div class="fl">REVIEWER NOTE</div>
+  <textarea rows="2" style="margin-bottom:12px;resize:none">Credit note — return auth #RA-2026-047 confirmed on file.</textarea>
+  <div style="display:flex;gap:8px">
+    <button class="btn btn-p" onclick="closeModal();toast('✓ Approved as credit note — credit memo queued for QuickBooks')"><i class="ti ti-check" aria-hidden="true"></i> Approve</button>
+    <button class="btn btn-d" onclick="closeModal()"><i class="ti ti-x" aria-hidden="true"></i> Reject</button>
+  </div>
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var CP='portfolio', CC=null, CV=null, CI=null;
+
+var clients=[
+  {id:'acme',name:'Acme Hardware LLC',plan:'Growth',inv:6,vol:34638.71,proc:4,exc:2,ai:'94.2%',st:'ok',erp:'QuickBooks',since:'Jan 2026'},
+  {id:'rivera',name:'Rivera & Sons',plan:'Scale',inv:2,vol:30500,proc:2,exc:0,ai:'97.1%',st:'ok',erp:'NetSuite',since:'Feb 2026'},
+  {id:'gulf',name:'Gulf Realty Group',plan:'Growth',inv:4,vol:27925.71,proc:0,exc:4,ai:'79.4%',st:'warn',erp:'Xero',since:'Mar 2026'},
+  {id:'metro',name:'Metro Supplies',plan:'Starter',inv:3,vol:18900,proc:3,exc:0,ai:'98.6%',st:'ok',erp:'QuickBooks',since:'Apr 2026'},
+];
+
+var invoices=[
+  {id:'WO-620399',vendor:'Prime Glass',vid:'PG',date:'2026-05-12',rec:'2026-05-22',due:'2026-06-11',amt:207.00,st:'processed',ai:96,gl:'5010 · COGS',cc:'CC-002',terms:'Net 30',tax:0,sub:200,client:'acme',flag:'',taxid:'27-1240448'},
+  {id:'CM838572P',vendor:'Stingray Chevrolet',vid:'SC',date:'2026-05-05',rec:'2026-05-22',due:'—',amt:-674.29,st:'review',ai:82,gl:'—',cc:'—',terms:'WHSL',tax:0,sub:-674.29,client:'acme',flag:'Credit note · two copies in file',taxid:'59-1234567'},
+  {id:'INV-2847',vendor:'Office Depot',vid:'OD',date:'2026-05-19',rec:'2026-05-19',due:'2026-06-18',amt:1240.00,st:'processed',ai:99,gl:'6100 · Office',cc:'CC-001',terms:'Net 30',tax:0,sub:1240,client:'acme',flag:'',taxid:'59-2342412'},
+  {id:'INV-2846',vendor:'FedEx Freight',vid:'FF',date:'2026-05-18',rec:'2026-05-18',due:'2026-06-17',amt:3871.00,st:'processed',ai:97,gl:'6200 · Freight',cc:'60/40 split',terms:'Net 30',tax:0,sub:3871,client:'acme',flag:'',taxid:'71-0427400'},
+  {id:'INV-2845',vendor:'ElectroParts Co',vid:'EC',date:'2026-05-18',rec:'2026-05-18',due:'2026-06-17',amt:12400.00,st:'review',ai:71,gl:'—',cc:'—',terms:'Net 30',tax:450,sub:11950,client:'acme',flag:'Tax mismatch — $450 stated ≠ $1,852 expected at 15.5%',taxid:'82-3456789'},
+  {id:'INV-2844',vendor:'Global Steel Inc',vid:'GS',date:'2026-05-17',rec:'2026-05-17',due:'2026-06-16',amt:28900.00,st:'processed',ai:98,gl:'5010 · COGS',cc:'CC-002',terms:'Net 30',tax:0,sub:28900,client:'acme',flag:'',taxid:'45-1234567'},
+  {id:'RIV-1140',vendor:'Harbor Concrete',vid:'HC',date:'2026-05-20',rec:'2026-05-20',due:'2026-06-19',amt:8400.00,st:'processed',ai:97,gl:'5010 · COGS',cc:'CC-001',terms:'Net 30',tax:0,sub:8400,client:'rivera',flag:'',taxid:'55-9876543'},
+  {id:'RIV-1141',vendor:'US Steel Supply',vid:'US',date:'2026-05-19',rec:'2026-05-19',due:'2026-06-18',amt:22100.00,st:'processed',ai:95,gl:'5010 · COGS',cc:'CC-001',terms:'Net 30',tax:0,sub:22100,client:'rivera',flag:'',taxid:'44-1234567'},
+  {id:'GR-3801',vendor:'Stingray Chevrolet',vid:'SC',date:'2026-05-05',rec:'2026-05-22',due:'—',amt:-674.29,st:'review',ai:82,gl:'—',cc:'—',terms:'WHSL',tax:0,sub:-674.29,client:'gulf',flag:'Credit note — verify return'},
+  {id:'GR-3802',vendor:'ElectroParts Co',vid:'EC',date:'2026-05-18',rec:'2026-05-18',due:'2026-06-17',amt:12400.00,st:'review',ai:71,gl:'—',cc:'—',terms:'Net 30',tax:450,sub:11950,client:'gulf',flag:'Tax mismatch'},
+  {id:'GR-3803',vendor:'Harbor Logistics',vid:'HL',date:'2026-05-20',rec:'2026-05-20',due:'2026-06-19',amt:6200.00,st:'review',ai:68,gl:'—',cc:'—',terms:'Net 30',tax:0,sub:6200,client:'gulf',flag:'Math error — verify totals'},
+  {id:'GR-3804',vendor:'Pacific Steel Co',vid:'PS',date:'2026-05-19',rec:'2026-05-19',due:'2026-06-18',amt:8900.00,st:'review',ai:88,gl:'—',cc:'—',terms:'Net 30',tax:0,sub:8900,client:'gulf',flag:'New vendor — no default GL coding'},
+  {id:'MT-2201',vendor:'Metro Parts Inc',vid:'MP',date:'2026-05-15',rec:'2026-05-15',due:'2026-06-14',amt:7400.00,st:'processed',ai:98,gl:'5010 · COGS',cc:'CC-001',terms:'Net 30',tax:0,sub:7400,client:'metro',flag:''},
+  {id:'MT-2202',vendor:'Office Zone',vid:'OZ',date:'2026-05-10',rec:'2026-05-10',due:'2026-06-09',amt:840.00,st:'processed',ai:99,gl:'6100 · Office',cc:'CC-001',terms:'Net 30',tax:0,sub:840,client:'metro',flag:''},
+  {id:'MT-2203',vendor:'Swift Delivery',vid:'SD',date:'2026-05-08',rec:'2026-05-08',due:'2026-06-07',amt:10660.00,st:'processed',ai:96,gl:'6200 · Freight',cc:'CC-002',terms:'Net 30',tax:0,sub:10660,client:'metro',flag:''},
+];
+
+var notes={};
+function f$(n){return n<0?'-$'+Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}):'$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function aiC(n){return n>=95?'var(--teal)':n>=80?'var(--amber)':'var(--red)';}
+function pill(s){var m={processed:'p-ok',review:'p-warn',ok:'p-ok',warn:'p-warn',setup:'p-info'};var l={processed:'Processed',review:'In review',ok:'Active',warn:'Attention',setup:'Onboarding'};return`<span class="pill ${m[s]||'p-neu'}">${l[s]||s}</span>`;}
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',2800);}
+function closeModal(){document.querySelectorAll('.mo').forEach(m=>m.classList.remove('open'));}
+function guide(t,b){return`<div class="guide"><i class="ti ti-bulb" aria-hidden="true"></i><div><strong>${t}</strong> — ${b}</div></div>`;}
+
+function goto(s){
+  document.querySelectorAll('.screen').forEach(el=>el.classList.remove('active'));
+  document.getElementById(s).classList.add('active');
+  if(s==='s-app'){CP='portfolio';CC=null;CV=null;CI=null;render();}
+  window.scrollTo(0,0);
+}
+
+function nav(el){
+  document.querySelectorAll('.si').forEach(n=>n.classList.remove('active'));
+  el.classList.add('active'); CP=el.dataset.p; CC=null; CV=null; CI=null; render();
+}
+
+function navClient(id){
+  CC=id; CV=null; CI=null; CP='client-invoices';
+  document.querySelectorAll('.si').forEach(n=>n.classList.remove('active'));
+  document.querySelectorAll('.cchip').forEach((c,i)=>c.classList.toggle('sel',['acme','rivera','gulf','metro'][i]===id));
+  render();
+}
+
+function render(){
+  var m=document.getElementById('pages');
+  if(CP==='portfolio') m.innerHTML=pgPortfolio();
+  else if(CP==='exceptions') m.innerHTML=pgExceptions();
+  else if(CP==='downloads') m.innerHTML=pgDownloads();
+  else if(CP==='billing') m.innerHTML=pgBilling();
+  else if(CP==='whitelabel') m.innerHTML=pgWhitelabel();
+  else if(CP==='approval') m.innerHTML=pgApproval();
+  else if(CP==='client-invoices') m.innerHTML=pgClientInvoices();
+  else if(CP==='client-vendors') m.innerHTML=pgVendors();
+  else if(CP==='invoice-detail') m.innerHTML=pgInvoiceDetail();
+  else m.innerHTML=pgPortfolio();
+}
+
+// ── PORTFOLIO ──────────────────────────────────────────────
+function pgPortfolio(){
+  return guide('Portfolio dashboard','Your complete portfolio at a glance. <strong>Click any client row or sidebar chip to dive in</strong> — you\'ll see their vendors, invoices, and can open any invoice for the full detail view with the original PDF.')+
+  `<div class="metrics">
+    <div class="met"><div class="mv">${clients.length}</div><div class="ml">Active clients</div></div>
+    <div class="met"><div class="mv ok">${invoices.length}</div><div class="ml">Invoices this month</div></div>
+    <div class="met"><div class="mv warn">4</div><div class="ml">Exceptions pending</div></div>
+    <div class="met"><div class="mv ok">$112K</div><div class="ml">Total AP volume</div></div>
+  </div>`+
+  `<div class="card"><div class="ch"><span class="ct">All clients — May 2026</span><span class="cs">Click any row to open that client</span></div>
+  <table class="tbl"><thead><tr>
+    <th style="width:22%">Client</th><th style="width:10%">Plan</th><th style="width:9%">Inv.</th>
+    <th style="width:12%">AP volume</th><th style="width:10%">Processed</th><th style="width:10%">Exceptions</th>
+    <th style="width:10%">AI avg</th><th style="width:8%">ERP</th><th style="width:9%">Status</th>
+  </tr></thead><tbody>`+
+  clients.map(c=>`<tr class="cr" onclick="navClient('${c.id}')">
+    <td style="font-weight:500">${c.name}</td><td>${c.plan}</td><td>${c.inv}</td>
+    <td>$${Math.round(c.vol).toLocaleString()}</td>
+    <td class="ok">${c.proc}</td>
+    <td style="color:${c.exc>0?'var(--amber)':'var(--text2)'}">${c.exc>0?c.exc+' pending ⚠':'—'}</td>
+    <td style="color:${c.ai==='—'?'var(--text3)':parseFloat(c.ai)<90?'var(--amber)':'var(--teal)'}">${c.ai}</td>
+    <td style="font-size:10px">${c.erp}</td><td>${pill(c.st)}</td>
+  </tr>`).join('')+`</tbody></table></div>`+
+  `<div class="g2">
+    <div class="card"><div class="ch"><span class="ct">Cross-portfolio exceptions</span></div><div class="cp">`+
+    invoices.filter(i=>i.st==='review').slice(0,4).map(i=>{
+      var cl=clients.find(c=>c.id===i.client);
+      return `<div style="display:flex;gap:7px;padding:6px 0;border-bottom:1px solid var(--bd);font-size:11px;align-items:flex-start">
+        <div style="width:7px;height:7px;border-radius:50%;background:var(--amber);flex-shrink:0;margin-top:3px"></div>
+        <div style="min-width:50px;font-size:9px;color:var(--text3)">${i.rec.slice(5).replace('-','/')}</div>
+        <div style="flex:1"><div style="font-weight:500">${i.id} <span style="font-size:9px;color:var(--text2)">· ${cl.name}</span></div>
+        <div style="font-size:9px;color:var(--amber)">${i.flag||'Review needed'}</div></div>
+        <button class="btn" style="font-size:9px;padding:2px 7px" onclick="event.stopPropagation();navClient('${i.client}');setTimeout(()=>{CI='${i.id}';CP='invoice-detail';render();},50)">View</button>
+      </div>`;}).join('')+`</div></div>
+    <div class="card"><div class="ch"><span class="ct">AP volume by client</span></div><div class="cp">`+
+    clients.sort((a,b)=>b.vol-a.vol).map(c=>`
+      <div style="margin-bottom:9px;cursor:pointer" onclick="navClient('${c.id}')">
+        <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px">
+          <span>${c.name}</span><span class="ok" style="font-weight:500">$${Math.round(c.vol).toLocaleString()}</span>
+        </div>
+        <div class="bar-t" style="width:100%"><div class="bar-f" style="width:${Math.round(c.vol/112000*100)}%"></div></div>
+      </div>`).join('')+`</div></div>
+  </div>`;
+}
+
+// ── CLIENT INVOICES ─────────────────────────────────────────
+function pgClientInvoices(){
+  var cl=clients.find(c=>c.id===CC);
+  if(!cl) return pgPortfolio();
+  var cInv=invoices.filter(i=>i.client===CC);
+  var vendors=[...new Set(cInv.map(i=>i.vendor))];
+  return `<div class="bc"><span onclick="CP='portfolio';render()">Portfolio</span><span class="bc-sep">›</span><strong>${cl.name}</strong></div>`+
+  guide('Client invoices — '+cl.name,'<strong>Click any vendor</strong> to see their invoices, or <strong>click any invoice row</strong> to open the full detail view with the original PDF on the right, extracted data on the left, plus GL coding, notes, and all actions.')+
+  `<div class="metrics">
+    <div class="met"><div class="mv">${cInv.length}</div><div class="ml">Invoices this month</div></div>
+    <div class="met"><div class="mv ok">$${Math.round(cl.vol).toLocaleString()}</div><div class="ml">AP volume</div></div>
+    <div class="met"><div class="mv ok">${cl.proc}</div><div class="ml">Processed ✓</div></div>
+    <div class="met"><div class="mv ${cl.exc>0?'warn':'ok'}">${cl.exc}</div><div class="ml">Exceptions ⚠</div></div>
+  </div>`+
+  (cl.exc>0?`<div style="background:var(--abg);border:1px solid var(--ab);border-radius:var(--r);padding:9px 12px;font-size:10px;color:#92400e;margin-bottom:12px"><i class="ti ti-alert-triangle" aria-hidden="true"></i> <strong>${cl.exc} invoices need review</strong> — click any row marked "In review" to open the detail panel.</div>`:'')+
+  `<div class="g2">
+    <div class="card"><div class="ch"><span class="ct">Vendors (${vendors.length})</span><span class="cs">Click to filter</span></div><div class="cp" style="padding:8px">`+
+    vendors.map(v=>{
+      var vInv=cInv.filter(i=>i.vendor===v);
+      var total=vInv.reduce((s,i)=>s+i.amt,0);
+      var initials=v.split(' ').slice(0,2).map(w=>w[0]).join('');
+      return `<div class="vendor-card ${CV===v?'sel':''}" onclick="CV='${v}';render()">
+        <div class="va">${initials}</div>
+        <div style="flex:1">
+          <div class="vn">${v}</div>
+          <div class="vm">${vInv.length} invoice${vInv.length>1?'s':''} · AI avg ${Math.round(vInv.reduce((s,i)=>s+i.ai,0)/vInv.length)}%</div>
+          <div class="bar-t"><div class="bar-f" style="width:${Math.round(Math.abs(total)/Math.max(...cInv.map(i=>Math.abs(i.amt)))*100)}%"></div></div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:12px;font-weight:600;color:${total<0?'var(--red)':'var(--teal)'}">${f$(total)}</div>
+          <div style="font-size:9px;color:var(--text3)">total</div>
+        </div>
+      </div>`;}).join('')+`</div></div>
+    <div class="card"><div class="ch">
+      <span class="ct">${CV?'Invoices — '+CV:'All invoices'}</span>
+      <div style="display:flex;gap:5px">${CV?`<button class="btn" style="font-size:9px;padding:2px 8px" onclick="CV=null;render()">Clear filter</button>`:''}
+      <button class="btn btn-p" style="font-size:9px" onclick="toast('✓ QuickBooks_May2026_${CC}.iif downloaded')"><i class="ti ti-download" aria-hidden="true"></i> QB export</button>
+      </div>
+    </div>
+    <table class="tbl"><thead><tr>
+      <th style="width:16%">Invoice #</th><th style="width:19%">Vendor</th><th style="width:10%">Date</th>
+      <th style="width:10%">Amount</th><th style="width:14%">GL account</th><th style="width:9%">Status</th><th style="width:7%">AI</th>
+    </tr></thead><tbody>`+
+    cInv.filter(i=>!CV||i.vendor===CV).map(i=>`
+      <tr class="cr" onclick="CI='${i.id}';CP='invoice-detail';render()">
+        <td>${i.id}</td><td>${i.vendor}</td><td>${i.date.slice(5).replace('-','/')}</td>
+        <td style="color:${i.amt<0?'var(--red)':'var(--text)'}">${f$(i.amt)}</td>
+        <td style="font-size:9px;color:var(--text2)">${i.gl}</td>
+        <td>${pill(i.st)}</td>
+        <td style="font-size:10px;font-weight:500;color:${aiC(i.ai)}">${i.ai}%</td>
+      </tr>`).join('')+`</tbody></table></div>
+  </div>`;
+}
+
+// ── INVOICE DETAIL ──────────────────────────────────────────
+function pgInvoiceDetail(){
+  var inv=invoices.find(i=>i.id===CI);
+  if(!inv) return pgClientInvoices();
+  var cl=clients.find(c=>c.id===inv.client);
+  var invNotes=notes[inv.id]||[];
+  var isPrime=inv.id==='WO-620399', isC=inv.id==='CM838572P'||inv.id==='GR-3801';
+  var isExc=inv.st==='review';
+
+  return `<div class="bc">
+    <span onclick="CP='portfolio';render()">Portfolio</span><span class="bc-sep">›</span>
+    <span onclick="CP='client-invoices';CV=null;render()">${cl.name}</span><span class="bc-sep">›</span>
+    <strong>${inv.id}</strong>
+  </div>`+
+  (isExc?`<div style="background:var(--abg);border:1px solid var(--ab);border-radius:var(--r);padding:9px 12px;font-size:10px;color:#92400e;margin-bottom:12px"><i class="ti ti-alert-triangle" aria-hidden="true"></i> <strong>Needs review — ${inv.flag}</strong></div>`:'')+
+  `<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+    <button class="btn" onclick="CP='client-invoices';CV=inv?inv.vendor:null;render()"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back</button>
+    <span style="font-size:14px;font-weight:600">${inv.id}</span>
+    ${pill(inv.st)}
+    <span style="font-size:10px;font-weight:500;color:${aiC(inv.ai)}">${inv.ai}% confidence</span>
+    <div style="margin-left:auto;display:flex;gap:5px;flex-wrap:wrap">
+      <button class="btn" onclick="toast('✓ ${inv.id}.pdf downloaded')"><i class="ti ti-download" aria-hidden="true"></i> Download PDF</button>
+      <button class="btn btn-b" onclick="document.getElementById('mo-email').classList.add('open')"><i class="ti ti-mail" aria-hidden="true"></i> Resend email</button>
+      ${isExc?`<button class="btn btn-p" onclick="document.getElementById('mo-approve').classList.add('open')"><i class="ti ti-check" aria-hidden="true"></i> Review & approve</button>`:''}
+    </div>
+  </div>`+
+  `<div class="inv-split">
+    <div class="pdf-panel">
+      <div class="pdf-toolbar">
+        <i class="ti ti-file-text" aria-hidden="true"></i>
+        <span style="font-weight:500">${inv.id}.pdf</span>
+        <span style="color:var(--text3)">·</span>
+        <span>${inv.vendor}</span>
+        <span style="margin-left:auto;display:flex;gap:5px">
+          <button class="btn" style="font-size:9px;padding:2px 8px" onclick="toast('✓ PDF downloaded')"><i class="ti ti-download" aria-hidden="true"></i> PDF</button>
+          <button class="btn" style="font-size:9px;padding:2px 8px" onclick="toast('✓ PDF sent to k.malek@koreymalekcpa.com')"><i class="ti ti-send" aria-hidden="true"></i> Email</button>
+        </span>
+      </div>
+      <div class="pdf-body">${buildPDF(inv,isPrime,isC)}</div>
+    </div>
+
+    <div class="data-panel">
+      <div class="dp-section">
+        <div class="dp-lbl">EXTRACTED DATA — AI VERIFIED</div>
+        <div class="frow"><span class="fn">Invoice #</span><span class="fv-ok">${inv.id}</span></div>
+        <div class="frow"><span class="fn">Vendor</span><span class="fv-ok">${inv.vendor}</span></div>
+        <div class="frow"><span class="fn">Tax ID / EIN</span><span class="fv">${inv.taxid||'—'}</span></div>
+        <div class="frow"><span class="fn">Invoice date</span><span class="fv">${inv.date}</span></div>
+        <div class="frow"><span class="fn">Due date</span><span class="fv">${inv.due}</span></div>
+        <div class="frow"><span class="fn">Terms</span><span class="fv">${inv.terms}</span></div>
+        ${isPrime?`<div class="frow"><span class="fn">Subtotal</span><span class="fv">$200.00</span></div>
+        <div class="frow"><span class="fn">Fuel surcharge</span><span class="fv">$7.00</span></div>`:`<div class="frow"><span class="fn">Subtotal</span><span class="fv">${f$(inv.sub)}</span></div>`}
+        <div class="frow"><span class="fn">Tax</span><span class="fv ${inv.flag&&inv.flag.includes('Tax')?'fv-w':''}">$${inv.tax.toFixed(2)}</span></div>
+        <div class="frow"><span class="fn">Total</span><span class="${inv.amt<0?'fv-b':'fv-ok'}" style="font-size:13px">${f$(inv.amt)}</span></div>
+      </div>
+
+      <div class="dp-section">
+        <div class="dp-lbl">GL CODING</div>
+        <div class="frow"><span class="fn">GL account</span>
+          <div style="display:flex;gap:3px;flex-wrap:wrap;justify-content:flex-end">
+            ${['5010 · COGS','6100 · Office','6200 · Freight','6500 · Professional'].map(gl=>
+              `<span class="gl-badge ${inv.gl===gl?'sel':''}" onclick="codeGL(event,'${inv.id}','${gl}')">${gl}</span>`
+            ).join('')}
+          </div>
+        </div>
+        <div class="frow"><span class="fn">Cost center</span>
+          <div style="display:flex;gap:3px;flex-wrap:wrap;justify-content:flex-end">
+            ${['CC-001 · Main','CC-002 · Warehouse','CC-003 · Online','60/40 split'].map(cc=>
+              `<span class="gl-badge ${inv.cc===cc?'sel':''}" onclick="codeCC(event,'${inv.id}','${cc}')">${cc}</span>`
+            ).join('')}
+          </div>
+        </div>
+        <div class="frow"><span class="fn">Send to invoice</span>
+          <select style="width:160px;font-size:10px;padding:3px 6px" onchange="codeSendTo(event,'${inv.id}')">
+            <option value="">— Select recipient —</option>
+            <option value="ap@acmehardware.com" ${inv.sentTo==='ap@acmehardware.com'?'selected':''}>AP Dept (ap@acmehardware.com)</option>
+            <option value="cfo@acmehardware.com" ${inv.sentTo==='cfo@acmehardware.com'?'selected':''}>CFO approval</option>
+            <option value="owner@acmehardware.com">Owner sign-off</option>
+            <option value="k.malek@koreymalekcpa.com">CPA review copy</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="dp-section">
+        <div class="dp-lbl">NOTES</div>
+        <div id="notes-list-${inv.id}">`+
+        (invNotes.length?invNotes.map(n=>`<div class="note-item"><div class="note-meta">${n.who} · ${n.when}</div><div class="note-txt">${n.text}</div></div>`).join(''):
+        `<div style="font-size:10px;color:var(--text3);padding:4px 0">No notes yet — add one below</div>`)+
+        `</div>
+        <div style="display:flex;gap:5px;margin-top:8px">
+          <input type="text" id="note-input-${inv.id}" placeholder="Add a note..." style="flex:1;font-size:10px">
+          <button class="btn btn-p" style="font-size:10px;padding:4px 8px" onclick="addNote('${inv.id}')"><i class="ti ti-send" aria-hidden="true"></i></button>
+        </div>
+      </div>
+
+      <div class="dp-section">
+        <div class="dp-lbl">AUDIT TRAIL</div>
+        <div class="tlrow"><div class="tld td-n"></div><span class="tlt">${inv.rec} 09:14</span><span>Received via email</span></div>
+        <div class="tlrow"><div class="tld td-n"></div><span class="tlt">${inv.rec} 09:16</span><span>AI extraction — ${inv.ai}% confidence</span></div>
+        ${inv.st==='processed'?
+          `<div class="tlrow"><div class="tld td-ok"></div><span class="tlt">${inv.rec} 09:16</span><span>Auto-approved ✓</span></div>
+          <div class="tlrow"><div class="tld td-ok"></div><span class="tlt">${inv.rec} 09:16</span><span>${cl.erp} file generated</span></div>`:
+          `<div class="tlrow"><div class="tld td-w"></div><span class="tlt">${inv.rec} 09:16</span><span>Routed to review queue</span></div>
+          <div class="tlrow"><div class="tld td-w"></div><span class="tlt">Pending</span><span>Awaiting reviewer approval</span></div>`}
+      </div>
+      ${inv.st==='processed'?`<div class="dp-section">
+        <div class="dp-lbl">ERP OUTPUT</div>
+        <div class="frow"><span class="fn"><i class="ti ti-circle-check ok" aria-hidden="true"></i> ${cl.erp} file</span>
+          <button class="btn btn-p" style="font-size:9px;padding:3px 8px" onclick="toast('✓ ${cl.erp} entry for ${inv.id} downloaded')"><i class="ti ti-download" aria-hidden="true"></i> Download</button>
+        </div>
+      </div>`:''}
+    </div>
+  </div>`;
+}
+
+function codeGL(e,id,gl){
+  var inv=invoices.find(i=>i.id===id); if(inv){inv.gl=gl;} toast('✓ GL coded to '+gl); render();
+}
+function codeCC(e,id,cc){
+  var inv=invoices.find(i=>i.id===id); if(inv){inv.cc=cc;} toast('✓ Cost center set to '+cc); render();
+}
+function codeSendTo(e,id){
+  var inv=invoices.find(i=>i.id===id); var val=e.target.value;
+  if(inv&&val){inv.sentTo=val; toast('✓ Invoice flagged to be sent to '+val);}
+}
+function addNote(id){
+  var inp=document.getElementById('note-input-'+id);
+  if(!inp||!inp.value.trim()) return;
+  if(!notes[id]) notes[id]=[];
+  notes[id].push({who:'Korey Malek, CPA',when:new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}),text:inp.value.trim()});
+  inp.value=''; render();
+}
+
+function buildPDF(inv,isPrime,isC){
+  if(isPrime) return `<div class="pdf-doc">
+    <div class="pdf-hdr">PRIME GLASS</div>
+    <div class="pdf-addr">4471 Santa Ana St Suite F-G · Ontario CA 91761<br>PH: (909) 390-9011 · Federal Tax ID: 27-1240448</div>
+    <hr class="pdf-rule">
+    <div class="pdf-kv">
+      <div><div class="pdf-label">Workorder</div><strong>620399</strong></div>
+      <div><div class="pdf-label">Date</div>5/12/2026</div>
+      <div><div class="pdf-label">Bill to</div>Crown Toyota / Swickard Crown LLC</div>
+      <div><div class="pdf-label">Terms</div>Net 30</div>
+      <div><div class="pdf-label">RO Number</div>1514006</div>
+      <div><div class="pdf-label">Unit Number</div>P208</div>
+    </div>
+    <div style="font-size:8px;color:#64748b;margin-bottom:8px">Vehicle: 2022 Toyota Avalon 4Dr · VIN: (blank on document)</div>
+    <div class="pdf-lh"><span>Description</span><span>Part #</span><span>Sell</span><span>Total</span></div>
+    <div class="pdf-lr"><span>Windshield — Labor only</span><span>165 Labor</span><span>$165.00</span><span>$165.00</span></div>
+    <div class="pdf-lr"><span>Glue Kit</span><span>GLUE KIT</span><span>$35.00</span><span>$35.00</span></div>
+    <div class="pdf-tots">
+      <div class="pdf-tr"><span>Subtotal</span><span>$200.00</span></div>
+      <div class="pdf-tr"><span>Fuel Surcharge</span><span>$7.00</span></div>
+      <div class="pdf-tr"><span>Tax</span><span>$0.00</span></div>
+      <div class="pdf-tr pdf-tf"><span>Balance Due</span><span>$207.00</span></div>
+    </div>
+    <div style="margin-top:8px;font-size:8px;color:#94a3b8">Install Date: 05/13/2026 09:00AM · Mobile Install · WED 9-11AM<br>Contact: BRANDON · Customer Copy</div>
+  </div>`;
+  if(isC) return `<div class="pdf-doc">
+    <div class="pdf-hdr">STINGRAY CHEVROLET</div>
+    <div class="pdf-addr">2002 N. Frontage Road · Plant City FL 33563<br>Tel: (813) 359-5000 · www.stingraychevrolet.com</div>
+    <hr class="pdf-rule">
+    <div class="pdf-kv">
+      <div><div class="pdf-label">Invoice #</div><strong>CM838572P</strong></div>
+      <div><div class="pdf-label">Date</div>05 MAY 26</div>
+      <div><div class="pdf-label">Account</div>3707</div>
+      <div><div class="pdf-label">Terms</div>WHSL CHARGE</div>
+      <div><div class="pdf-label">Order #</div>69047535</div>
+      <div><div class="pdf-label">FOB</div>Plant City FL</div>
+    </div>
+    <div style="font-size:8px;color:#64748b;margin-bottom:6px">Bill to: Ferman on Florida Body Shop · 11025 N Florida Ave · Tampa FL 33612</div>
+    <div class="pdf-lh"><span>Part Number</span><span>Description</span><span>List</span><span>Amount</span></div>
+    <div class="pdf-lr"><span>84399430</span><span>7831 FASCIA (XFAS) · Return</span><span>$920.75</span><span style="color:#dc2626">-$599.29</span></div>
+    <div class="pdf-lr"><span>CORE DEPOSIT</span><span>CC-Reverse / SOR</span><span>—</span><span style="color:#dc2626">-$75.00</span></div>
+    <div class="pdf-tots">
+      <div class="pdf-tr"><span>Parts</span><span style="color:#dc2626">-$674.29</span></div>
+      <div class="pdf-tr"><span>Freight</span><span>$0.00</span></div>
+      <div class="pdf-tr"><span>Sales Tax</span><span>$0.00</span></div>
+      <div class="pdf-tr pdf-tf"><span>TOTAL</span><span style="color:#dc2626">-$674.29</span></div>
+    </div>
+    <div style="margin-top:8px;text-align:center;font-size:9px;font-weight:700;color:#dc2626">** CREDIT — CUSTOMER COPY **</div>
+    <div style="margin-top:6px;font-size:7px;color:#94a3b8">NO GOODS ACCEPTED FOR CREDIT UNLESS RETURNED WITH THIS INVOICE WITHIN 10 DAYS. 10% HANDLING CHARGE ON RETURNED PARTS.</div>
+  </div>`;
+  return `<div class="pdf-doc">
+    <div class="pdf-hdr">${inv.vendor.toUpperCase()}</div>
+    <div class="pdf-addr">Invoice ${inv.id} · Accounts Payable Department</div>
+    <hr class="pdf-rule">
+    <div class="pdf-kv">
+      <div><div class="pdf-label">Invoice #</div><strong>${inv.id}</strong></div>
+      <div><div class="pdf-label">Date</div>${inv.date}</div>
+      <div><div class="pdf-label">Bill to</div>${clients.find(c=>c.id===inv.client)?.name}</div>
+      <div><div class="pdf-label">Terms</div>${inv.terms}</div>
+      <div><div class="pdf-label">Due date</div>${inv.due}</div>
+      <div><div class="pdf-label">Tax ID</div>${inv.taxid||'—'}</div>
+    </div>
+    <div class="pdf-lh"><span>Description</span><span>Qty</span><span>Unit</span><span>Total</span></div>
+    <div class="pdf-lr"><span>Goods and services delivered</span><span>1</span><span>${f$(inv.sub)}</span><span>${f$(inv.sub)}</span></div>
+    ${inv.tax>0?`<div class="pdf-lr" style="color:#dc2626"><span>Tax</span><span></span><span></span><span>$${inv.tax.toFixed(2)}</span></div>`:''}
+    <div class="pdf-tots">
+      <div class="pdf-tr"><span>Subtotal</span><span>${f$(inv.sub)}</span></div>
+      ${inv.tax>0?`<div class="pdf-tr" style="color:#dc2626"><span>Tax</span><span>$${inv.tax.toFixed(2)}</span></div>`:''}
+      <div class="pdf-tr pdf-tf"><span>Total Due</span><span>${f$(inv.amt)}</span></div>
+    </div>
+    <div style="margin-top:8px;font-size:8px;color:#94a3b8">Please remit payment by ${inv.due}. Thank you for your business.</div>
+  </div>`;
+}
+
+// ── EXCEPTIONS ─────────────────────────────────────────────
+function pgExceptions(){
+  var exc=invoices.filter(i=>i.st==='review');
+  return guide('Exceptions queue','All flagged invoices across every client — sorted by urgency. Click <strong>Review</strong> to open the full invoice detail with the original PDF and correction tools.')+
+  `<div class="card"><div class="ch"><span class="ct">${exc.length} invoices need attention</span><span class="ba">Cross-portfolio</span></div>
+  <table class="tbl"><thead><tr>
+    <th style="width:13%">Invoice</th><th style="width:18%">Client</th><th style="width:16%">Vendor</th>
+    <th style="width:10%">Amount</th><th style="width:20%">Flag</th><th style="width:7%">AI</th><th style="width:16%">Actions</th>
+  </tr></thead><tbody>`+
+  exc.map(i=>{
+    var cl=clients.find(c=>c.id===i.client);
+    return `<tr><td>${i.id}</td><td style="font-size:10px">${cl.name}</td><td>${i.vendor}</td>
+      <td style="color:${i.amt<0?'var(--red)':'var(--text)'}">${f$(i.amt)}</td>
+      <td><span class="pill p-warn" style="font-size:8px;white-space:normal">${i.flag||'Review'}</span></td>
+      <td style="font-weight:500;color:${aiC(i.ai)}">${i.ai}%</td>
+      <td><button class="btn btn-p" style="font-size:9px;padding:3px 8px" onclick="CC='${i.client}';CI='${i.id}';CP='invoice-detail';render()"><i class="ti ti-file-text" aria-hidden="true"></i> Open</button></td>
+    </tr>`;}).join('')+`</tbody></table></div>`;
+}
+
+// ── DOWNLOADS & REPORTS ─────────────────────────────────────
+function pgDownloads(){
+  return guide('Downloads & reports','All downloadable reports in one place. <strong>Dummy Excel files are pre-built</strong> — click any Download button to get the actual file. QuickBooks export, year-end tax + 1099 report, P&L and Balance Sheet all included.')+
+  `<div class="card"><div class="ch"><span class="ct">ERP export files</span><span class="bt">QuickBooks · Xero · NetSuite</span></div>`+
+  [['QuickBooks IIF — Acme Hardware May 2026','5 invoices · AP entries ready to import','BetMe_QuickBooks_Export_AcmeHardware_May2026.xlsx','QB','bt'],
+   ['Xero CSV — Rivera & Sons May 2026','2 invoices · formatted for Xero import','#','Xero','bb2'],
+   ['NetSuite CSV — Rivera & Sons May 2026','2 invoices · formatted for NetSuite','#','NS','bg2'],
+   ['Portfolio bulk export — all clients','ZIP: all ERP files + all PDFs + Excel summary','#','All','bt']].map(r=>`
+    <div class="dl-row">
+      <div class="dl-info"><div class="dl-name">${r[0]}</div><div class="dl-desc">${r[1]}</div></div>
+      <div class="dl-btns">
+        <span class="badge ${r[4]}" style="margin-right:6px">${r[2]}</span>
+        <button class="btn btn-p" style="font-size:10px" onclick="dlFile('${r[2]}','${r[0]}')"><i class="ti ti-download" aria-hidden="true"></i> Download</button>
+      </div>
+    </div>`).join('')+`</div>`+
+
+  `<div class="card"><div class="ch"><span class="ct">Year-end tax report + 1099</span><span class="ba">Tax Year 2026</span></div>`+
+  [['Year-End AP Summary + 1099 — Acme Hardware 2026','Vendor totals · 1099-required vendors · Box 1 amounts','BetMe_YearEnd_Tax_1099_AcmeHardware_2026.xlsx','Excel','bt'],
+   ['1099-NEC Filing Summary','4 vendors requiring 1099-NEC filing for 2026 · Total: $353,620','BetMe_YearEnd_Tax_1099_AcmeHardware_2026.xlsx','1099','ba'],
+   ['Vendor AP Detail — all months 2026','Month-by-month breakdown per vendor for Schedule C','#','CSV','bg2']].map(r=>`
+    <div class="dl-row">
+      <div class="dl-info"><div class="dl-name">${r[0]}</div><div class="dl-desc">${r[1]}</div></div>
+      <div class="dl-btns">
+        <span class="badge ${r[4]}" style="margin-right:6px">${r[2]}</span>
+        <button class="btn btn-p" style="font-size:10px" onclick="dlFile('${r[2]}','${r[0]}')"><i class="ti ti-download" aria-hidden="true"></i> Download</button>
+      </div>
+    </div>`).join('')+`</div>`+
+
+  `<div class="card"><div class="ch"><span class="ct">Financial statements</span><span class="bb2">P&L · Balance Sheet</span></div>`+
+  [['Profit & Loss Statement — Acme Hardware YTD May 2026','Income · COGS · Operating expenses · Net income vs prior year','BetMe_FinancialStatements_AcmeHardware_2026.xlsx','P&L','bt'],
+   ['Balance Sheet — Acme Hardware as of May 31 2026','Assets · Liabilities · Equity · Comparative Dec 31 2025','BetMe_FinancialStatements_AcmeHardware_2026.xlsx','B/S','bt'],
+   ['P&L + Balance Sheet — all clients bundle','One workbook per client with both statements','#','Bundle','bg2']].map(r=>`
+    <div class="dl-row">
+      <div class="dl-info"><div class="dl-name">${r[0]}</div><div class="dl-desc">${r[1]}</div></div>
+      <div class="dl-btns">
+        <span class="badge ${r[4]}" style="margin-right:6px">${r[2]}</span>
+        <button class="btn btn-p" style="font-size:10px" onclick="dlFile('${r[2]}','${r[0]}')"><i class="ti ti-download" aria-hidden="true"></i> Download</button>
+      </div>
+    </div>`).join('')+`</div>`+
+
+  `<div class="card"><div class="ch"><span class="ct">Audit & compliance</span><span class="bg2">Immutable records</span></div>`+
+  [['Full audit trail — Acme Hardware May 2026','Every action · every reviewer · every timestamp','#','PDF','bg2'],
+   ['Tax-ready document package — 2026','All invoices organized by vendor · signed audit trail · ERP entries','#','ZIP','bg2']].map(r=>`
+    <div class="dl-row">
+      <div class="dl-info"><div class="dl-name">${r[0]}</div><div class="dl-desc">${r[1]}</div></div>
+      <div class="dl-btns">
+        <button class="btn" style="font-size:10px" onclick="toast('✓ Generating ${r[0]}...')"><i class="ti ti-download" aria-hidden="true"></i> Download</button>
+      </div>
+    </div>`).join('')+`</div>`;
+}
+
+function dlFile(filename, label){
+  if(filename==='#'){toast('✓ Generating '+label+' — download will start shortly');return;}
+  var a=document.createElement('a');
+  a.href=filename; a.download=filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  toast('✓ Downloading: '+filename);
+}
+
+// ── BILLING ─────────────────────────────────────────────────
+function pgBilling(){
+  return guide('Firm billing','<strong>One invoice to your firm each month.</strong> See your exact cost per client, set your markup, and earn a margin on every invoice processed.')+
+  `<div class="g3"><div class="met"><div class="mv ok">147</div><div class="ml">Invoices this month</div></div>
+  <div class="met"><div class="mv">$279.30</div><div class="ml">BetMe cost (at $1.90)</div></div>
+  <div class="met"><div class="mv ok">$235</div><div class="ml">Your margin (at $3.50)</div></div></div>`+
+  `<div class="card"><div class="ch"><span class="ct">May 2026 — cost breakdown</span><span class="bt">Firm Pro · $1.90/invoice wholesale</span></div>
+  <table class="tbl"><thead><tr><th style="width:28%">Client</th><th style="width:12%">Invoices</th><th style="width:16%">Your cost</th><th style="width:16%">You charge $3.50</th><th style="width:16%">Your margin</th><th style="width:12%">Status</th></tr></thead><tbody>`+
+  clients.filter(c=>c.inv>0).map(c=>{
+    var cost=(c.inv*1.9).toFixed(2); var rev=(c.inv*3.5).toFixed(2); var margin=(c.inv*1.6).toFixed(2);
+    return `<tr><td style="font-weight:500">${c.name}</td><td>${c.inv}</td><td class="warn">$${cost}</td><td class="ok">$${rev}</td><td style="color:var(--teal);font-weight:500">$${margin}</td><td>${pill('ok')}</td></tr>`;
+  }).join('')+
+  `<tr style="background:var(--bg3);font-weight:600;border-top:1px solid var(--bd2)"><td>TOTAL</td><td>147</td><td class="warn">$279.30</td><td class="ok">$514.50</td><td style="color:var(--teal);font-weight:600">$235.20</td><td></td></tr>`+
+  `</tbody></table></div>`;
+}
+
+// ── WHITE LABEL ─────────────────────────────────────────────
+function pgWhitelabel(){
+  return guide('White-label setup','<strong>Your clients see your brand.</strong> Configure your firm name, colors, and custom domain. Client portal shows Korey Malek CPA — not BetMe.')+
+  `<div class="g2">
+    <div class="card"><div class="ch"><span class="ct">Branding settings</span><span class="bt">Firm Pro · Active</span></div><div class="cp">
+      <div class="fg"><div class="fl">FIRM DISPLAY NAME</div><input type="text" value="Korey Malek CPA"></div>
+      <div class="fg"><div class="fl">TAGLINE</div><input type="text" value="Expert accounting. Real results."></div>
+      <div class="fg"><div class="fl">PORTAL SUBDOMAIN</div>
+        <div style="display:flex;align-items:center;gap:5px"><input type="text" value="invoices" style="width:90px"><span style="font-size:11px">.</span><input type="text" value="koreymalekcpa.com"></div>
+      </div>
+      <div class="fg"><div class="fl">ACCENT COLOR</div>
+        <div style="display:flex;gap:6px;margin-top:4px">
+          ${['#3b82f6','#00c896','#8b5cf6','#f59e0b','#ef4444'].map(c=>`<div style="width:26px;height:26px;border-radius:5px;background:${c};cursor:pointer;border:2px solid ${c==='#3b82f6'?'#0f172a':'transparent'}" onclick="toast('✓ Accent color updated')"></div>`).join('')}
+        </div>
+      </div>
+      <button class="btn btn-p" onclick="toast('✓ White-label branding saved — live in 60 seconds')"><i class="ti ti-device-floppy" aria-hidden="true"></i> Save branding</button>
+    </div></div>
+    <div class="card"><div class="ch"><span class="ct">Client portal preview</span></div><div class="cp">
+      <div style="background:var(--navy2);border-radius:var(--r);overflow:hidden">
+        <div style="background:#1e3048;padding:7px 11px;display:flex;align-items:center;gap:7px;border-bottom:1px solid rgba(255,255,255,.06)">
+          <div style="width:20px;height:20px;border-radius:4px;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff">KM</div>
+          <span style="font-size:11px;color:#e2e8f0;font-weight:500">Korey Malek CPA — Invoice Portal</span>
+        </div>
+        <div style="padding:12px">
+          <div style="font-size:10px;color:#8fa3b8;margin-bottom:8px">Good morning, Acme Hardware!</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:8px">
+            <div style="background:rgba(255,255,255,.04);border-radius:5px;padding:7px"><div style="font-size:13px;font-weight:600;color:#f0f4f8">47</div><div style="font-size:8px;color:#4a6480">Invoices</div></div>
+            <div style="background:rgba(255,255,255,.04);border-radius:5px;padding:7px"><div style="font-size:13px;font-weight:600;color:var(--teal)">$84K</div><div style="font-size:8px;color:#4a6480">AP volume</div></div>
+          </div>
+          <div style="font-size:8px;color:#2d4057;text-align:center;padding-top:6px;border-top:1px solid rgba(255,255,255,.04)">Powered by BetMe InvoiceTrack</div>
+        </div>
+      </div>
+    </div></div>
+  </div>`;
+}
+
+// ── APPROVAL RULES ──────────────────────────────────────────
+function pgApproval(){
+  return guide('Client approval rules','<strong>Protect yourself and your clients.</strong> Invoices above the threshold go to the business owner for one-tap approval before anything posts to ERP.')+
+  `<div class="card"><div class="ch"><span class="ct">Approval thresholds per client</span></div>
+  <table class="tbl"><thead><tr><th style="width:26%">Client</th><th style="width:18%">Threshold</th><th style="width:18%">Method</th><th style="width:14%">Pending</th><th style="width:12%">Status</th><th style="width:12%">Edit</th></tr></thead><tbody>`+
+  [['Acme Hardware LLC','$5,000','Email + SMS','1 pending','ok'],
+   ['Rivera & Sons','$10,000','Email only','0','ok'],
+   ['Gulf Realty Group','$2,500','Email + SMS','2 pending','warn'],
+   ['Metro Supplies','$8,000','Email only','0','ok']].map(r=>`
+    <tr><td style="font-weight:500">${r[0]}</td>
+    <td class="ok" style="font-weight:500">${r[1]}</td><td>${r[2]}</td>
+    <td style="color:${r[3]!=='0'?'var(--amber)':'var(--text2)'}">${r[3]}</td>
+    <td>${pill(r[4])}</td>
+    <td><button class="btn" style="font-size:9px;padding:2px 7px" onclick="toast('Edit approval rules for ${r[0]}')"><i class="ti ti-edit" aria-hidden="true"></i></button></td>
+    </tr>`).join('')+`</tbody></table></div>`;
+}
+
+// Email resend modal (simple inline)
+document.addEventListener('click',function(e){
+  if(e.target.closest('#mo-email')) return;
+});
+
+// init
+render();
+</script>
+
+<!-- EMAIL RESEND MODAL -->
+<div class="mo" id="mo-email">
+<div class="md">
+  <button class="mc" onclick="closeModal()"><i class="ti ti-x" aria-hidden="true"></i></button>
+  <div class="md-t">Resend invoice by email</div>
+  <div class="md-s">Send this invoice and its extracted data to any email address</div>
+  <div class="fg"><div class="fl">RECIPIENT</div><input type="email" value="ap@acmehardware.com"></div>
+  <div class="fg"><div class="fl">SUBJECT</div><input type="text" value="Invoice WO-620399 — Prime Glass — $207.00"></div>
+  <div class="fg"><div class="fl">MESSAGE</div><textarea rows="3" style="resize:none">Please find the processed invoice attached. GL code: 5010 · Cost center: CC-002.</textarea></div>
+  <div style="display:flex;gap:5px;margin-bottom:10px">
+    <label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer"><input type="checkbox" style="width:13px;height:13px;accent-color:var(--teal)" checked> Attach original PDF</label>
+    <label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;margin-left:12px"><input type="checkbox" style="width:13px;height:13px;accent-color:var(--teal)" checked> Attach ERP entry</label>
+  </div>
+  <button class="btn btn-p" onclick="closeModal();toast('✓ Invoice emailed to ap@acmehardware.com with PDF and ERP entry attached')"><i class="ti ti-send" aria-hidden="true"></i> Send email</button>
+</div>
+</div>
+
+</body>
+</html>
