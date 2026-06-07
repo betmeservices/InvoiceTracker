@@ -1,0 +1,2166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Korey Malek CPA — Invoice Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  /* Brand palette — deep navy + electric teal + warm amber */
+  --navy:#0B1426;--navy2:#111D35;--navy3:#172444;--navy4:#1E2E50;
+  --teal:#00D4A8;--teal2:#00B891;--teal3:#009B79;--teal-glow:rgba(0,212,168,.15);
+  --amber:#F5A623;--amber2:#E8941A;--amber-bg:rgba(245,166,35,.1);
+  --red:#FF4757;--red-bg:rgba(255,71,87,.1);
+  --blue:#4A90E2;--blue-bg:rgba(74,144,226,.1);
+  --purple:#7C3AED;--purple-bg:rgba(124,58,237,.1);
+  --bg:#F0F4FA;--bg2:#FAFCFF;--bg3:#E8EEF8;--bg4:#DDE5F2;
+  --tx:#0B1426;--tx2:#4A5568;--tx3:#8896AB;
+  --bd:#DDE5F2;--bd2:#C8D4E8;
+  --r:10px;--rl:14px;--rxl:20px;
+  --font:'Plus Jakarta Sans',system-ui,sans-serif;
+  --mono:'DM Mono',monospace;
+  --shadow:0 1px 3px rgba(11,20,38,.06),0 4px 12px rgba(11,20,38,.04);
+  --shadow-lg:0 4px 16px rgba(11,20,38,.1),0 12px 40px rgba(11,20,38,.07);
+  --shadow-teal:0 4px 20px rgba(0,212,168,.25);
+}
+body{font-family:var(--font);background:var(--bg);color:var(--tx);font-size:13px;line-height:1.5;-webkit-font-smoothing:antialiased}
+
+/* ── SCREENS ── */
+.sc{display:none;min-height:100vh}.sc.on{display:block}
+
+/* ── LOGIN ── */
+.login-bg{
+  background:linear-gradient(135deg,var(--navy) 0%,var(--navy3) 50%,#0D2040 100%);
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden
+}
+.login-bg::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 600px 400px at 20% 50%,rgba(0,212,168,.08),transparent),
+    radial-gradient(ellipse 400px 300px at 80% 20%,rgba(74,144,226,.06),transparent),
+    radial-gradient(ellipse 300px 200px at 60% 80%,rgba(245,166,35,.04),transparent);
+  pointer-events:none
+}
+.login-grid{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:40px 40px;pointer-events:none
+}
+.login-card{
+  background:rgba(255,255,255,.97);border-radius:24px;padding:44px 48px;width:440px;
+  box-shadow:0 32px 80px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.1);
+  position:relative;backdrop-filter:blur(20px)
+}
+.login-card::before{
+  content:'';position:absolute;top:-1px;left:20%;right:20%;height:2px;
+  background:linear-gradient(90deg,transparent,var(--teal),transparent);
+  border-radius:2px
+}
+.km-icon{
+  width:72px;height:72px;
+  background:linear-gradient(135deg,var(--teal),var(--teal2));
+  border-radius:20px;display:flex;align-items:center;justify-content:center;
+  font-size:26px;font-weight:800;color:var(--navy);margin:0 auto 16px;
+  box-shadow:0 8px 24px rgba(0,212,168,.35),0 0 0 4px rgba(0,212,168,.12)
+}
+.km-firm{font-size:24px;font-weight:800;color:var(--navy);text-align:center;letter-spacing:-.4px;margin-bottom:4px}
+.km-sub{font-size:12px;color:var(--tx3);text-align:center;margin-bottom:28px;letter-spacing:.02em}
+label.fl{font-size:10px;font-weight:700;color:var(--tx2);display:block;margin-bottom:4px;letter-spacing:.06em;text-transform:uppercase}
+.inp{width:100%;background:var(--bg);border:1.5px solid var(--bd);border-radius:var(--r);padding:10px 13px;font-size:13px;font-family:var(--font);color:var(--tx);outline:none;transition:all .15s}
+.inp:focus{border-color:var(--teal);background:#fff;box-shadow:0 0 0 3px rgba(0,212,168,.12)}
+.inp::placeholder{color:var(--tx3)}
+.inp-wrap{margin-bottom:14px}
+input[type=checkbox],input[type=radio]{width:15px;height:15px;accent-color:var(--teal);cursor:pointer}
+input[type=range]{accent-color:var(--teal);cursor:pointer}
+select{width:100%;background:var(--bg);border:1.5px solid var(--bd);border-radius:var(--r);padding:9px 12px;font-size:12px;font-family:var(--font);color:var(--tx);outline:none;transition:all .15s;cursor:pointer}
+select:focus{border-color:var(--teal);background:#fff;box-shadow:0 0 0 3px rgba(0,212,168,.12)}
+textarea{width:100%;background:var(--bg);border:1.5px solid var(--bd);border-radius:var(--r);padding:9px 12px;font-size:12px;font-family:var(--font);color:var(--tx);outline:none;transition:all .15s;resize:none}
+textarea:focus{border-color:var(--teal);background:#fff;box-shadow:0 0 0 3px rgba(0,212,168,.12)}
+.login-btn{
+  width:100%;background:linear-gradient(135deg,var(--teal),var(--teal2));
+  border:none;border-radius:var(--r);color:var(--navy);font-size:14px;font-weight:700;
+  padding:13px;cursor:pointer;font-family:var(--font);
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  box-shadow:0 4px 16px rgba(0,212,168,.4);transition:all .2s
+}
+.login-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,212,168,.5)}
+.powered{text-align:center;margin-top:22px;font-size:10px;color:var(--tx3)}
+.powered span{color:var(--teal);font-weight:600}
+.cred-box{background:linear-gradient(135deg,#f0faf7,#f5f8ff);border:1px solid rgba(0,212,168,.2);border-radius:var(--r);padding:12px 14px;margin-top:14px}
+
+/* ── APP SHELL ── */
+.app{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+
+/* TOPBAR */
+.topbar{
+  display:flex;align-items:center;gap:9px;padding:0 18px;height:52px;
+  background:var(--navy);border-bottom:1px solid rgba(255,255,255,.06);
+  flex-shrink:0;position:relative;z-index:100
+}
+.topbar::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,212,168,.2),transparent)}
+.tb-logo{
+  width:30px;height:30px;background:linear-gradient(135deg,var(--teal),var(--teal2));
+  border-radius:8px;display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:800;color:var(--navy);flex-shrink:0
+}
+.tb-firm{font-size:13px;font-weight:700;color:#F0F6FF}
+.tb-div{width:1px;height:18px;background:rgba(255,255,255,.1)}
+.tb-sub{font-size:11px;color:rgba(255,255,255,.4);display:flex;align-items:center;gap:5px}
+.tb-badge{font-size:9px;padding:2px 8px;border-radius:20px;background:rgba(0,212,168,.12);color:var(--teal);border:1px solid rgba(0,212,168,.2);font-weight:600}
+.tb-sep{flex:1}
+.tb-bell{
+  width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;
+  justify-content:center;cursor:pointer;color:rgba(255,255,255,.5);font-size:17px;
+  position:relative;transition:all .15s
+}
+.tb-bell:hover{background:rgba(255,255,255,.1);color:rgba(255,255,255,.8)}
+.tb-badge-dot{
+  position:absolute;top:-3px;right:-3px;width:15px;height:15px;
+  background:var(--amber);border-radius:50%;font-size:8px;font-weight:700;
+  color:var(--navy);display:flex;align-items:center;justify-content:center;
+  border:2px solid var(--navy)
+}
+.tb-user{display:flex;align-items:center;gap:7px;cursor:pointer;padding:4px 8px;border-radius:8px;transition:all .15s}
+.tb-user:hover{background:rgba(255,255,255,.06)}
+.tb-av{
+  width:28px;height:28px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue-bg),rgba(74,144,226,.2));
+  border:1.5px solid rgba(74,144,226,.4);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;color:var(--blue)
+}
+.tb-uname{font-size:11px;color:rgba(255,255,255,.75);font-weight:500}
+.tb-signout{
+  background:transparent;border:1px solid rgba(255,255,255,.12);
+  border-radius:8px;color:rgba(255,255,255,.4);font-size:10px;padding:4px 10px;
+  cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:4px;
+  margin-left:4px;transition:all .15s
+}
+.tb-signout:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.7)}
+
+/* BODY */
+.appbody{display:flex;flex:1;overflow:hidden}
+
+/* SIDEBAR */
+.sb{
+  width:210px;background:var(--navy2);
+  border-right:1px solid rgba(255,255,255,.05);
+  flex-shrink:0;overflow-y:auto;display:flex;flex-direction:column;
+  scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.1) transparent
+}
+.ss{font-size:9px;color:rgba(255,255,255,.25);padding:14px 14px 4px;letter-spacing:.1em;font-weight:700;text-transform:uppercase}
+.si{
+  display:flex;align-items:center;gap:7px;padding:7px 14px;
+  font-size:11px;color:rgba(255,255,255,.5);cursor:pointer;
+  border-left:2px solid transparent;transition:all .12s;user-select:none;font-weight:500
+}
+.si:hover{background:rgba(255,255,255,.04);color:rgba(255,255,255,.8)}
+.si.on{color:var(--teal);background:rgba(0,212,168,.06);border-left-color:var(--teal)}
+.si i{font-size:15px;flex-shrink:0}
+.sib{font-size:8px;padding:2px 6px;border-radius:7px;margin-left:auto;font-weight:700}
+.sib-w{background:rgba(245,166,35,.15);color:var(--amber);border:1px solid rgba(245,166,35,.3)}
+.sib-i{background:rgba(74,144,226,.15);color:var(--blue);border:1px solid rgba(74,144,226,.3)}
+.sib-g{background:rgba(0,212,168,.12);color:var(--teal);border:1px solid rgba(0,212,168,.2)}
+.cchip{
+  margin:2px 10px;padding:8px 10px;border-radius:10px;
+  border:1px solid rgba(255,255,255,.06);cursor:pointer;transition:all .12s
+}
+.cchip:hover{border-color:rgba(255,255,255,.16);background:rgba(255,255,255,.03)}
+.cchip.on{border-color:rgba(0,212,168,.3);background:rgba(0,212,168,.05)}
+.ccn{font-size:11px;font-weight:600;color:rgba(255,255,255,.85)}
+.ccm{font-size:9px;color:rgba(255,255,255,.3);margin-top:1px}
+.sdot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:5px;vertical-align:middle}
+.dot-ok{background:var(--teal)}.dot-w{background:var(--amber)}.dot-n{background:rgba(255,255,255,.2)}
+.sbot{margin-top:auto;padding:12px}
+.sbb{
+  width:100%;background:transparent;border:1px solid rgba(255,255,255,.1);
+  border-radius:8px;color:rgba(255,255,255,.4);font-size:10px;padding:7px;
+  cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:5px;transition:all .12s
+}
+.sbb:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.7)}
+
+/* MAIN */
+.main{flex:1;overflow-y:auto;background:var(--bg);padding:18px;scrollbar-width:thin;scrollbar-color:var(--bd2) transparent}
+.pg{display:none}.pg.on{display:block}
+
+/* GUIDE */
+.guide{
+  background:linear-gradient(90deg,rgba(0,212,168,.06),rgba(0,212,168,.01));
+  border-left:3px solid var(--teal);padding:9px 14px;margin-bottom:14px;
+  font-size:10px;color:var(--tx2);line-height:1.65;display:flex;gap:9px;
+  border-radius:0 10px 10px 0
+}
+.guide i{color:var(--teal);font-size:14px;flex-shrink:0;margin-top:1px}
+
+/* CARDS */
+.card{
+  background:var(--bg2);border:1px solid var(--bd);
+  border-radius:var(--rl);margin-bottom:12px;overflow:hidden;
+  box-shadow:var(--shadow)
+}
+.ch{
+  padding:11px 15px;border-bottom:1px solid var(--bd);
+  display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;
+  background:linear-gradient(180deg,#fff,var(--bg2))
+}
+.ct{font-size:12px;font-weight:700;color:var(--navy);letter-spacing:-.1px}
+.cs{font-size:10px;color:var(--tx2)}
+.cp{padding:14px}
+
+/* METRICS */
+.mets{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.met{
+  background:var(--bg2);border:1px solid var(--bd);border-radius:var(--rl);
+  padding:14px 16px;box-shadow:var(--shadow);cursor:pointer;transition:all .18s;
+  position:relative;overflow:hidden
+}
+.met::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--met-color,var(--teal));opacity:.6}
+.met:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);border-color:var(--bd2)}
+.mv{font-size:24px;font-weight:800;line-height:1.1;color:var(--tx);letter-spacing:-.5px}
+.ml{font-size:9px;color:var(--tx3);margin-top:3px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.ms{font-size:10px;color:var(--tx2);margin-top:4px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:11px}
+.tbl th{
+  text-align:left;padding:8px 11px;border-bottom:1.5px solid var(--bd);
+  font-weight:700;font-size:9px;color:var(--tx3);letter-spacing:.06em;
+  text-transform:uppercase;background:var(--bg);white-space:nowrap
+}
+.tbl td{padding:8px 11px;border-bottom:1px solid var(--bg3);vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr.cr:hover td{background:linear-gradient(90deg,rgba(0,212,168,.03),transparent);cursor:pointer}
+.tbl tr.cr:hover td:first-child{border-left:2px solid var(--teal)}
+.tbl tr.tot td{background:var(--bg3);font-weight:700;border-top:1.5px solid var(--bd2)}
+.srch{
+  background:var(--bg2);border:1px solid var(--bd);border-radius:6px;
+  padding:3px 7px;font-size:9px;width:100%;color:var(--tx);margin-top:3px;
+  font-family:var(--font);outline:none;transition:border-color .15s
+}
+.srch:focus{border-color:var(--teal)}
+
+/* PILLS */
+.pill{display:inline-block;font-size:8px;padding:3px 8px;border-radius:20px;font-weight:700;white-space:nowrap;letter-spacing:.02em}
+.p-ok{background:#D1FAE5;color:#065F46}
+.p-warn{background:#FEF3C7;color:#92400E}
+.p-info{background:#DBEAFE;color:#1E40AF}
+.p-neu{background:var(--bg3);color:var(--tx2);border:1px solid var(--bd)}
+.p-err{background:#FEE2E2;color:#991B1B}
+.p-pu{background:#F5F3FF;color:#5B21B6}
+
+/* BADGES */
+.badge{font-size:9px;padding:3px 9px;border-radius:8px;font-weight:700;letter-spacing:.02em}
+.bt{background:rgba(0,212,168,.1);color:var(--teal3);border:1px solid rgba(0,212,168,.25)}
+.bb{background:rgba(74,144,226,.1);color:var(--blue);border:1px solid rgba(74,144,226,.25)}
+.ba{background:rgba(245,166,35,.1);color:var(--amber2);border:1px solid rgba(245,166,35,.25)}
+.bg{background:var(--bg3);color:var(--tx2);border:1px solid var(--bd)}
+.br{background:rgba(255,71,87,.1);color:var(--red);border:1px solid rgba(255,71,87,.25)}
+
+.ok{color:var(--teal2)}.warn{color:var(--amber2)}.bad{color:var(--red)}.blue{color:var(--blue)}
+
+/* BUTTONS */
+.btn{
+  background:var(--bg2);border:1.5px solid var(--bd2);border-radius:8px;
+  color:var(--tx2);font-size:11px;font-weight:600;padding:6px 13px;cursor:pointer;
+  font-family:var(--font);display:inline-flex;align-items:center;gap:5px;
+  transition:all .12s;white-space:nowrap
+}
+.btn:hover{background:var(--bg);border-color:var(--teal);color:var(--teal3)}
+.btn-p{background:linear-gradient(135deg,var(--teal),var(--teal2));border-color:var(--teal);color:var(--navy);font-weight:700;box-shadow:0 2px 8px rgba(0,212,168,.25)}
+.btn-p:hover{background:linear-gradient(135deg,var(--teal2),var(--teal3));transform:translateY(-1px);box-shadow:0 4px 14px rgba(0,212,168,.35);color:var(--navy)}
+.btn-d{border-color:rgba(255,71,87,.3);color:var(--red)}
+.btn-d:hover{background:rgba(255,71,87,.06);border-color:var(--red)}
+.btn-b{border-color:rgba(74,144,226,.3);color:var(--blue)}
+.btn-b:hover{background:rgba(74,144,226,.06);border-color:var(--blue)}
+.btn-ghost{background:transparent;border-color:rgba(255,255,255,.15);color:rgba(255,255,255,.6)}
+.btn-ghost:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.9);border-color:rgba(255,255,255,.3)}
+
+.frow{display:flex;justify-content:space-between;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--bg3);font-size:10px;gap:8px}
+.frow:last-child{border-bottom:none}
+.fn{color:var(--tx2);flex-shrink:0;font-weight:500}.fv{font-weight:600;text-align:right;max-width:58%;word-break:break-word;color:var(--tx)}
+.fvg{color:var(--teal2);font-weight:700;text-align:right}
+.row{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--bg3);font-size:11px}
+.row:last-child{border-bottom:none}
+
+/* CLIENT TABS */
+.ctabs{display:flex;gap:0;border-bottom:2px solid var(--bd);margin-bottom:0;overflow-x:auto;background:var(--bg2);padding:0 6px}
+.ctab{
+  padding:10px 15px;font-size:11px;cursor:pointer;color:var(--tx2);
+  border-bottom:2.5px solid transparent;margin-bottom:-2px;transition:all .15s;
+  white-space:nowrap;display:flex;align-items:center;gap:5px;font-weight:600
+}
+.ctab:hover{color:var(--tx);background:rgba(0,0,0,.02)}
+.ctab.on{color:var(--teal2);border-bottom-color:var(--teal)}
+.ctab i{font-size:14px}
+.ctab-content{background:var(--bg2);border:1px solid var(--bd);border-top:none;border-radius:0 0 var(--rl) var(--rl);padding:16px;box-shadow:var(--shadow)}
+
+/* INVOICE DETAIL */
+.inv-split{display:grid;grid-template-columns:1fr 330px;gap:14px}
+.pdf-pnl{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--rl);overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow)}
+.pdf-tb{background:var(--navy);padding:8px 13px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.pdf-body{flex:1;overflow:auto;padding:16px;background:#CDD4E0;display:flex;justify-content:center;align-items:flex-start;min-height:480px}
+.pdf-doc{background:#fff;border-radius:4px;padding:24px;color:#111;box-shadow:0 4px 20px rgba(0,0,0,.2);min-width:320px;transition:transform .2s;transform-origin:top center;font-family:'Times New Roman',serif}
+.zcbtn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:6px;padding:4px 9px;cursor:pointer;font-size:10px;display:flex;align-items:center;gap:3px;font-family:var(--font);color:rgba(255,255,255,.7);transition:all .12s}
+.zcbtn:hover{background:rgba(255,255,255,.2);color:#fff}
+.zcbtn.active{background:rgba(0,212,168,.2);border-color:rgba(0,212,168,.4);color:var(--teal)}
+.data-pnl{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--rl);overflow-y:auto;display:flex;flex-direction:column;max-height:calc(100vh - 120px);box-shadow:var(--shadow)}
+.dps{padding:11px 14px;border-bottom:1px solid var(--bg3)}
+.dps:last-child{border-bottom:none}
+.dpl{font-size:9px;color:var(--tx3);letter-spacing:.08em;margin-bottom:7px;font-weight:700;text-transform:uppercase}
+.chip-gl{display:inline-flex;align-items:center;font-size:9px;padding:3px 9px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);margin:2px;cursor:pointer;transition:all .12s;font-weight:500}
+.chip-gl:hover{border-color:rgba(0,212,168,.4);background:rgba(0,212,168,.05);color:var(--teal3)}
+.chip-gl.on{border-color:rgba(0,212,168,.5);background:rgba(0,212,168,.1);color:var(--teal2);font-weight:700}
+.note-item{background:var(--bg);border-radius:8px;padding:8px 10px;margin-bottom:5px;font-size:10px;border-left:3px solid var(--teal)}
+.note-meta{font-size:8px;color:var(--tx3);margin-bottom:2px;font-weight:600}
+.tl-row{display:flex;gap:7px;padding:4px 0;font-size:10px;align-items:flex-start}
+.tld{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:2px}
+.td-ok{background:var(--teal)}.td-w{background:var(--amber)}.td-n{background:var(--bd2)}
+.tlt{font-size:9px;color:var(--tx3);min-width:64px;font-weight:500}
+
+/* HIGHLIGHT */
+.hl-span{background:#FFF176;border-radius:2px;cursor:pointer}
+
+/* SLA */
+.sla-bar{height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;margin-top:3px}
+.sla-fill{height:6px;border-radius:3px}
+.sla-ok{background:linear-gradient(90deg,var(--teal2),var(--teal))}
+.sla-w{background:linear-gradient(90deg,var(--amber2),var(--amber))}
+.sla-b{background:linear-gradient(90deg,#dc2626,var(--red))}
+
+/* CHARTS */
+.chart-wrap{position:relative;height:200px}
+.chart-sm{position:relative;height:150px}
+.donut-wrap{position:relative;display:flex;align-items:center;justify-content:center}
+.donut-center{position:absolute;text-align:center;pointer-events:none}
+.dv{font-size:22px;font-weight:800;color:var(--tx)}
+.dl{font-size:9px;color:var(--tx3);font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+
+/* BAR MINI */
+.bar-t{height:5px;background:var(--bg3);border-radius:3px;overflow:hidden;margin-top:3px}
+.bar-f{height:5px;border-radius:3px;background:var(--teal)}
+
+/* MODAL */
+.mo{display:none;position:fixed;inset:0;background:rgba(11,20,38,.6);z-index:1000;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.mo.on{display:flex}
+.md{background:var(--bg2);border-radius:var(--rxl);padding:26px;max-width:540px;width:92%;max-height:88vh;overflow-y:auto;position:relative;box-shadow:var(--shadow-lg);border:1px solid var(--bd)}
+.md::before{content:'';position:absolute;top:-1px;left:15%;right:15%;height:2px;background:linear-gradient(90deg,transparent,var(--teal),transparent);border-radius:2px}
+.md-t{font-size:18px;font-weight:800;margin-bottom:4px;color:var(--navy);letter-spacing:-.3px}
+.md-s{font-size:11px;color:var(--tx2);margin-bottom:18px}
+.mc{position:absolute;top:16px;right:16px;background:var(--bg);border:1px solid var(--bd);border-radius:6px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;color:var(--tx3);transition:all .12s}
+.mc:hover{background:var(--bg3);color:var(--tx)}
+
+/* ANNOUNCEMENT */
+.ann{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--rl);padding:16px;margin-bottom:10px;transition:all .15s;position:relative;overflow:hidden}
+.ann:hover{box-shadow:var(--shadow-lg);transform:translateY(-1px)}
+.ann.urgent::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--red),var(--amber))}
+
+/* UPLOAD */
+.drop-zone{
+  border:2px dashed var(--bd2);border-radius:var(--rl);padding:36px 24px;
+  text-align:center;cursor:pointer;transition:all .2s;position:relative;
+  background:linear-gradient(135deg,rgba(0,212,168,.01),rgba(74,144,226,.01))
+}
+.drop-zone:hover,.drop-zone.drag-over{
+  border-color:var(--teal);background:linear-gradient(135deg,rgba(0,212,168,.05),rgba(74,144,226,.03));
+  transform:scale(1.005)
+}
+.drop-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+
+/* BELL PANEL */
+.bell-panel{
+  display:none;position:fixed;top:58px;right:16px;width:360px;
+  background:var(--bg2);border:1px solid var(--bd);border-radius:var(--rl);
+  box-shadow:var(--shadow-lg);z-index:2000;overflow:hidden
+}
+
+/* STATUS DOT PULSE */
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.pulse{animation:pulse 2s infinite}
+
+/* UPLOAD PROGRESS */
+.upload-prog{height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;margin-top:6px}
+.upload-prog-fill{height:4px;border-radius:2px;background:linear-gradient(90deg,var(--teal),var(--blue));transition:width .3s ease}
+
+/* PAGE HEADER */
+.pg-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}
+.pg-title{font-size:20px;font-weight:800;color:var(--navy);letter-spacing:-.4px}
+.pg-sub{font-size:11px;color:var(--tx2);margin-top:3px}
+
+/* BREADCRUMB */
+.bc{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--tx2);margin-bottom:13px;flex-wrap:wrap}
+.bc span{cursor:pointer;color:var(--teal2);font-weight:600}.bc span:hover{text-decoration:underline}
+.bc-s{color:var(--tx3)}
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:20px;right:20px;
+  background:linear-gradient(135deg,var(--teal),var(--teal2));
+  color:var(--navy);font-size:12px;font-weight:700;padding:11px 20px;
+  border-radius:10px;z-index:9999;display:none;
+  box-shadow:0 4px 20px rgba(0,212,168,.45);
+  font-family:var(--font)
+}
+
+/* INVOICE FILE CARD (for upload queue) */
+.inv-file-card{
+  background:var(--bg);border:1px solid var(--bd);border-radius:var(--r);
+  padding:10px 13px;display:flex;align-items:flex-start;gap:11px;margin-bottom:8px;
+  transition:all .15s
+}
+.inv-file-card.processing{border-color:rgba(0,212,168,.3);background:rgba(0,212,168,.03)}
+.inv-file-card.done{border-color:rgba(0,212,168,.4);background:rgba(0,212,168,.05)}
+.inv-file-card.error{border-color:rgba(255,71,87,.3);background:rgba(255,71,87,.03)}
+.file-thumb{width:40px;height:50px;border-radius:6px;background:var(--bg3);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;color:var(--tx3)}
+
+.tag{display:inline-flex;align-items:center;gap:4px;font-size:9px;padding:3px 8px;border-radius:20px;border:1px solid;margin:2px;cursor:pointer;font-weight:600}
+</style>
+</head>
+<body>
+
+<!-- ═══ LOGIN ═══ -->
+<div class="sc on" id="s-login">
+<div class="login-bg">
+<div class="login-grid"></div>
+<div class="login-card">
+  <div class="km-icon">KM</div>
+  <div class="km-firm">Korey Malek CPA</div>
+  <div class="km-sub">Invoice Management Portal</div>
+  <div class="inp-wrap"><label class="fl">Email address</label><input class="inp" type="email" value="k.malek@koreymalekcpa.com"></div>
+  <div class="inp-wrap"><label class="fl">Password</label><input class="inp" type="password" value="KMalek2026!"></div>
+  <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:16px">
+    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;color:var(--tx2);font-weight:500"><input type="checkbox" checked> Remember me</label>
+    <a href="#" style="color:var(--teal2);text-decoration:none;font-weight:600">Forgot password?</a>
+  </div>
+  <button class="login-btn" onclick="G('s-app')"><i class="ti ti-login"></i> Sign in to portal</button>
+  <div class="powered">Powered by <span>BetMe InvoiceTrack</span></div>
+  <div style="text-align:center;margin:13px 0;font-size:10px;color:var(--tx3);display:flex;align-items:center;gap:8px">
+    <div style="flex:1;height:1px;background:var(--bd)"></div><span>demo credentials</span><div style="flex:1;height:1px;background:var(--bd)"></div>
+  </div>
+  <div class="cred-box">
+    <div style="font-size:9px;font-weight:700;color:var(--tx2);margin-bottom:6px;letter-spacing:.06em;text-transform:uppercase">Pre-filled · Just click sign in</div>
+    <div style="display:flex;justify-content:space-between;font-size:11px;padding:2px 0"><span style="color:var(--tx3)">Email</span><span style="color:var(--teal2);font-family:var(--mono);font-weight:500">k.malek@koreymalekcpa.com</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:11px;padding:2px 0"><span style="color:var(--tx3)">Password</span><span style="color:var(--teal2);font-family:var(--mono);font-weight:500">KMalek2026!</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:11px;padding:2px 0"><span style="color:var(--tx3)">Plan</span><span style="color:var(--teal2);font-weight:600">Firm Pro · White-label</span></div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- ═══ APP ═══ -->
+<div class="sc" id="s-app">
+<div class="app">
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="tb-logo">KM</div>
+  <span class="tb-firm">Korey Malek CPA</span>
+  <div class="tb-div"></div>
+  <div class="tb-sub">Invoice Portal<span class="tb-badge">Firm Pro</span></div>
+  <div class="tb-sep"></div>
+  <div class="tb-bell" onclick="openBell()" id="bell-btn">
+    <i class="ti ti-bell" aria-hidden="true"></i>
+    <div class="tb-badge-dot" id="bell-dot">4</div>
+  </div>
+  <div class="tb-user">
+    <div class="tb-av">KM</div>
+    <span class="tb-uname">Korey Malek, CPA</span>
+  </div>
+  <button class="tb-signout" onclick="G('s-login')"><i class="ti ti-logout" aria-hidden="true"></i> Sign out</button>
+</div>
+
+<div class="appbody">
+
+<!-- SIDEBAR -->
+<div class="sb" id="sidebar">
+  <div class="ss">Portfolio</div>
+  <div class="si on" data-p="dashboard" onclick="NAV(this)"><i class="ti ti-layout-dashboard" aria-hidden="true"></i>Dashboard</div>
+  <div class="si" data-p="exceptions" onclick="NAV(this)"><i class="ti ti-alert-triangle" aria-hidden="true"></i>Exceptions<span class="sib sib-w" id="exc-badge">4</span></div>
+  <div class="si" data-p="reports" onclick="NAV(this)"><i class="ti ti-chart-dots" aria-hidden="true"></i>Reports</div>
+  <div class="si" data-p="downloads" onclick="NAV(this)"><i class="ti ti-download" aria-hidden="true"></i>Downloads</div>
+  <div class="si" data-p="mass-upload" onclick="NAV(this)"><i class="ti ti-cloud-upload" aria-hidden="true"></i>Mass upload</div>
+  <div class="si" data-p="announcements" onclick="NAV(this)"><i class="ti ti-speakerphone" aria-hidden="true"></i>Announcements<span class="sib sib-i">2</span></div>
+  <div class="ss">Clients</div>
+  <div id="client-chips"></div>
+  <div class="ss">Firm tools</div>
+  <div class="si" data-p="team" onclick="NAV(this)"><i class="ti ti-users" aria-hidden="true"></i>My team</div>
+  <div class="si" data-p="add-client" onclick="NAV(this)"><i class="ti ti-user-plus" aria-hidden="true"></i>Add new client</div>
+  <div class="si" data-p="whitelabel" onclick="NAV(this)"><i class="ti ti-palette" aria-hidden="true"></i>White-label</div>
+  <div class="sbot"><button class="sbb" onclick="G('s-login')"><i class="ti ti-logout" aria-hidden="true"></i> Sign out</button></div>
+</div>
+
+<!-- MAIN -->
+<div class="main"><div id="pages"></div></div>
+</div>
+</div>
+</div>
+
+<!-- BELL PANEL -->
+<div class="bell-panel" id="bell-panel">
+  <div style="padding:13px 15px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;background:var(--navy)">
+    <span style="font-size:13px;font-weight:700;color:#f0f6ff">Notifications</span>
+    <div style="display:flex;gap:8px;align-items:center">
+      <span style="font-size:10px;color:rgba(255,255,255,.4);cursor:pointer" onclick="markAllRead()">Mark all read</span>
+      <button onclick="closeBell()" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:5px;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;color:rgba(255,255,255,.6)">×</button>
+    </div>
+  </div>
+  <div id="bell-items" style="max-height:380px;overflow-y:auto"></div>
+  <div style="padding:10px 15px;border-top:1px solid var(--bd);text-align:center">
+    <span style="font-size:11px;color:var(--teal2);cursor:pointer;font-weight:600" onclick="closeBell();NAV(document.querySelector('[data-p=announcements]'))">View all announcements →</span>
+  </div>
+</div>
+
+<!-- ═══ MODALS ═══ -->
+
+<!-- APPROVE MODAL -->
+<div class="mo" id="mo-approve">
+<div class="md">
+  <button class="mc" onclick="CM()">×</button>
+  <div class="md-t">Review exception invoice</div>
+  <div class="md-s" id="mo-sub">Invoice details</div>
+  <div style="background:rgba(245,166,35,.08);border:1.5px solid rgba(245,166,35,.3);border-radius:10px;padding:10px 13px;font-size:10px;color:#92400E;margin-bottom:14px;line-height:1.6" id="mo-flag"></div>
+  <div class="g2">
+    <div><label class="fl">Document type</label><select id="ma-type" style="margin-bottom:10px"><option>INVOICE</option><option>CREDIT_NOTE</option><option>DEBIT_NOTE</option><option>RECEIPT</option></select></div>
+    <div><label class="fl">Total amount</label><input class="inp" type="text" id="ma-amt" style="margin-bottom:10px"></div>
+    <div><label class="fl">Vendor name</label><input class="inp" type="text" id="ma-vendor" style="margin-bottom:10px"></div>
+    <div><label class="fl">GL account</label><select id="ma-gl" style="margin-bottom:10px"><option>5010 · Cost of Goods Sold</option><option>6100 · Office Supplies</option><option>6200 · Freight & Shipping</option><option>6300 · Utilities</option><option>6400 · Insurance</option><option>6500 · Professional Services</option><option>2000 · Accounts Payable</option></select></div>
+  </div>
+  <label class="fl">Reviewer note (required)</label>
+  <textarea id="ma-note" rows="2" style="margin-bottom:14px" placeholder="Describe any corrections made and why..."></textarea>
+  <div style="display:flex;gap:8px">
+    <button class="btn btn-p" id="ma-btn"><i class="ti ti-check" aria-hidden="true"></i> Approve & queue for ERP</button>
+    <button class="btn btn-d" onclick="CM();T('Invoice rejected — client will be notified')"><i class="ti ti-x" aria-hidden="true"></i> Reject</button>
+    <button class="btn" onclick="CM();T('Escalated to senior reviewer')"><i class="ti ti-arrow-up-right" aria-hidden="true"></i> Escalate</button>
+  </div>
+</div>
+</div>
+
+<!-- EMAIL MODAL -->
+<div class="mo" id="mo-email">
+<div class="md">
+  <button class="mc" onclick="CM()">×</button>
+  <div class="md-t">Resend invoice by email</div>
+  <div class="md-s">Forward this invoice and its extracted data to any address</div>
+  <div class="inp-wrap"><label class="fl">Recipient email</label><input class="inp" type="email" id="email-to" value="ap@acmehardware.com"></div>
+  <div class="inp-wrap"><label class="fl">Subject</label><input class="inp" type="text" id="email-subj"></div>
+  <div class="inp-wrap"><label class="fl">Message</label><textarea rows="3" placeholder="Optional message to include...">Please find the processed invoice attached. Let us know if you have any questions.</textarea></div>
+  <div style="display:flex;gap:14px;margin-bottom:14px;font-size:11px;flex-wrap:wrap">
+    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:500"><input type="checkbox" checked> Attach original PDF</label>
+    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:500"><input type="checkbox" checked> Attach ERP entry file</label>
+    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:500"><input type="checkbox"> Include audit trail</label>
+  </div>
+  <button class="btn btn-p" onclick="CM();T('✓ Invoice emailed to '+document.getElementById('email-to').value)"><i class="ti ti-send" aria-hidden="true"></i> Send email</button>
+</div>
+</div>
+
+<!-- TEAM EDIT MODAL -->
+<div class="mo" id="mo-team-edit">
+<div class="md">
+  <button class="mc" onclick="CM()">×</button>
+  <div class="md-t" id="te-title">Edit team member</div>
+  <div class="md-s">Update role, contact information, and client access permissions</div>
+  <div class="g2">
+    <div><label class="fl">Full name</label><input class="inp" type="text" id="te-name" style="margin-bottom:10px"></div>
+    <div><label class="fl">Role</label><select id="te-role" style="margin-bottom:10px"><option>Managing CPA</option><option>Senior Associate</option><option>Staff Accountant</option><option>Bookkeeper</option><option>View only</option></select></div>
+  </div>
+  <div class="inp-wrap"><label class="fl">Email address</label><input class="inp" type="email" id="te-email"></div>
+  <div style="margin:12px 0 6px"><label class="fl">Clients this person can access</label></div>
+  <div id="te-clients" style="display:flex;flex-direction:column;gap:5px;margin-bottom:16px"></div>
+  <button class="btn btn-p" onclick="saveTeam()"><i class="ti ti-device-floppy" aria-hidden="true"></i> Save changes</button>
+</div>
+</div>
+
+<!-- COA UPLOAD MODAL -->
+<div class="mo" id="mo-coa">
+<div class="md" style="max-width:560px">
+  <button class="mc" onclick="CM()">×</button>
+  <div class="md-t">Upload Chart of Accounts</div>
+  <div class="md-s">Import your GL codes from a CSV or Excel file. Columns: Code, Description, Type</div>
+  <div class="drop-zone" style="margin-bottom:14px" onclick="T('File picker opens here')">
+    <i class="ti ti-table-import" style="font-size:32px;color:var(--tx3);display:block;margin-bottom:10px" aria-hidden="true"></i>
+    <div style="font-size:13px;font-weight:700;margin-bottom:5px;color:var(--tx)">Drop your Chart of Accounts here</div>
+    <div style="font-size:11px;color:var(--tx2)">CSV or Excel · Columns: Code, Description, Type</div>
+  </div>
+  <div style="background:var(--bg);border:1px solid var(--bd);border-radius:var(--r);padding:11px 13px;margin-bottom:13px">
+    <div style="font-size:10px;font-weight:700;margin-bottom:6px;color:var(--tx)">Expected format:</div>
+    <div style="font-family:var(--mono);font-size:10px;line-height:2;color:var(--tx2)">Code,Description,Type<br>2000,Accounts Payable,Liability<br>5010,Cost of Goods Sold,Expense<br>6100,Office Supplies,Expense<br>6200,Freight & Shipping,Expense</div>
+  </div>
+  <button class="btn btn-p" onclick="CM();T('✓ Chart of accounts imported — 142 GL codes loaded')"><i class="ti ti-upload" aria-hidden="true"></i> Import chart of accounts</button>
+</div>
+</div>
+
+<!-- INVITE USER MODAL -->
+<div class="mo" id="mo-invite-user">
+<div class="md">
+  <button class="mc" onclick="CM()">×</button>
+  <div class="md-t">Invite client user</div>
+  <div class="md-s" id="invite-sub">Give your client access to their invoice portal</div>
+  <div class="g2">
+    <div><label class="fl">Full name</label><input class="inp" type="text" id="iu-name" placeholder="e.g. James Wilson" style="margin-bottom:10px"></div>
+    <div><label class="fl">Email address</label><input class="inp" type="email" id="iu-email" placeholder="james@company.com" style="margin-bottom:10px"></div>
+  </div>
+  <div class="inp-wrap">
+    <label class="fl">Access level</label>
+    <select id="iu-role" onchange="updateIURoleDesc()">
+      <option value="full">Full access — view, approve, and download</option>
+      <option value="approve">Approve + view — can approve invoices</option>
+      <option value="view">View only — read-only portal access</option>
+    </select>
+    <div id="iu-role-desc" style="font-size:9px;color:var(--tx3);margin-top:4px;font-weight:500">Can view all invoices, approve exceptions, and download ERP files</div>
+  </div>
+  <div style="background:var(--bg);border:1px solid rgba(0,212,168,.2);border-radius:var(--r);padding:11px 13px;margin-bottom:15px">
+    <div style="font-size:10px;color:var(--tx2)">Client portal URL:</div>
+    <div id="iu-portal-url" style="color:var(--teal2);font-family:var(--mono);font-weight:600;font-size:11px;margin-top:3px">invoices.acme@koreymalekcpa.com</div>
+    <div style="font-size:9px;color:var(--tx3);margin-top:3px">Branded as <strong>Korey Malek CPA</strong></div>
+  </div>
+  <button class="btn btn-p" style="width:100%;justify-content:center" onclick="doInviteUser()"><i class="ti ti-mail" aria-hidden="true"></i> Send portal invite email</button>
+</div>
+</div>
+
+<!-- ADD CLIENT SUCCESS MODAL -->
+<div class="mo" id="mo-client-created">
+<div class="md" style="text-align:center;max-width:420px">
+  <button class="mc" onclick="CM()">×</button>
+  <div style="width:56px;height:56px;background:rgba(0,212,168,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;border:2px solid rgba(0,212,168,.3)">
+    <i class="ti ti-circle-check" style="font-size:28px;color:var(--teal)" aria-hidden="true"></i>
+  </div>
+  <div class="md-t" style="text-align:center" id="mac-title">Client created!</div>
+  <div class="md-s" style="text-align:center" id="mac-msg">Your new client has been added.</div>
+  <div style="display:flex;gap:8px;justify-content:center">
+    <button class="btn btn-p" id="mac-open-btn"><i class="ti ti-arrow-right" aria-hidden="true"></i> Open client dashboard</button>
+    <button class="btn" onclick="CM()">Stay here</button>
+  </div>
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script>
+// ═══════════════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════════════
+var charts={}, editingTeamId=null, CP='dashboard', CC='acme', CI=null, CCT=0;
+var pdfZ=1, pdfRot=0, hlMode=false, notesDB={}, bellRead={};
+
+// Real-world invoice data for 5 industries
+var clients=[
+  {id:'acme',name:'Acme Hardware LLC',short:'Acme',plan:'Growth',inv:6,vol:47418,proc:4,exc:2,ai:94.2,st:'ok',erp:'QuickBooks Online',since:'Jan 2026',contact:'James Wilson',email:'james@acmehardware.com',ein:'82-3456789',phone:'(214) 555-0192',addr:'4521 Commerce Blvd, Dallas TX 75201',approval:5000,color:'#00D4A8',industry:'Retail Hardware',users:[]},
+  {id:'sparkle',name:'Sparkle Clean Services',short:'Sparkle',plan:'Starter',inv:4,vol:3840,proc:4,exc:0,ai:97.8,st:'ok',erp:'QuickBooks Desktop',since:'Feb 2026',contact:'Maria Santos',email:'maria@sparkleclean.com',ein:'71-3344567',phone:'(305) 555-0881',addr:'2200 SW 8th St, Miami FL 33135',approval:2000,color:'#4A90E2',industry:'Commercial Cleaning',users:[]},
+  {id:'greenlawn',name:'GreenLawn Landscape Co',short:'GreenLawn',plan:'Growth',inv:5,vol:28650,proc:3,exc:2,ai:88.4,st:'warn',erp:'Xero',since:'Mar 2026',contact:'Tom Bradley',email:'tom@greenlawn.com',ein:'55-7788901',phone:'(512) 555-0443',addr:'890 Lamar Blvd, Austin TX 78703',approval:3000,color:'#22C55E',industry:'Landscaping',users:[]},
+  {id:'summit',name:'Summit Building Group',short:'Summit',plan:'Scale',inv:7,vol:184200,proc:5,exc:2,ai:91.3,st:'ok',erp:'NetSuite',since:'Jan 2026',contact:'Robert Chen',email:'robert@summitbg.com',ein:'44-9922134',phone:'(404) 555-0217',addr:'1400 Peachtree St, Atlanta GA 30309',approval:10000,color:'#F5A623',industry:'General Contractor',users:[]},
+  {id:'metro',name:'Metro Supplies Inc',short:'Metro',plan:'Starter',inv:3,vol:18760,proc:3,exc:0,ai:98.6,st:'ok',erp:'QuickBooks Desktop',since:'Apr 2026',contact:'Ana López',email:'ana@metrosupplies.com',ein:'44-5678901',phone:'(407) 555-0621',addr:'320 Commerce Dr, Orlando FL 32801',approval:8000,color:'#7C3AED',industry:'Wholesale Supplies',users:[]},
+];
+
+// Real-world invoices across industries
+var invoices=[
+  // ACME HARDWARE — Retail
+  {id:'WO-620399',vendor:'Prime Glass LLC',date:'2026-05-12',rec:'2026-05-22',due:'2026-06-11',amt:207.00,st:'processed',ai:96,gl:'5010 · Cost of Goods',cc:'CC-002',terms:'Net 30',tax:0,sub:200,client:'acme',flag:'',taxid:'27-1240448',po:'PO-2026-0441',posted:true,industry:'auto glass',file:'prime_glass'},
+  {id:'CM838572P',vendor:'Stingray Chevrolet',date:'2026-05-05',rec:'2026-05-22',due:'—',amt:-674.29,st:'review',ai:82,gl:'—',cc:'—',terms:'WHSL',tax:0,sub:-674.29,client:'acme',flag:'Credit note · two copies in PDF · verify return authorization',taxid:'59-1234567',po:'—',posted:false,industry:'auto parts',file:'stingray'},
+  {id:'INV-2847',vendor:'Office Depot',date:'2026-05-19',rec:'2026-05-19',due:'2026-06-18',amt:1240.00,st:'processed',ai:99,gl:'6100 · Office Supplies',cc:'CC-001',terms:'Net 30',tax:99.20,sub:1140.80,client:'acme',flag:'',taxid:'59-2342412',po:'PO-2026-0438',posted:true,industry:'office',file:'office_depot'},
+  {id:'INV-2846',vendor:'FedEx Freight',date:'2026-05-18',rec:'2026-05-18',due:'2026-06-17',amt:3871.00,st:'processed',ai:97,gl:'6200 · Freight',cc:'60/40',terms:'Net 30',tax:0,sub:3871,client:'acme',flag:'',taxid:'71-0427400',po:'—',posted:false,industry:'freight',file:'fedex'},
+  {id:'INV-2845',vendor:'ElectroParts Co',date:'2026-05-18',rec:'2026-05-18',due:'2026-06-17',amt:12400.00,st:'review',ai:71,gl:'—',cc:'—',terms:'Net 30',tax:450,sub:11950,client:'acme',flag:'Tax mismatch — $450 stated ≠ $1,852 expected at 15.5% of $11,950',taxid:'82-3456789',po:'PO-2026-0437',posted:false,industry:'electronics',file:'electroparts'},
+  {id:'INV-2844',vendor:'Global Steel Inc',date:'2026-05-17',rec:'2026-05-17',due:'2026-06-16',amt:28900.00,st:'processed',ai:98,gl:'5010 · Cost of Goods',cc:'CC-002',terms:'Net 30',tax:0,sub:28900,client:'acme',flag:'',taxid:'45-1234567',po:'PO-2026-0435',posted:true,industry:'steel',file:'global_steel'},
+  // SPARKLE CLEAN — Commercial Cleaning
+  {id:'SPK-0441',vendor:'Hillyard Industries',date:'2026-05-14',rec:'2026-05-14',due:'2026-06-13',amt:892.40,st:'processed',ai:99,gl:'5010 · COGS — Supplies',cc:'CC-001',terms:'Net 30',tax:71.39,sub:821.01,client:'sparkle',flag:'',taxid:'41-0605860',po:'PO-S-0088',posted:true,industry:'cleaning supplies',file:'hillyard'},
+  {id:'SPK-0442',vendor:'Cintas Corp',date:'2026-05-08',rec:'2026-05-08',due:'2026-06-07',amt:1240.00,st:'processed',ai:98,gl:'6100 · Uniforms & PPE',cc:'CC-001',terms:'Net 30',tax:99.20,sub:1140.80,client:'sparkle',flag:'',taxid:'31-1052574',po:'PO-S-0087',posted:true,industry:'uniforms',file:'cintas'},
+  {id:'SPK-0443',vendor:'Grainger Industrial',date:'2026-05-20',rec:'2026-05-20',due:'2026-06-19',amt:486.00,st:'processed',ai:97,gl:'5020 · Equipment Maint.',cc:'CC-001',terms:'Net 30',tax:38.88,sub:447.12,client:'sparkle',flag:'',taxid:'36-1150280',po:'—',posted:true,industry:'equipment',file:'grainger'},
+  {id:'SPK-0444',vendor:'Uline Shipping Supplies',date:'2026-05-22',rec:'2026-05-22',due:'2026-06-21',amt:1221.60,st:'processed',ai:96,gl:'6100 · Supplies',cc:'CC-001',terms:'Net 30',tax:97.73,sub:1123.87,client:'sparkle',flag:'',taxid:'33-0969977',po:'PO-S-0089',posted:true,industry:'supplies',file:'uline'},
+  // GREENLAWN — Landscaping
+  {id:'GL-3301',vendor:'John Deere Financial',date:'2026-05-01',rec:'2026-05-01',due:'2026-05-31',amt:4200.00,st:'processed',ai:99,gl:'6600 · Equipment Lease',cc:'CC-001',terms:'Net 30',tax:0,sub:4200,client:'greenlawn',flag:'',taxid:'36-2382580',po:'LEASE-2026-03',posted:true,industry:'equipment lease',file:'john_deere'},
+  {id:'GL-3302',vendor:'SiteOne Landscape Supply',date:'2026-05-10',rec:'2026-05-10',due:'2026-06-09',amt:6840.00,st:'processed',ai:94,gl:'5010 · Materials',cc:'CC-002',terms:'Net 30',tax:547.20,sub:6292.80,client:'greenlawn',flag:'',taxid:'46-4056619',po:'PO-GL-0114',posted:true,industry:'landscape materials',file:'siteone'},
+  {id:'GL-3303',vendor:'Sunbelt Rentals',date:'2026-05-15',rec:'2026-05-15',due:'2026-06-14',amt:3200.00,st:'review',ai:84,gl:'—',cc:'—',terms:'Net 30',tax:256,sub:2944,client:'greenlawn',flag:'New vendor — verify account setup and terms',taxid:'—',po:'—',posted:false,industry:'equipment rental',file:'sunbelt'},
+  {id:'GL-3304',vendor:'Fuel Express',date:'2026-05-18',rec:'2026-05-18',due:'2026-06-17',amt:2890.00,st:'processed',ai:91,gl:'6300 · Fuel & Fleet',cc:'CC-001',terms:'Net 15',tax:0,sub:2890,client:'greenlawn',flag:'',taxid:'82-1122334',po:'—',posted:false,industry:'fuel',file:'fuel_express'},
+  {id:'GL-3305',vendor:'Ewing Irrigation',date:'2026-05-21',rec:'2026-05-21',due:'2026-06-20',amt:11520.00,st:'review',ai:79,gl:'—',cc:'—',terms:'Net 30',tax:921.60,sub:10598.40,client:'greenlawn',flag:'PO missing — large amount requires approval before posting',taxid:'95-2787329',po:'—',posted:false,industry:'irrigation',file:'ewing'},
+  // SUMMIT BUILDING GROUP — Construction
+  {id:'SBG-7701',vendor:'ABC Supply Co',date:'2026-05-02',rec:'2026-05-02',due:'2026-06-01',amt:42800.00,st:'processed',ai:97,gl:'5010 · Materials',cc:'CC-001',terms:'Net 30',tax:0,sub:42800,client:'summit',flag:'',taxid:'39-1304286',po:'PO-SBG-441',posted:true,industry:'building materials',file:'abc_supply'},
+  {id:'SBG-7702',vendor:'United Rentals Inc',date:'2026-05-08',rec:'2026-05-08',due:'2026-06-07',amt:18600.00,st:'processed',ai:96,gl:'5030 · Equipment Rental',cc:'CC-002',terms:'Net 30',tax:0,sub:18600,client:'summit',flag:'',taxid:'06-1452422',po:'PO-SBG-442',posted:true,industry:'equipment rental',file:'united_rentals'},
+  {id:'SBG-7703',vendor:'Oldcastle Infrastructure',date:'2026-05-12',rec:'2026-05-12',due:'2026-06-11',amt:29400.00,st:'processed',ai:95,gl:'5010 · Materials',cc:'CC-001',terms:'Net 30',tax:0,sub:29400,client:'summit',flag:'',taxid:'58-1710781',po:'PO-SBG-443',posted:true,industry:'concrete',file:'oldcastle'},
+  {id:'SBG-7704',vendor:'Sunbelt Rentals',date:'2026-05-15',rec:'2026-05-15',due:'2026-06-14',amt:8800.00,st:'review',ai:88,gl:'—',cc:'—',terms:'Net 30',tax:704,sub:8096,client:'summit',flag:'Same vendor as GL-3303 — verify different accounts',taxid:'—',po:'PO-SBG-444',posted:false,industry:'equipment rental',file:'sunbelt2'},
+  {id:'SBG-7705',vendor:'Sherwin-Williams',date:'2026-05-19',rec:'2026-05-19',due:'2026-06-18',amt:4200.00,st:'processed',ai:99,gl:'5010 · Materials',cc:'CC-003',terms:'Net 30',tax:336,sub:3864,client:'summit',flag:'',taxid:'34-0526850',po:'PO-SBG-445',posted:false,industry:'paint',file:'sherwin'},
+  {id:'SBG-7706',vendor:'Ferguson Enterprises',date:'2026-05-20',rec:'2026-05-20',due:'2026-06-19',amt:38400.00,st:'processed',ai:93,gl:'5010 · Materials',cc:'CC-001',terms:'Net 30',tax:0,sub:38400,client:'summit',flag:'',taxid:'54-0614867',po:'PO-SBG-446',posted:true,industry:'plumbing',file:'ferguson'},
+  {id:'SBG-7707',vendor:'Fastenal Company',date:'2026-05-22',rec:'2026-05-22',due:'2026-06-21',amt:42000.00,st:'review',ai:86,gl:'—',cc:'—',terms:'Net 30',tax:0,sub:42000,client:'summit',flag:'Large amount — requires owner approval before ERP posting',taxid:'41-0948513',po:'PO-SBG-447',posted:false,industry:'fasteners',file:'fastenal'},
+  // METRO SUPPLIES — Wholesale
+  {id:'MT-2201',vendor:'Metro Parts Inc',date:'2026-05-15',rec:'2026-05-15',due:'2026-06-14',amt:7400.00,st:'processed',ai:98,gl:'5010 · COGS',cc:'CC-001',terms:'Net 30',tax:0,sub:7400,client:'metro',flag:'',taxid:'55-9876543',po:'MP-2026-551',posted:true,industry:'parts',file:'metro_parts'},
+  {id:'MT-2202',vendor:'W.W. Grainger Inc',date:'2026-05-10',rec:'2026-05-10',due:'2026-06-09',amt:840.00,st:'processed',ai:99,gl:'6100 · Office Supplies',cc:'CC-001',terms:'Net 30',tax:67.20,sub:772.80,client:'metro',flag:'',taxid:'36-1150280',po:'MP-2026-550',posted:true,industry:'industrial',file:'grainger2'},
+  {id:'MT-2203',vendor:'Estes Express Lines',date:'2026-05-08',rec:'2026-05-08',due:'2026-06-07',amt:10660.00,st:'processed',ai:96,gl:'6200 · Freight',cc:'CC-002',terms:'Net 30',tax:0,sub:10660,client:'metro',flag:'',taxid:'54-0698378',po:'—',posted:true,industry:'freight',file:'estes'},
+];
+
+// Queue for uploaded files (demo processing)
+var uploadQueue=[];
+var uploadedInvoices=[];
+
+// Team
+var teamMembers=[
+  {id:'km',name:'Korey Malek',role:'Managing CPA',email:'k.malek@koreymalekcpa.com',clients:['acme','sparkle','greenlawn','summit','metro'],last:'Today',status:'ok'},
+  {id:'sr',name:'Sofia Reyes',role:'Senior Associate',email:'s.reyes@koreymalekcpa.com',clients:['acme','metro'],last:'Today',status:'ok'},
+  {id:'mj',name:'Mike Johnson',role:'Staff Accountant',email:'m.johnson@koreymalekcpa.com',clients:['greenlawn','summit'],last:'Yesterday',status:'ok'},
+  {id:'al',name:'Amy Lin',role:'Bookkeeper',email:'a.lin@koreymalekcpa.com',clients:['sparkle','metro'],last:'May 20',status:'ok'},
+];
+
+var announcements=[
+  {id:1,cat:'Tax Alert',cls:'p-warn',title:'IRS extends 1099-NEC electronic filing threshold for 2026',date:'May 22, 2026',body:'The IRS now requires e-filing for 10+ forms (down from 250). All BetMe clients with 10+ 1099 vendors will have automatic e-filing in the year-end package. Action required for all construction and landscaping clients.',urgent:true},
+  {id:2,cat:'Product Update',cls:'p-info',title:'Multi-page invoice splitting now live — test it in Mass Upload',date:'May 20, 2026',body:'BetMe InvoiceTrack can now detect and separate multiple invoices within a single PDF. Upload a batch PDF and the AI identifies vendor headers automatically.',urgent:false},
+  {id:3,cat:'Market News',cls:'p-ok',title:'68% of SMBs still process invoices manually — $12.88/invoice avg cost',date:'May 18, 2026',body:'New AICPA survey: 68% of small businesses still use manual AP processes costing $12.88 per invoice. BetMe reduces this to under $0.20 — 98.5% savings. Use this data in client conversations.',urgent:false},
+  {id:4,cat:'Compliance',cls:'p-pu',title:'Florida sales tax Q3 2026 — new vendor reporting requirements',date:'May 15, 2026',body:'Florida DOR updated schedules for businesses with $250K+ annual purchases. BetMe Q3 export template will include updated tax fields automatically.',urgent:false},
+];
+
+var glCodes=['2000 · Accounts Payable','4000 · Sales Revenue','5010 · Cost of Goods Sold','5020 · Direct Labor','5030 · Equipment Rental','6100 · Office Supplies','6200 · Freight & Shipping','6300 · Utilities / Fuel','6400 · Insurance','6500 · Professional Services','6600 · Equipment Lease','6700 · Depreciation'];
+var ccCodes=['CC-001 · Main Operations','CC-002 · Warehouse / Field','CC-003 · Project Work','CC-004 · Administration','CC-005 · Marketing','60/40 split'];
+
+// Bell notifications
+var bellNotifs=[
+  {id:'exc1',type:'warn',icon:'ti-alert-triangle',color:'var(--amber)',title:'Exception — CM838572P needs review',body:'Stingray Chevrolet · Credit note -$674.29 · Acme Hardware',time:'9:14 AM',go:function(){closeBell();CC='acme';CI='CM838572P';CP='invoice-detail';R();}},
+  {id:'exc2',type:'warn',icon:'ti-alert-triangle',color:'var(--amber)',title:'Exception — GL-3305 needs approval',body:'Ewing Irrigation · $11,520 · GreenLawn · PO missing',time:'9:22 AM',go:function(){closeBell();CC='greenlawn';CI='GL-3305';CP='invoice-detail';R();}},
+  {id:'exc3',type:'warn',icon:'ti-alert-triangle',color:'var(--amber)',title:'Exception — SBG-7707 large invoice',body:'Fastenal · $42,000 · Summit Building · requires approval',time:'9:31 AM',go:function(){closeBell();CC='summit';CI='SBG-7707';CP='invoice-detail';R();}},
+  {id:'ann1',type:'info',icon:'ti-speakerphone',color:'var(--blue)',title:'IRS 1099-NEC threshold update',body:'New filing requirements for 2026 — action required',time:'Today',go:function(){closeBell();NAV(document.querySelector('[data-p=announcements]'));}},
+  {id:'sla1',type:'ok',icon:'ti-circle-check',color:'var(--teal)',title:'All SLAs met — May 2026',body:'5 clients · 25 invoices · 100% on-time processing',time:'This month',go:function(){closeBell();NC('acme');}},
+];
+
+// ═══════ UTILITIES ═══════════════════════════════════════════
+function $(id){return document.getElementById(id)}
+function f$(n){return n<0?'-$'+Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}):'$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function aiC(n){return n>=95?'var(--teal2)':n>=80?'var(--amber2)':'var(--red)';}
+function pill(s,l){
+  var m={processed:'p-ok',review:'p-warn',ok:'p-ok',warn:'p-warn',posted:'p-ok',unposted:'p-neu',setup:'p-info',error:'p-err'};
+  return`<span class="pill ${m[s]||'p-neu'}">${l||s}</span>`;
+}
+function guide(t,b){return`<div class="guide"><i class="ti ti-bulb" aria-hidden="true"></i><div><strong>${t}</strong> — ${b}</div></div>`;}
+function killCharts(){Object.keys(charts).forEach(k=>{try{charts[k].destroy();}catch(e){}});charts={};}
+function T(m,type='ok'){
+  var t=$('toast');t.textContent=m;
+  t.style.background=type==='ok'?'linear-gradient(135deg,var(--teal),var(--teal2))':type==='warn'?'linear-gradient(135deg,var(--amber),var(--amber2))':'linear-gradient(135deg,var(--red),#dc2626)';
+  t.style.color=type==='ok'?'var(--navy)':'#fff';
+  t.style.display='block';
+  setTimeout(()=>t.style.display='none',3000);
+}
+
+function G(s){
+  document.querySelectorAll('.sc').forEach(e=>e.classList.remove('on'));
+  $(s).classList.add('on');
+  if(s==='s-app'){CP='dashboard';CC='acme';CI=null;CCT=0;buildClientChips();R();}
+  window.scrollTo(0,0);
+}
+function NAV(el){
+  if(!el)return;
+  document.querySelectorAll('.si').forEach(n=>n.classList.remove('on'));
+  el.classList.add('on');CP=el.dataset.p;CC=null;CI=null;R();
+}
+function NC(id){
+  CC=id;CI=null;CP='client';CCT=0;
+  document.querySelectorAll('.si').forEach(n=>n.classList.remove('on'));
+  document.querySelectorAll('.cchip').forEach(c=>c.classList.remove('on'));
+  var chip=document.querySelector(`.cchip[data-id="${id}"]`);
+  if(chip)chip.classList.add('on');
+  R();
+}
+function CM(){document.querySelectorAll('.mo').forEach(m=>m.classList.remove('on'));}
+function OM(id){$(id).classList.add('on');}
+
+function buildClientChips(){
+  var container=$('client-chips');
+  if(!container)return;
+  container.innerHTML=clients.map(c=>`
+    <div class="cchip ${CC===c.id?'on':''}" data-id="${c.id}" onclick="NC('${c.id}')">
+      <div><span class="sdot ${c.st==='warn'?'dot-w':'dot-ok'}"></span><span class="ccn">${c.short}</span></div>
+      <div class="ccm">${c.inv} inv · ${c.plan}${c.exc>0?' · <span style="color:var(--amber)">'+c.exc+' exc</span>':''}</div>
+    </div>`).join('');
+}
+
+function R(){
+  killCharts();
+  var m=$('pages');
+  var fn={
+    dashboard:pgDash, exceptions:pgExceptions, reports:pgReports,
+    downloads:pgDownloads, 'mass-upload':pgMassUpload, announcements:pgAnnouncements,
+    team:pgTeam, 'add-client':pgAddClient, whitelabel:pgWhitelabel,
+    client:pgClient, 'invoice-detail':pgInvDetail
+  };
+  m.innerHTML=(fn[CP]||pgDash)();
+  setTimeout(()=>{
+    if(CP==='dashboard')initDashCharts();
+    if(CP==='client'&&CCT===0)initClientCharts();
+  },60);
+}
+
+// Update exception badge
+function updateExcBadge(){
+  var count=invoices.filter(i=>i.st==='review').length;
+  var b=$('exc-badge');
+  if(b)b.textContent=count;
+}
+</script>
+<script>
+// ═══════ DASHBOARD ════════════════════════════════════════
+function pgDash(){
+  var ti=invoices.length, tv=clients.reduce((s,c)=>s+c.vol,0);
+  var te=invoices.filter(i=>i.st==='review').length;
+  var tp=invoices.filter(i=>i.st==='processed').length;
+
+  return `<div class="pg-hdr">
+    <div>
+      <div class="pg-title">Good morning, Korey 👋</div>
+      <div class="pg-sub">Portfolio overview · May 2026 · ${clients.length} active clients</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div style="font-size:11px;color:var(--teal2);display:flex;align-items:center;gap:5px;background:rgba(0,212,168,.06);padding:6px 12px;border-radius:20px;border:1px solid rgba(0,212,168,.2);font-weight:600">
+        <i class="ti ti-circle-check" style="font-size:14px" aria-hidden="true"></i> All SLAs met
+      </div>
+    </div>
+  </div>`+
+  `<div class="mets">
+    <div class="met" style="--met-color:var(--amber)" onclick="NAV(document.querySelector('[data-p=exceptions]'))">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div class="mv warn">${te}</div>
+        <div style="width:36px;height:36px;background:rgba(245,166,35,.1);border-radius:8px;display:flex;align-items:center;justify-content:center"><i class="ti ti-alert-triangle" style="font-size:18px;color:var(--amber)" aria-hidden="true"></i></div>
+      </div>
+      <div class="ml">Exceptions pending</div>
+      <div class="ms" style="color:var(--amber);font-weight:600;font-size:10px">Click to review →</div>
+    </div>
+    <div class="met" style="--met-color:var(--teal)">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div class="mv ok">${tp}</div>
+        <div style="width:36px;height:36px;background:rgba(0,212,168,.1);border-radius:8px;display:flex;align-items:center;justify-content:center"><i class="ti ti-circle-check" style="font-size:18px;color:var(--teal)" aria-hidden="true"></i></div>
+      </div>
+      <div class="ml">Processed this month</div>
+      <div class="ms">across ${clients.length} clients</div>
+    </div>
+    <div class="met" style="--met-color:var(--blue)">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div class="mv" style="color:var(--blue)">$${Math.round(tv/1000)}K</div>
+        <div style="width:36px;height:36px;background:rgba(74,144,226,.1);border-radius:8px;display:flex;align-items:center;justify-content:center"><i class="ti ti-report-money" style="font-size:18px;color:var(--blue)" aria-hidden="true"></i></div>
+      </div>
+      <div class="ml">Total AP volume</div>
+      <div class="ms">May 2026</div>
+    </div>
+    <div class="met" style="--met-color:var(--purple)">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div class="mv" style="color:var(--purple)">${ti}</div>
+        <div style="width:36px;height:36px;background:rgba(124,58,237,.1);border-radius:8px;display:flex;align-items:center;justify-content:center"><i class="ti ti-files" style="font-size:18px;color:var(--purple)" aria-hidden="true"></i></div>
+      </div>
+      <div class="ml">Total invoices</div>
+      <div class="ms">${clients.length} clients combined</div>
+    </div>
+  </div>`+
+  `<div class="g2">
+    <div class="card"><div class="ch"><span class="ct">Invoice count by client</span><span class="cs">Click bar to open client</span></div>
+    <div class="cp"><div class="chart-wrap"><canvas id="ch-vol"></canvas></div></div></div>
+    <div class="card"><div class="ch"><span class="ct">AP volume by client ($)</span><span class="cs">Click bar to open client</span></div>
+    <div class="cp"><div class="chart-wrap"><canvas id="ch-amt"></canvas></div></div></div>
+  </div>`+
+  `<div class="g2">
+    <div class="card"><div class="ch"><span class="ct">Invoice status breakdown</span></div>
+    <div class="cp"><div style="display:flex;gap:16px;align-items:center">
+      <div class="donut-wrap" style="width:150px;height:150px;flex-shrink:0">
+        <canvas id="ch-donut" width="150" height="150"></canvas>
+        <div class="donut-center"><div class="dv">${ti}</div><div class="dl">total</div></div>
+      </div>
+      <div style="flex:1">
+        ${[['Processed',tp,'var(--teal)'],['In review',te,'var(--amber)'],['Posted',invoices.filter(i=>i.posted).length,'var(--blue)']].map(([l,v,c])=>`
+        <div style="margin-bottom:11px">
+          <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px;font-weight:600">
+            <span style="display:flex;align-items:center;gap:6px"><span style="width:9px;height:9px;border-radius:50%;background:${c};display:inline-block"></span>${l}</span>
+            <span style="color:${c}">${v}</span>
+          </div>
+          <div class="bar-t"><div class="bar-f" style="width:${Math.round(v/ti*100)}%;background:${c}"></div></div>
+        </div>`).join('')}
+      </div>
+    </div></div></div>
+    <div class="card"><div class="ch"><span class="ct">AI confidence · clients</span></div>
+    <div class="cp"><div class="chart-wrap"><canvas id="ch-ai"></canvas></div></div></div>
+  </div>`+
+  `<div class="card"><div class="ch"><span class="ct">Client portfolio</span><span class="cs">Click to open any client</span></div><div class="cp">`+
+  clients.map(c=>`<div style="display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--bg3);cursor:pointer;transition:all .12s" onclick="NC('${c.id}')" onmouseenter="this.style.background='rgba(0,212,168,.02)'" onmouseleave="this.style.background=''">
+    <div style="width:38px;height:38px;border-radius:10px;background:${c.color}15;border:1.5px solid ${c.color}30;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:${c.color};flex-shrink:0">${c.short.substring(0,2)}</div>
+    <div style="flex:1">
+      <div style="font-size:12px;font-weight:700;color:var(--navy)">${c.name}</div>
+      <div style="font-size:10px;color:var(--tx2)">${c.industry} · ${c.inv} invoices · $${Math.round(c.vol).toLocaleString()} AP</div>
+    </div>
+    <div style="text-align:right">
+      ${c.exc>0?`<span class="badge ba" style="margin-bottom:3px;display:block">${c.exc} exceptions ⚠</span>`:`<span class="badge bt" style="margin-bottom:3px;display:block">On track ✓</span>`}
+      <div style="font-size:9px;color:${c.ai>=90?'var(--teal2)':'var(--amber2)'}">AI: ${c.ai}%</div>
+    </div>
+  </div>`).join('')+`</div></div>`;
+}
+
+function initDashCharts(){
+  var opts={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},onClick:(e,el,chart)=>{if(el.length){var ci=clients[el[0].index];if(ci)NC(ci.id);}}};
+  var c1=$('ch-vol');
+  if(c1) charts['vol']=new Chart(c1,{type:'bar',data:{labels:clients.map(c=>c.short),datasets:[{data:clients.map(c=>c.inv),backgroundColor:clients.map(c=>c.color+'99'),borderColor:clients.map(c=>c.color),borderWidth:2,borderRadius:8,borderSkipped:false}]},options:{...opts,scales:{y:{ticks:{stepSize:1,font:{size:10,family:'Plus Jakarta Sans'}},grid:{color:'rgba(0,0,0,.04)'}},x:{ticks:{font:{size:10,family:'Plus Jakarta Sans'}},grid:{display:false}}}}});
+  var c2=$('ch-amt');
+  if(c2) charts['amt']=new Chart(c2,{type:'bar',data:{labels:clients.map(c=>c.short),datasets:[{data:clients.map(c=>c.vol),backgroundColor:clients.map(c=>c.color+'66'),borderColor:clients.map(c=>c.color),borderWidth:2,borderRadius:8,borderSkipped:false}]},options:{...opts,scales:{y:{ticks:{callback:v=>'$'+Math.round(v/1000)+'K',font:{size:10,family:'Plus Jakarta Sans'}},grid:{color:'rgba(0,0,0,.04)'}},x:{ticks:{font:{size:10,family:'Plus Jakarta Sans'}},grid:{display:false}}}}});
+  var c3=$('ch-donut');
+  if(c3){var proc=invoices.filter(i=>i.st==='processed').length,rev=invoices.filter(i=>i.st==='review').length;
+    charts['donut']=new Chart(c3,{type:'doughnut',data:{labels:['Processed','In review'],datasets:[{data:[proc,rev],backgroundColor:['#00D4A8','#F5A623'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,cutout:'72%',plugins:{legend:{display:false}}}});}
+  var c4=$('ch-ai');
+  if(c4) charts['ai']=new Chart(c4,{type:'bar',data:{labels:clients.map(c=>c.short),datasets:[{data:clients.map(c=>c.ai),backgroundColor:clients.map(c=>c.ai>=90?'#00D4A899':'#F5A62399'),borderColor:clients.map(c=>c.ai>=90?'#00D4A8':'#F5A623'),borderWidth:2,borderRadius:8,borderSkipped:false}]},options:{...opts,scales:{y:{min:60,max:100,ticks:{callback:v=>v+'%',font:{size:10,family:'Plus Jakarta Sans'}},grid:{color:'rgba(0,0,0,.04)'}},x:{ticks:{font:{size:10,family:'Plus Jakarta Sans'}},grid:{display:false}}}}});
+}
+
+// ═══════ EXCEPTIONS ═══════════════════════════════════════
+function pgExceptions(){
+  var exc=invoices.filter(i=>i.st==='review');
+  return `<div class="pg-hdr">
+    <div><div class="pg-title">Exception queue</div>
+    <div class="pg-sub">${exc.length} invoices flagged across all clients · SLA: resolve within 4 hours</div></div>
+    <div style="display:flex;gap:8px">
+      <select style="width:160px" onchange="R()"><option>All clients</option>${clients.map(c=>`<option>${c.name}</option>`).join('')}</select>
+      <select style="width:150px"><option>All flag types</option><option>Credit note</option><option>Tax mismatch</option><option>New vendor</option><option>Large amount</option></select>
+    </div>
+  </div>`+
+  `<div class="card"><table class="tbl"><thead><tr>
+    <th style="min-width:110px">Invoice #</th>
+    <th style="min-width:90px">Client</th>
+    <th style="min-width:130px">Vendor</th>
+    <th style="min-width:90px">Amount</th>
+    <th style="min-width:100px">PO #</th>
+    <th style="min-width:55px">AI</th>
+    <th style="min-width:200px">Flag</th>
+    <th style="min-width:110px">Action</th>
+  </tr></thead><tbody>`+
+  exc.map(i=>{var cl=clients.find(c=>c.id===i.client);return`<tr>
+    <td style="font-weight:700;color:var(--navy)">${i.id}</td>
+    <td><span class="badge" style="background:${cl.color}15;color:${cl.color};border:1px solid ${cl.color}30;font-size:8px">${cl.short}</span></td>
+    <td>${i.vendor}</td>
+    <td style="color:${i.amt<0?'var(--red)':'var(--tx)'};font-weight:700">${f$(i.amt)}</td>
+    <td style="font-size:10px;color:var(--tx2)">${i.po}</td>
+    <td style="font-weight:700;color:${aiC(i.ai)}">${i.ai}%</td>
+    <td style="max-width:200px;white-space:normal;line-height:1.4;font-size:10px;color:var(--tx2)">${i.flag}</td>
+    <td>
+      <button class="btn btn-p" style="font-size:9px;padding:4px 10px" onclick="openExc('${i.id}','${i.client}')">
+        <i class="ti ti-file-search" aria-hidden="true"></i> Review invoice
+      </button>
+    </td>
+  </tr>`;}).join('')+`</tbody></table></div>`;
+}
+
+function openExc(invId,clientId){
+  CC=clientId;CI=invId;CP='invoice-detail';R();
+}
+
+// ═══════ REPORTS ══════════════════════════════════════════
+function pgReports(){
+  return `<div class="pg-hdr">
+    <div><div class="pg-title">Reports</div>
+    <div class="pg-sub">Generate, preview, and download reports across your entire portfolio</div></div>
+  </div>`+
+  `<div class="g2">
+    <div class="card"><div class="ch"><span class="ct">Invoice report</span><span class="badge bt">All invoices · full detail</span></div><div class="cp">
+      <div class="g2" style="margin-bottom:10px">
+        <div><label class="fl">From date</label><input class="inp" type="date" id="rpt-from" value="2026-05-01"></div>
+        <div><label class="fl">To date</label><input class="inp" type="date" id="rpt-to" value="2026-05-31"></div>
+      </div>
+      <div style="margin-bottom:10px"><label class="fl">Client</label>
+        <select id="rpt-client"><option value="all">All clients</option>${clients.map(c=>`<option value="${c.id}">${c.name}</option>`).join('')}</select>
+      </div>
+      <div class="g2" style="margin-bottom:10px">
+        <div><label class="fl">Status</label>
+          <select id="rpt-status"><option value="all">All statuses</option><option value="processed">Processed</option><option value="review">In review</option></select>
+        </div>
+        <div><label class="fl">Posted?</label>
+          <select id="rpt-posted"><option value="all">All</option><option value="yes">Posted only</option><option value="no">Unposted only</option></select>
+        </div>
+      </div>
+      <div style="margin-bottom:12px"><label class="fl" style="margin-bottom:6px">Columns</label>
+        <div style="display:flex;flex-wrap:wrap;gap:4px">
+          ${['Invoice #','Vendor','Date','Due','PO #','Amount','Tax','GL','Status','AI%','Posted'].map(col=>`<label style="display:flex;align-items:center;gap:4px;font-size:10px;cursor:pointer;padding:3px 8px;background:var(--bg);border:1px solid var(--bd);border-radius:20px;font-weight:500"><input type="checkbox" checked style="width:12px;height:12px;accent-color:var(--teal)"> ${col}</label>`).join('')}
+        </div>
+      </div>
+      <div style="display:flex;gap:7px;flex-wrap:wrap">
+        <button class="btn btn-p" onclick="generateReport()"><i class="ti ti-table-export" aria-hidden="true"></i> Generate Excel</button>
+        <button class="btn" onclick="previewReport()"><i class="ti ti-eye" aria-hidden="true"></i> Preview</button>
+        <span id="rpt-count" style="font-size:11px;color:var(--tx3);align-self:center"></span>
+      </div>
+      <div id="rpt-preview" style="display:none;margin-top:12px;border:1px solid var(--bd);border-radius:8px;overflow:hidden;max-height:280px;overflow-y:auto"></div>
+    </div></div>
+
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="card"><div class="ch"><span class="ct">Exception report</span><span class="badge ba">Flagged invoices</span></div><div class="cp">
+        <div class="g2" style="margin-bottom:10px">
+          <div><label class="fl">Date range</label><input class="inp" type="date" value="2026-05-01"></div>
+          <div><label class="fl">Client</label><select><option>All clients</option>${clients.map(c=>`<option>${c.name}</option>`).join('')}</select></div>
+        </div>
+        <button class="btn btn-p" onclick="T('✓ Exception_Report_May2026.xlsx downloaded')"><i class="ti ti-table-export" aria-hidden="true"></i> Download exception report</button>
+      </div></div>
+
+      <div class="card"><div class="ch"><span class="ct">1099-NEC report</span><span class="badge ba">Year-end compliance</span></div><div class="cp">
+        <div class="g2" style="margin-bottom:10px">
+          <div><label class="fl">Tax year</label><select><option>2026</option><option>2025</option></select></div>
+          <div><label class="fl">Threshold ($)</label><input class="inp" type="number" value="600"></div>
+        </div>
+        <button class="btn btn-p" onclick="dlF('BetMe_YearEnd_Tax_1099_AcmeHardware_2026.xlsx','1099 Report')"><i class="ti ti-table-export" aria-hidden="true"></i> Download 1099 report</button>
+      </div></div>
+
+      <div class="card"><div class="ch"><span class="ct">AP aging report</span><span class="badge bb">Outstanding payables</span></div><div class="cp">
+        <div class="g2" style="margin-bottom:10px">
+          <div><label class="fl">As of date</label><input class="inp" type="date" value="2026-05-31"></div>
+          <div><label class="fl">Client</label><select><option>All clients</option>${clients.map(c=>`<option>${c.name}</option>`).join('')}</select></div>
+        </div>
+        <button class="btn btn-p" onclick="T('✓ AP_Aging_May2026.xlsx downloaded')"><i class="ti ti-table-export" aria-hidden="true"></i> Download aging report</button>
+      </div></div>
+
+      <div class="card"><div class="ch"><span class="ct">Financial statements</span><span class="badge bt">P&L · Balance Sheet</span></div><div class="cp">
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-p" onclick="dlF('BetMe_FinancialStatements_AcmeHardware_2026.xlsx','P&L')"><i class="ti ti-download" aria-hidden="true"></i> P&L Statement</button>
+          <button class="btn btn-p" onclick="dlF('BetMe_FinancialStatements_AcmeHardware_2026.xlsx','Balance Sheet')"><i class="ti ti-download" aria-hidden="true"></i> Balance Sheet</button>
+        </div>
+      </div></div>
+    </div>
+  </div>`;
+}
+
+function previewReport(){
+  var cl=$('rpt-client')&&$('rpt-client').value;
+  var st=$('rpt-status')&&$('rpt-status').value;
+  var po=$('rpt-posted')&&$('rpt-posted').value;
+  var filtered=invoices.filter(i=>{
+    if(cl&&cl!=='all'&&i.client!==cl)return false;
+    if(st&&st!=='all'&&i.st!==st)return false;
+    if(po==='yes'&&!i.posted)return false;
+    if(po==='no'&&i.posted)return false;
+    return true;
+  });
+  var cnt=$('rpt-count');
+  if(cnt)cnt.textContent=filtered.length+' invoices match';
+  var prev=$('rpt-preview');
+  if(!prev)return;
+  prev.style.display='block';
+  prev.innerHTML=`<div style="background:var(--bg);padding:7px 11px;font-size:9px;color:var(--tx3);border-bottom:1px solid var(--bd);font-weight:700;letter-spacing:.06em;text-transform:uppercase">PREVIEW — ${Math.min(filtered.length,8)} of ${filtered.length} rows</div>
+  <table class="tbl"><thead><tr>
+    ${['Invoice #','Vendor','Date','Amount','Tax','GL','Status','Posted'].map(h=>`<th>${h}</th>`).join('')}
+  </tr></thead><tbody>
+  ${filtered.slice(0,8).map(i=>`<tr>
+    <td style="font-weight:700">${i.id}</td><td>${i.vendor}</td>
+    <td>${i.date.slice(5).replace('-','/')}</td>
+    <td style="color:${i.amt<0?'var(--red)':'var(--tx)'};font-weight:600">${f$(i.amt)}</td>
+    <td style="color:${i.tax>0?'var(--amber2)':'var(--tx3)'}">${i.tax>0?f$(i.tax):'—'}</td>
+    <td style="font-size:10px;color:var(--tx2)">${i.gl}</td>
+    <td>${pill(i.st)}</td>
+    <td>${i.posted?'<span style="color:var(--teal2);font-weight:600">✓</span>':'<span style="color:var(--tx3)">—</span>'}</td>
+  </tr>`).join('')}</tbody></table>`;
+}
+
+function generateReport(){
+  var cl=$('rpt-client')&&$('rpt-client').value;
+  var st=$('rpt-status')&&$('rpt-status').value;
+  var filtered=invoices.filter(i=>{
+    if(cl&&cl!=='all'&&i.client!==cl)return false;
+    if(st&&st!=='all'&&i.st!==st)return false;
+    return true;
+  });
+  var header=['Invoice #','Vendor','Date','Received','Due','PO Number','Amount','Tax','Subtotal','GL Account','Cost Center','Status','AI%','Posted'];
+  var rows=filtered.map(i=>[i.id,i.vendor,i.date,i.rec,i.due,i.po,i.amt,i.tax||'',i.sub,i.gl,i.cc,i.st,i.ai,i.posted?'Yes':'No']);
+  var csv=[header,...rows].map(r=>r.map(v=>'"'+(v||'').toString().replace(/"/g,'""')+'"').join(',')).join('\n');
+  var blob=new Blob([csv],{type:'text/csv'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;a.download='Invoice_Report_'+new Date().toISOString().slice(0,10)+'.csv';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  T('✓ Invoice report exported ('+filtered.length+' rows)');
+}
+
+function dlF(f,l){
+  if(f==='#'){T('✓ Generating: '+l+'...');return;}
+  var a=document.createElement('a');a.href=f;a.download=f;
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  T('✓ Downloading: '+f);
+}
+
+function exportTableXLSX(clientId){
+  var cInv=invoices.filter(i=>i.client===clientId);
+  if(uploadedInvoices.length>0) cInv=[...cInv,...uploadedInvoices.filter(i=>i.client===clientId)];
+  var header=['Invoice #','Vendor','Date','Received','Due','PO #','Amount','Tax','GL','Cost Center','Status','AI%','Posted'];
+  var rows=cInv.map(i=>[i.id,i.vendor,i.date,i.rec,i.due,i.po,i.amt,i.tax||'',i.gl,i.cc,i.st,i.ai,i.posted?'Yes':'No']);
+  var csv=[header,...rows].map(r=>r.map(v=>'"'+(v||'').toString().replace(/"/g,'""')+'"').join(',')).join('\n');
+  var blob=new Blob([csv],{type:'text/csv'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');a.href=url;a.download='Invoices_'+clientId+'_'+new Date().toISOString().slice(0,10)+'.csv';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  T('✓ Invoice table exported ('+cInv.length+' rows)');
+}
+</script>
+<script>
+// ═══════ DOWNLOADS ════════════════════════════════════════
+function pgDownloads(){
+  var now='May 22, 2026 · 10:14 AM';
+  function row(name,desc,params,file,badge,bc){
+    return`<div style="display:flex;align-items:flex-start;padding:12px 15px;border-bottom:1px solid var(--bg3);gap:11px">
+      <div style="width:38px;height:38px;background:var(--bg);border:1px solid var(--bd);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <i class="ti ti-table-export" style="font-size:17px;color:var(--teal)" aria-hidden="true"></i>
+      </div>
+      <div style="flex:1">
+        <div style="font-weight:700;font-size:12px;color:var(--navy)">${name}</div>
+        <div style="font-size:10px;color:var(--tx2);margin-top:2px">${desc}</div>
+        <div style="font-size:9px;color:var(--tx3);margin-top:5px;display:flex;gap:12px;flex-wrap:wrap;font-weight:600">
+          <span><i class="ti ti-calendar" style="font-size:9px" aria-hidden="true"></i> ${now}</span>
+          <span>· ${params}</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px;flex-shrink:0">
+        <span class="badge ${bc}">${badge}</span>
+        <button class="btn btn-p" style="font-size:10px" onclick="dlF('${file}','${name}')"><i class="ti ti-download" aria-hidden="true"></i> Download</button>
+      </div>
+    </div>`;
+  }
+  return `<div class="pg-hdr"><div>
+    <div class="pg-title">Downloads & Reports</div>
+    <div class="pg-sub">All export files · real Excel files download on click</div>
+  </div></div>`+
+  `<div class="card"><div class="ch"><span class="ct">ERP export files</span></div>`+
+  row('QuickBooks IIF — Acme Hardware May 2026','5 processed invoices ready to import','Client: Acme Hardware · May 2026 · IIF format · 5 invoices','BetMe_QuickBooks_Export_AcmeHardware_May2026.xlsx','QB IIF','bt')+
+  row('Xero CSV — Rivera & Sons May 2026','2 invoices for Xero AP import','Client: Rivera & Sons · May 2026 · Xero CSV · 2 invoices','#','Xero CSV','bb')+
+  row('Portfolio bulk export — all clients','ZIP: all ERP files + PDFs + Excel summary','All 5 clients · May 2026 · ZIP package','#','Portfolio ZIP','bg')+`</div>`+
+  `<div class="card"><div class="ch"><span class="ct">Year-end tax + 1099</span></div>`+
+  row('Year-End AP Summary + 1099-NEC — Acme 2026','Vendor totals · 1099-required flag · Box 1 amounts','Client: Acme Hardware · Tax Year 2026 · 7 vendors · 4 need 1099','BetMe_YearEnd_Tax_1099_AcmeHardware_2026.xlsx','Tax+1099','ba')+
+  row('1099-NEC Filing — all clients 2026','All vendors requiring 1099-NEC filing · Total: $353,620','All 5 clients · Tax Year 2026 · Due Jan 31 2027','BetMe_YearEnd_Tax_1099_AcmeHardware_2026.xlsx','1099 NEC','ba')+`</div>`+
+  `<div class="card"><div class="ch"><span class="ct">Financial statements</span></div>`+
+  row('Profit & Loss — Acme Hardware YTD May 2026','Revenue · COGS · Operating expenses · Net income vs prior year','Client: Acme Hardware · Jan–May 2026 · Accrual basis','BetMe_FinancialStatements_AcmeHardware_2026.xlsx','P&L','bt')+
+  row('Balance Sheet — Acme Hardware May 31 2026','Assets · Liabilities · Equity · comparative Dec 31 2025','Client: Acme Hardware · As of May 31 2026','BetMe_FinancialStatements_AcmeHardware_2026.xlsx','Balance Sheet','bt')+`</div>`;
+}
+
+// ═══════ MASS UPLOAD ══════════════════════════════════════
+function pgMassUpload(){
+  return `<div class="pg-hdr">
+    <div><div class="pg-title">Mass upload</div>
+    <div class="pg-sub">Upload invoice files and watch the AI extract every field in real time</div></div>
+  </div>`+
+  `<div class="g2">
+    <div>
+      <div class="card"><div class="ch"><span class="ct">Step 1 — Select client</span></div><div class="cp">
+        <div style="display:flex;flex-wrap:wrap;gap:7px" id="mu-clients">`+
+        clients.map(c=>`<div data-id="${c.id}" onclick="selMU(this,'${c.id}')" style="padding:8px 14px;border:1.5px solid var(--bd);border-radius:10px;cursor:pointer;transition:all .12s">
+          <div style="font-weight:700;font-size:12px">${c.name}</div>
+          <div style="font-size:9px;color:var(--tx2)">${c.industry} · ${c.erp}</div>
+        </div>`).join('')+`</div>
+      </div></div>
+
+      <div class="card"><div class="ch"><span class="ct">Step 2 — Upload files</span></div><div class="cp">
+        <div class="drop-zone" id="drop-zone">
+          <input type="file" multiple accept=".pdf,.jpg,.jpeg,.png" onchange="handleFiles(this.files)" id="file-input">
+          <i class="ti ti-cloud-upload" style="font-size:36px;color:var(--tx3);display:block;margin-bottom:12px" aria-hidden="true"></i>
+          <div style="font-size:14px;font-weight:700;margin-bottom:6px;color:var(--tx)">Drag & drop invoice files here</div>
+          <div style="font-size:11px;color:var(--tx2)">PDF · JPG · PNG · up to 50 files · max 20 MB each</div>
+          <div style="font-size:10px;color:var(--teal2);margin-top:8px;display:flex;align-items:center;justify-content:center;gap:5px;font-weight:600">
+            <i class="ti ti-scan" aria-hidden="true"></i> Multi-invoice PDFs auto-detected and separated
+          </div>
+        </div>
+        <div style="margin-top:12px;font-size:11px;font-weight:700;margin-bottom:8px;color:var(--tx)">Or forward by email:</div>
+        ${clients.map(c=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 11px;background:var(--bg);border:1px solid var(--bd);border-radius:8px;margin-bottom:5px">
+          <span style="font-weight:600;font-size:11px">${c.name}</span>
+          <span style="color:var(--teal2);font-family:var(--mono);font-size:10px">invoices.${c.id}@koreymalekcpa.com</span>
+        </div>`).join('')}
+      </div></div>
+    </div>
+
+    <div class="card" style="height:fit-content"><div class="ch"><span class="ct">Processing queue</span><span id="queue-badge" class="badge bg">0 files</span></div>
+    <div class="cp" id="upload-queue-container">
+      <div style="text-align:center;padding:32px 20px;color:var(--tx3)">
+        <i class="ti ti-file-upload" style="font-size:32px;display:block;margin-bottom:10px" aria-hidden="true"></i>
+        <div style="font-size:12px;font-weight:600">No files uploaded yet</div>
+        <div style="font-size:10px;margin-top:4px">Upload files on the left to start processing</div>
+      </div>
+    </div></div>
+  </div>`;
+}
+
+function selMU(el,id){
+  document.querySelectorAll('#mu-clients>div').forEach(e=>{e.style.borderColor='var(--bd)';e.style.background='';e.style.color='';});
+  el.style.borderColor='var(--teal)';el.style.background='rgba(0,212,168,.05)';
+  window._muClient=id;
+  T('Selected: '+clients.find(c=>c.id===id).name);
+}
+
+var _processingIdx=0;
+function handleFiles(files){
+  var clientId=window._muClient||'acme';
+  var cl=clients.find(c=>c.id===clientId)||clients[0];
+  var container=$('upload-queue-container');
+  var badge=$('queue-badge');
+  if(!container)return;
+
+  // Clear empty state
+  if(container.querySelector('.ti-file-upload')) container.innerHTML='';
+
+  Array.from(files).forEach(function(file,idx){
+    var fid='f'+Date.now()+idx;
+    var isImg=file.type.startsWith('image/');
+    var isPDF=file.type==='application/pdf';
+    var icon=isPDF?'ti-file-type-pdf':isImg?'ti-photo':'ti-file';
+    var iconColor=isPDF?'var(--red)':'var(--blue)';
+
+    // Create card
+    var div=document.createElement('div');
+    div.className='inv-file-card';
+    div.id=fid;
+    div.innerHTML=`
+      <div class="file-thumb"><i class="ti ${icon}" style="color:${iconColor}" aria-hidden="true"></i></div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:700;font-size:11px;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${file.name}</div>
+        <div style="font-size:9px;color:var(--tx2);margin-top:1px">${cl.name} · ${(file.size/1024).toFixed(0)} KB</div>
+        <div class="upload-prog"><div class="upload-prog-fill" id="prog-${fid}" style="width:0%"></div></div>
+        <div id="status-${fid}" style="font-size:9px;color:var(--tx3);margin-top:3px;font-weight:500">Queued...</div>
+      </div>
+    `;
+    container.appendChild(div);
+
+    // Update badge
+    var allCards=container.querySelectorAll('.inv-file-card');
+    if(badge)badge.textContent=allCards.length+' file'+(allCards.length>1?'s':'');
+
+    // Simulate AI processing with realistic steps
+    simulateProcessing(fid,file,cl,clientId,idx*1200);
+  });
+}
+
+function simulateProcessing(fid,file,cl,clientId,delay){
+  setTimeout(function(){
+    var card=$(fid);
+    var prog=$('prog-'+fid);
+    var status=$('status-'+fid);
+    if(!card||!prog||!status)return;
+
+    card.className='inv-file-card processing';
+
+    var steps=[
+      {p:15,msg:'Uploading file...'},
+      {p:30,msg:'Scanning document...'},
+      {p:55,msg:'AI extracting fields...'},
+      {p:75,msg:'Identifying vendor...'},
+      {p:88,msg:'Coding GL accounts...'},
+      {p:100,msg:'✓ Complete'}
+    ];
+    var si=0;
+    var interval=setInterval(function(){
+      if(!prog||!status){clearInterval(interval);return;}
+      var s=steps[si];
+      prog.style.width=s.p+'%';
+      status.textContent=s.msg;
+      si++;
+      if(si>=steps.length){
+        clearInterval(interval);
+        // Generate a realistic extracted invoice
+        var extracted=generateExtractedInvoice(file,cl,clientId);
+        uploadedInvoices.push(extracted);
+        var cl2=clients.find(c=>c.id===clientId);
+        if(cl2){cl2.inv++;cl2.vol+=Math.abs(extracted.amt);}
+        card.className='inv-file-card done';
+        status.innerHTML=`<span style="color:var(--teal2);font-weight:700">✓ Extracted ${extracted.ai}% confidence</span> · <span style="cursor:pointer;color:var(--blue);text-decoration:underline" onclick="viewExtracted('${extracted.id}','${clientId}')">View invoice</span>`;
+        buildClientChips();
+        updateExcBadge();
+      }
+    },400);
+  },delay);
+}
+
+var _uploadCounter=100;
+function generateExtractedInvoice(file,cl,clientId){
+  _uploadCounter++;
+  // Industry-specific vendor pool per client
+  var vendorPools={
+    acme:[{v:'Home Depot Pro',amt:2840,gl:'5010 · COGS',tax:227.20,po:'PO-UP-'+_uploadCounter},{v:'Fastenal',amt:1620,gl:'5010 · COGS',tax:0,po:'PO-UP-'+(_uploadCounter+1)},{v:'W.W. Grainger',amt:892,gl:'6100 · Office Supplies',tax:71.36,po:'—'}],
+    sparkle:[{v:'Hillyard Industries',amt:740,gl:'5010 · Supplies',tax:59.20,po:'PO-SP-'+_uploadCounter},{v:'Cintas Corp',amt:1100,gl:'6100 · Uniforms',tax:88,po:'—'},{v:'ZEP Commercial',amt:480,gl:'5010 · Supplies',tax:38.40,po:'PO-SP-'+(_uploadCounter+1)}],
+    greenlawn:[{v:'SiteOne Landscape',amt:5200,gl:'5010 · Materials',tax:416,po:'PO-GL-UP-'+_uploadCounter},{v:'John Deere Credit',amt:4200,gl:'6600 · Lease',tax:0,po:'LEASE-2026-04'},{v:'Ewing Irrigation',amt:3800,gl:'5010 · Materials',tax:304,po:'—'}],
+    summit:[{v:'ABC Supply Co',amt:38400,gl:'5010 · Materials',tax:0,po:'PO-SBG-UP-'+_uploadCounter},{v:'Builders FirstSource',amt:24800,gl:'5010 · Materials',tax:0,po:'PO-SBG-UP-'+(_uploadCounter+1)},{v:'Ferguson Enterprises',amt:18200,gl:'5010 · Materials',tax:0,po:'PO-SBG-UP-'+(_uploadCounter+2)}],
+    metro:[{v:'Grainger Industrial',amt:1840,gl:'5010 · COGS',tax:147.20,po:'MP-UP-'+_uploadCounter},{v:'Uline Shipping',amt:920,gl:'6100 · Supplies',tax:73.60,po:'—'},{v:'Estes Express',amt:4200,gl:'6200 · Freight',tax:0,po:'—'}],
+  };
+  var pool=vendorPools[clientId]||vendorPools['acme'];
+  var v=pool[Math.floor(Math.random()*pool.length)];
+  var ai=Math.floor(82+Math.random()*17);
+  var today=new Date();
+  var dateStr=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
+  var dueDate=new Date(today);dueDate.setDate(dueDate.getDate()+30);
+  var dueDateStr=dueDate.getFullYear()+'-'+String(dueDate.getMonth()+1).padStart(2,'0')+'-'+String(dueDate.getDate()).padStart(2,'0');
+  var inv={
+    id:'UP-'+_uploadCounter,
+    vendor:v.v,date:dateStr,rec:dateStr,due:dueDateStr,
+    amt:v.amt+(v.tax||0),st:ai>=88?'processed':'review',ai:ai,
+    gl:ai>=88?v.gl:'—',cc:ai>=88?'CC-001':'—',
+    terms:'Net 30',tax:v.tax||0,sub:v.amt,
+    client:clientId,flag:ai<88?'Low confidence — please verify extracted fields':'',
+    taxid:'—',po:v.po,posted:false,
+    _uploaded:true,_filename:file.name
+  };
+  return inv;
+}
+
+function viewExtracted(id,clientId){
+  CI=id;CC=clientId;CP='invoice-detail';R();
+}
+
+// ═══════ ANNOUNCEMENTS ════════════════════════════════════
+function pgAnnouncements(){
+  return `<div class="pg-hdr">
+    <div><div class="pg-title">Announcements</div>
+    <div class="pg-sub">Tax alerts, product updates, and market intelligence from BetMe</div></div>
+  </div>
+  <div style="display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap">
+    <button class="btn btn-p ann-fb" data-cat="All" onclick="fAnn(this,'All')">All</button>
+    <button class="btn ann-fb" data-cat="Tax Alert" onclick="fAnn(this,'Tax Alert')"><span class="pill p-warn" style="margin-right:4px;pointer-events:none">●</span>Tax Alert</button>
+    <button class="btn ann-fb" data-cat="Product Update" onclick="fAnn(this,'Product Update')"><span class="pill p-info" style="margin-right:4px;pointer-events:none">●</span>Product Update</button>
+    <button class="btn ann-fb" data-cat="Market News" onclick="fAnn(this,'Market News')"><span class="pill p-ok" style="margin-right:4px;pointer-events:none">●</span>Market News</button>
+    <button class="btn ann-fb" data-cat="Compliance" onclick="fAnn(this,'Compliance')"><span class="pill p-pu" style="margin-right:4px;pointer-events:none">●</span>Compliance</button>
+  </div>
+  <div id="ann-list">`+
+  announcements.map(a=>`<div class="ann ${a.urgent?'urgent':''}" data-cat="${a.cat}">
+    <div style="display:flex;align-items:flex-start;gap:11px;margin-bottom:9px">
+      <span class="pill ${a.cls}" style="flex-shrink:0;margin-top:2px;font-size:9px">${a.cat}</span>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:700;color:var(--navy)">${a.urgent?'<span style="color:var(--red);font-size:9px;margin-right:6px;font-weight:700">⚠ URGENT</span>':''}${a.title}</div>
+        <div style="font-size:10px;color:var(--tx3);margin-top:3px;font-weight:600">${a.date}</div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--tx2);line-height:1.7;margin-bottom:10px">${a.body}</div>
+    <div style="display:flex;gap:7px">
+      <button class="btn" style="font-size:10px" onclick="this.parentElement.parentElement.style.opacity='.4';T('Marked as read')"><i class="ti ti-check" aria-hidden="true"></i> Mark read</button>
+      <button class="btn" style="font-size:10px" onclick="T('Shared with team members')"><i class="ti ti-share" aria-hidden="true"></i> Share</button>
+    </div>
+  </div>`).join('')+`</div>`;
+}
+
+function fAnn(btn,cat){
+  document.querySelectorAll('.ann-fb').forEach(b=>b.classList.remove('btn-p'));
+  btn.classList.add('btn-p');
+  document.querySelectorAll('#ann-list .ann').forEach(a=>{
+    a.style.display=(cat==='All'||a.dataset.cat===cat)?'block':'none';
+  });
+}
+
+// ═══════ TEAM ═════════════════════════════════════════════
+function pgTeam(){
+  return `<div class="pg-hdr">
+    <div><div class="pg-title">My team</div>
+    <div class="pg-sub">Manage firm members and their client access permissions</div></div>
+    <button class="btn btn-p" onclick="openTeamEdit(null)"><i class="ti ti-user-plus" aria-hidden="true"></i> Add member</button>
+  </div>`+
+  `<div class="card"><table class="tbl"><thead><tr>
+    <th>Name</th><th>Role</th><th>Email</th><th>Clients</th><th>Last active</th><th>Status</th><th>Edit</th>
+  </tr></thead><tbody>`+
+  teamMembers.map(m=>`<tr>
+    <td style="font-weight:700;color:var(--navy)">${m.name}</td>
+    <td style="font-size:11px">${m.role}</td>
+    <td style="font-size:10px;color:var(--tx2)">${m.email}</td>
+    <td><div style="display:flex;gap:3px;flex-wrap:wrap">${m.clients.map(cid=>{var cl=clients.find(c=>c.id===cid);return cl?`<span class="badge bt" style="font-size:8px">${cl.short}</span>`:''}).join('')}</div></td>
+    <td style="font-size:10px;color:var(--tx2)">${m.last}</td>
+    <td>${pill('ok','Active')}</td>
+    <td><button class="btn btn-b" style="font-size:9px;padding:3px 9px" onclick="openTeamEdit('${m.id}')"><i class="ti ti-edit" aria-hidden="true"></i> Edit</button></td>
+  </tr>`).join('')+`</tbody></table></div>`;
+}
+
+function openTeamEdit(id){
+  editingTeamId=id;
+  var m=id?teamMembers.find(t=>t.id===id):null;
+  $('te-title').textContent=m?'Edit: '+m.name:'Add team member';
+  $('te-name').value=m?m.name:'';
+  $('te-role').value=m?m.role:'Staff Accountant';
+  $('te-email').value=m?m.email:'';
+  $('te-clients').innerHTML=clients.map(c=>`<label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer;padding:8px 11px;background:var(--bg);border:1px solid var(--bd);border-radius:8px;font-weight:500">
+    <input type="checkbox" data-cid="${c.id}" ${(!m||m.clients.includes(c.id))?'checked':''} style="accent-color:var(--teal)">
+    <div style="flex:1"><div>${c.name}</div><div style="font-size:10px;color:var(--tx2)">${c.industry} · ${c.erp}</div></div>
+  </label>`).join('');
+  OM('mo-team-edit');
+}
+
+function saveTeam(){
+  var name=$('te-name').value.trim();
+  var role=$('te-role').value;
+  var email=$('te-email').value.trim();
+  var checked=[...$('te-clients').querySelectorAll('input[type=checkbox]:checked')].map(i=>i.dataset.cid);
+  if(!name){T('Please enter a name','warn');return;}
+  if(editingTeamId){
+    var m=teamMembers.find(t=>t.id===editingTeamId);
+    if(m){m.name=name;m.role=role;m.email=email;m.clients=checked;}
+    T('✓ '+name+' updated successfully');
+  } else {
+    teamMembers.push({id:'tm'+Date.now(),name,role,email,clients:checked,last:'Just now',status:'ok'});
+    T('✓ Invite sent to '+name);
+  }
+  CM();R();
+}
+
+// ═══════ ADD CLIENT ═══════════════════════════════════════
+function pgAddClient(){
+  return `<div class="pg-hdr">
+    <div><div class="pg-title">Add new client</div>
+    <div class="pg-sub">Complete the form below — client is added to your portfolio immediately</div></div>
+  </div>
+  <div style="max-width:680px">
+    <div class="card"><div class="ch"><span class="ct">Company information</span></div><div class="cp">
+      <div class="g2">
+        <div><label class="fl">Company name *</label><input class="inp" type="text" id="nc-name" placeholder="e.g. Blue Horizon LLC" style="margin-bottom:11px" oninput="updateNCPreview()"></div>
+        <div><label class="fl">Industry</label><select id="nc-ind" style="margin-bottom:11px"><option>Retail</option><option>Commercial Cleaning</option><option>Landscaping</option><option>General Contractor</option><option>Wholesale / Distribution</option><option>Restaurant</option><option>Healthcare</option><option>Professional Services</option><option>Manufacturing</option><option>Other</option></select></div>
+        <div><label class="fl">Primary contact *</label><input class="inp" type="text" id="nc-contact" placeholder="e.g. John Smith" style="margin-bottom:11px"></div>
+        <div><label class="fl">Contact email *</label><input class="inp" type="email" id="nc-email" placeholder="john@company.com" style="margin-bottom:11px"></div>
+        <div><label class="fl">Phone</label><input class="inp" type="text" id="nc-phone" placeholder="(555) 000-0000" style="margin-bottom:11px"></div>
+        <div><label class="fl">EIN / Tax ID</label><input class="inp" type="text" id="nc-ein" placeholder="e.g. 82-3456789" style="margin-bottom:11px"></div>
+        <div><label class="fl">Plan</label><select id="nc-plan" style="margin-bottom:11px"><option value="Starter">Starter — $2.50/invoice (up to 500/mo)</option><option value="Growth" selected>Growth — $1.90/invoice (500–2,000/mo)</option><option value="Scale">Scale — $1.50/invoice (2,000+/mo)</option></select></div>
+        <div><label class="fl">ERP software *</label><select id="nc-erp" style="margin-bottom:11px"><option>QuickBooks Online</option><option>QuickBooks Desktop</option><option>Xero</option><option>NetSuite</option><option>Sage Intacct</option><option>FreshBooks</option><option>Wave</option><option>Custom / Other</option></select></div>
+      </div>
+      <div><label class="fl">Address</label><input class="inp" type="text" id="nc-addr" placeholder="123 Main St, City, State ZIP" style="margin-bottom:11px"></div>
+      <div><label class="fl">Invoice approval threshold ($)</label><input class="inp" type="number" id="nc-thresh" value="5000" style="margin-bottom:4px"><div style="font-size:9px;color:var(--tx3);margin-top:3px;font-weight:500">Invoices above this amount require client approval before ERP posting</div></div>
+    </div></div>
+
+    <div class="card"><div class="ch"><span class="ct">Portal & intake setup</span></div><div class="cp">
+      <div style="background:var(--bg);border:1.5px solid rgba(0,212,168,.2);border-radius:var(--r);padding:12px 14px;margin-bottom:13px">
+        <div style="font-size:10px;font-weight:700;color:var(--tx2);margin-bottom:4px">Intake email (auto-generated):</div>
+        <div id="nc-email-preview" style="color:var(--teal2);font-family:var(--mono);font-weight:600;font-size:12px">invoices.newclient@koreymalekcpa.com</div>
+        <div style="font-size:9px;color:var(--tx3);margin-top:3px">Vendors can forward invoices directly to this address</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer;font-weight:500"><input type="checkbox" checked id="nc-invite" style="accent-color:var(--teal)"> Send portal invite email to client immediately</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer;font-weight:500"><input type="checkbox" checked id="nc-wl" style="accent-color:var(--teal)"> Apply white-label branding (Korey Malek CPA)</label>
+      </div>
+    </div></div>
+
+    <div style="display:flex;gap:9px;margin-top:4px">
+      <button class="btn btn-p" style="font-size:13px;padding:10px 24px" onclick="saveNewClient()"><i class="ti ti-user-plus" aria-hidden="true"></i> Create client</button>
+      <button class="btn" onclick="CP='dashboard';R()">Cancel</button>
+    </div>
+  </div>`;
+}
+
+function updateNCPreview(){
+  var slug=$('nc-name').value.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'newclient';
+  var el=$('nc-email-preview');
+  if(el)el.textContent='invoices.'+slug+'@koreymalekcpa.com';
+}
+
+function saveNewClient(){
+  var name=$('nc-name')&&$('nc-name').value.trim();
+  var contact=$('nc-contact')&&$('nc-contact').value.trim();
+  var email=$('nc-email')&&$('nc-email').value.trim();
+  if(!name){T('Please enter a company name','warn');return;}
+  if(!contact){T('Please enter a contact name','warn');return;}
+  if(!email){T('Please enter a contact email','warn');return;}
+  var erp=$('nc-erp')&&$('nc-erp').value||'QuickBooks Online';
+  var plan=$('nc-plan')&&$('nc-plan').value||'Growth';
+  var thresh=parseInt($('nc-thresh')&&$('nc-thresh').value||5000);
+  var phone=$('nc-phone')&&$('nc-phone').value||'—';
+  var addr=$('nc-addr')&&$('nc-addr').value||'—';
+  var ein=$('nc-ein')&&$('nc-ein').value||'—';
+  var ind=$('nc-ind')&&$('nc-ind').value||'Other';
+  var colors=['#00D4A8','#4A90E2','#22C55E','#F5A623','#7C3AED','#EF4444','#06B6D4'];
+  var id='c'+Date.now();
+  var slug=name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  clients.push({
+    id,name,short:name.split(' ')[0].substring(0,7),plan,inv:0,vol:0,proc:0,exc:0,ai:0,
+    st:'setup',erp,since:new Date().toLocaleDateString('en-US',{month:'short',year:'numeric'}),
+    contact,email,ein,phone,addr,approval:thresh,
+    color:colors[clients.length%colors.length],industry:ind,users:[]
+  });
+  buildClientChips();
+  $('mac-title').textContent=name+' created!';
+  $('mac-msg').textContent=name+' has been added to your portfolio. Set up their GL codes in Account Setup.';
+  $('mac-open-btn').onclick=function(){CM();CC=id;CCT=0;CP='client';R();};
+  OM('mo-client-created');
+}
+
+// ═══════ WHITE LABEL ══════════════════════════════════════
+function pgWhitelabel(){
+  return `<div class="pg-hdr"><div>
+    <div class="pg-title">White-label setup</div>
+    <div class="pg-sub">Your clients see your firm's brand — not BetMe's</div>
+  </div></div>
+  <div class="g2">
+    <div class="card"><div class="ch"><span class="ct">Branding configuration</span><span class="badge bt">Firm Pro · Active</span></div><div class="cp">
+      <div class="inp-wrap"><label class="fl">Firm display name</label><input class="inp" type="text" value="Korey Malek CPA"></div>
+      <div class="inp-wrap"><label class="fl">Tagline</label><input class="inp" type="text" value="Expert accounting. Real results."></div>
+      <div class="inp-wrap"><label class="fl">Portal URL</label>
+        <div style="display:flex;gap:6px;align-items:center">
+          <input class="inp" type="text" value="invoices" style="width:90px">
+          <span style="font-size:14px;color:var(--tx3);font-weight:600">.</span>
+          <input class="inp" type="text" value="koreymalekcpa.com">
+        </div>
+      </div>
+      <label class="fl" style="margin-bottom:7px">Accent color</label>
+      <div style="display:flex;gap:8px;margin-bottom:16px">
+        ${['#00D4A8','#3b82f6','#7C3AED','#F5A623','#EF4444','#0B1426'].map(c=>`<div style="width:28px;height:28px;border-radius:7px;background:${c};cursor:pointer;border:2px solid transparent;transition:all .12s" onclick="T('✓ Accent color set to ${c}')" onmouseenter="this.style.borderColor='var(--navy)'" onmouseleave="this.style.borderColor='transparent'"></div>`).join('')}
+      </div>
+      <button class="btn btn-p" onclick="T('✓ White-label branding saved — live in 60 seconds')"><i class="ti ti-device-floppy" aria-hidden="true"></i> Save branding</button>
+    </div></div>
+    <div class="card"><div class="ch"><span class="ct">Client portal preview</span></div><div class="cp">
+      <div style="background:var(--navy2);border-radius:10px;overflow:hidden">
+        <div style="background:var(--navy);padding:9px 13px;display:flex;align-items:center;gap:8px">
+          <div style="width:22px;height:22px;border-radius:5px;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:var(--navy)">KM</div>
+          <span style="font-size:11px;color:#f0f6ff;font-weight:700">Korey Malek CPA</span>
+          <span style="margin-left:auto;font-size:9px;color:rgba(255,255,255,.3)">invoices.koreymalekcpa.com</span>
+        </div>
+        <div style="padding:14px;font-size:10px;color:rgba(255,255,255,.5)">
+          <div style="margin-bottom:9px;font-weight:600">Good morning, Acme Hardware!</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:9px">
+            <div style="background:rgba(255,255,255,.05);border-radius:7px;padding:9px"><div style="font-size:15px;font-weight:800;color:#f0f6ff">47</div><div style="font-size:8px;color:rgba(255,255,255,.3);font-weight:600;text-transform:uppercase;letter-spacing:.05em">Invoices</div></div>
+            <div style="background:rgba(255,255,255,.05);border-radius:7px;padding:9px"><div style="font-size:15px;font-weight:800;color:var(--teal)">$84K</div><div style="font-size:8px;color:rgba(255,255,255,.3);font-weight:600;text-transform:uppercase;letter-spacing:.05em">AP Volume</div></div>
+          </div>
+          <div style="text-align:center;font-size:8px;color:rgba(255,255,255,.15);padding-top:7px;border-top:1px solid rgba(255,255,255,.06)">Powered by BetMe InvoiceTrack</div>
+        </div>
+      </div>
+    </div></div>
+  </div>`;
+}
+</script>
+<script>
+// ═══════ CLIENT PAGE (6 SUB-TABS) ════════════════════════
+function pgClient(){
+  var cl=clients.find(c=>c.id===CC);
+  if(!cl)return pgDash();
+  var cInv=[...invoices.filter(i=>i.client===CC),...uploadedInvoices.filter(i=>i.client===CC)];
+  var excInv=cInv.filter(i=>i.st==='review');
+  var posted=cInv.filter(i=>i.posted);
+
+  var tabs=[
+    {i:'ti-chart-bar',l:'Overview'},
+    {i:'ti-files',l:'All invoices'},
+    {i:'ti-alert-triangle',l:'Exceptions'+(excInv.length?' ('+excInv.length+')':'')},
+    {i:'ti-building-store',l:'Client info'},
+    {i:'ti-settings',l:'Account setup'},
+    {i:'ti-shield-check',l:'Access & users'},
+  ];
+
+  var bc=`<div class="bc"><span onclick="CP='dashboard';R()">Dashboard</span><span class="bc-s">›</span><strong>${cl.name}</strong></div>`;
+  var hdr=`<div class="card" style="margin-bottom:0;border-bottom:none;border-radius:var(--rl) var(--rl) 0 0">
+    <div style="padding:12px 15px;background:linear-gradient(135deg,${cl.color}10,${cl.color}05);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:12px">
+      <div style="width:44px;height:44px;border-radius:12px;background:${cl.color}20;border:2px solid ${cl.color}40;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:${cl.color}">${cl.short.substring(0,2).toUpperCase()}</div>
+      <div style="flex:1">
+        <div style="font-size:16px;font-weight:800;color:var(--navy)">${cl.name}</div>
+        <div style="font-size:11px;color:var(--tx2)">${cl.industry} · ${cl.erp} · Client since ${cl.since}</div>
+      </div>
+      <div style="display:flex;gap:7px;flex-wrap:wrap">
+        ${excInv.length?`<span class="badge ba">${excInv.length} exceptions ⚠</span>`:
+        `<span class="badge bt">On track ✓</span>`}
+        <button class="btn" style="font-size:10px" onclick="T('✓ May 2026 report emailed to ${cl.email}')"><i class="ti ti-mail" aria-hidden="true"></i> Email report</button>
+        <button class="btn btn-d" style="font-size:10px" onclick="deleteClient('${cl.id}')"><i class="ti ti-trash" aria-hidden="true"></i> Remove</button>
+      </div>
+    </div>
+    <div class="ctabs">${tabs.map((t,i)=>`<div class="ctab ${CCT===i?'on':''}" onclick="setTab(${i})"><i class="ti ${t.i}" aria-hidden="true"></i>${t.l}</div>`).join('')}</div>
+  </div>`;
+
+  var body='';
+  if(CCT===0) body=cTab0(cl,cInv,posted,excInv);
+  else if(CCT===1) body=cTab1(cl,cInv);
+  else if(CCT===2) body=cTab2(cl,excInv);
+  else if(CCT===3) body=cTab3(cl,cInv,posted);
+  else if(CCT===4) body=cTab4(cl);
+  else if(CCT===5) body=cTab5(cl);
+
+  return bc+hdr+`<div class="ctab-content">${body}</div>`;
+}
+function setTab(i){CCT=i;R();}
+function deleteClient(id){
+  if(!confirm('Remove '+clients.find(c=>c.id===id)?.name+' from portfolio?'))return;
+  clients=clients.filter(c=>c.id!==id);
+  buildClientChips();CP='dashboard';R();T('Client removed');
+}
+
+// TAB 0: OVERVIEW ─────────────────────────────────────────
+function cTab0(cl,cInv,posted,excInv){
+  var proc=cInv.filter(i=>i.st==='processed').length;
+  var total=cInv.reduce((s,i)=>s+(i.amt>0?i.amt:0),0);
+  var avgAI=cInv.length?Math.round(cInv.reduce((s,i)=>s+i.ai,0)/cInv.length):0;
+  return `<div class="mets">
+    <div class="met" style="--met-color:${cl.color}"><div class="mv" style="color:${cl.color}">$${Math.round(total).toLocaleString()}</div><div class="ml">AP volume</div></div>
+    <div class="met" style="--met-color:var(--teal)"><div class="mv ok">${proc}</div><div class="ml">Processed ✓</div></div>
+    <div class="met" style="--met-color:${excInv.length?'var(--amber)':'var(--teal)'}"><div class="mv ${excInv.length?'warn':'ok'}">${excInv.length}</div><div class="ml">Exceptions ${excInv.length?'⚠':''}</div></div>
+    <div class="met" style="--met-color:var(--blue)"><div class="mv blue">${posted.length}</div><div class="ml">Posted to ${cl.erp}</div></div>
+  </div>
+  <div class="g2">
+    <div class="card"><div class="ch"><span class="ct">Invoice status</span></div><div class="cp">
+      <div style="display:flex;gap:14px;align-items:center">
+        <div class="donut-wrap" style="width:140px;height:140px;flex-shrink:0">
+          <canvas id="c-ov-donut" width="140" height="140"></canvas>
+          <div class="donut-center"><div class="dv">${cInv.length}</div><div class="dl">total</div></div>
+        </div>
+        <div style="flex:1">
+          ${[['Processed',proc,'var(--teal)'],['In review',excInv.length,'var(--amber)'],['Posted',posted.length,'var(--blue)'],['Unposted',cInv.length-posted.length,'var(--tx3)']].map(([l,v,c])=>`
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--bg3);font-size:11px;font-weight:600">
+            <span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:${c};display:inline-block"></span>${l}</span>
+            <span style="color:${c}">${v}</span>
+          </div>`).join('')}
+          <div style="margin-top:8px;font-size:10px;color:var(--tx2);font-weight:600">AI avg: <strong style="color:${avgAI>=90?'var(--teal2)':'var(--amber2)'}">${avgAI}%</strong></div>
+        </div>
+      </div>
+    </div></div>
+    <div class="card"><div class="ch"><span class="ct">SLA — live data</span><span class="badge bt">All met ✓</span></div><div class="cp">
+      ${[['Processing SLA (4hr)',100],['AI accuracy',Math.round(avgAI)||94],['ERP delivery',100],['Portal uptime',100]].map(([l,v])=>`
+      <div style="margin-bottom:10px">
+        <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px;font-weight:600">
+          <span>${l}</span><span style="color:${v>=95?'var(--teal2)':'var(--amber2)'}">${v}%</span>
+        </div>
+        <div class="sla-bar"><div class="sla-fill ${v>=95?'sla-ok':'sla-w'}" style="width:${v}%"></div></div>
+      </div>`).join('')}
+    </div></div>
+  </div>
+  <div class="card"><div class="ch"><span class="ct">AP trend — 2026</span></div>
+  <div class="cp"><div class="chart-wrap"><canvas id="c-ov-trend"></canvas></div></div></div>`;
+}
+
+function initClientCharts(){
+  var cl=clients.find(c=>c.id===CC);if(!cl||CCT!==0)return;
+  var cInv=[...invoices.filter(i=>i.client===CC),...uploadedInvoices.filter(i=>i.client===CC)];
+  var proc=cInv.filter(i=>i.st==='processed').length,rev=cInv.filter(i=>i.st==='review').length;
+  var d=$('c-ov-donut');
+  if(d)charts['c-ov-donut']=new Chart(d,{type:'doughnut',data:{labels:['Processed','In review'],datasets:[{data:[proc,rev],backgroundColor:[cl.color,'#F5A623'],borderWidth:0,hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,cutout:'72%',plugins:{legend:{display:false}}}});
+  var t=$('c-ov-trend');
+  if(t){
+    var months=['Jan','Feb','Mar','Apr','May'];
+    var base=cl.vol*0.5;
+    var data=months.map((m,i)=>Math.round(base+cl.vol*0.1*i+cl.vol*0.04*(Math.random()-.5)));
+    charts['c-ov-trend']=new Chart(t,{type:'line',data:{labels:months,datasets:[{label:'AP Volume',data,borderColor:cl.color,backgroundColor:cl.color+'18',borderWidth:2.5,pointBackgroundColor:cl.color,pointRadius:5,tension:.4,fill:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>'$'+Math.round(v/1000)+'K',font:{size:10}},grid:{color:'rgba(0,0,0,.04)'}},x:{ticks:{font:{size:10}},grid:{display:false}}}}});
+  }
+}
+
+// TAB 1: ALL INVOICES ─────────────────────────────────────
+function cTab1(cl,cInv){
+  var allInv=[...cInv,...uploadedInvoices.filter(i=>i.client===CC&&!cInv.find(x=>x.id===i.id))];
+  return `<div style="display:flex;gap:8px;margin-bottom:11px;align-items:center;flex-wrap:wrap">
+    <span style="font-size:11px;color:var(--tx2);font-weight:600">${allInv.length} invoices · $${Math.round(allInv.reduce((s,i)=>s+(i.amt>0?i.amt:0),0)).toLocaleString()} total AP</span>
+    <div style="margin-left:auto;display:flex;gap:7px;flex-wrap:wrap">
+      <button class="btn btn-p" style="font-size:10px" onclick="T('✓ QuickBooks export for ${cl.name} downloaded')"><i class="ti ti-download" aria-hidden="true"></i> QB export</button>
+      <button class="btn" style="font-size:10px;border-color:rgba(0,212,168,.3);color:var(--teal2)" onclick="exportTableXLSX('${cl.id}')"><i class="ti ti-table-export" aria-hidden="true"></i> Export CSV</button>
+      <button class="btn" style="font-size:10px" onclick="T('✓ PDFs ZIP downloading...')"><i class="ti ti-file-zip" aria-hidden="true"></i> PDFs ZIP</button>
+    </div>
+  </div>
+  <div style="overflow-x:auto;border:1px solid var(--bd);border-radius:10px">
+  <table class="tbl" style="min-width:980px">
+  <thead><tr>
+    <th>Invoice #<br><input class="srch" placeholder="filter…" oninput="fCol(this,0)"></th>
+    <th>Vendor<br><input class="srch" placeholder="filter…" oninput="fCol(this,1)"></th>
+    <th>Date<br><input class="srch" placeholder="filter…" oninput="fCol(this,2)"></th>
+    <th>Received<br><input class="srch" placeholder="filter…" oninput="fCol(this,3)"></th>
+    <th>Due<br><input class="srch" placeholder="filter…" oninput="fCol(this,4)"></th>
+    <th>PO #<br><input class="srch" placeholder="filter…" oninput="fCol(this,5)"></th>
+    <th>Amount<br><input class="srch" placeholder="filter…" oninput="fCol(this,6)"></th>
+    <th>Tax<br><input class="srch" placeholder="filter…" oninput="fCol(this,7)"></th>
+    <th>GL account<br><input class="srch" placeholder="filter…" oninput="fCol(this,8)"></th>
+    <th>Status<br><input class="srch" placeholder="filter…" oninput="fCol(this,9)"></th>
+    <th>AI<br><input class="srch" placeholder="all" oninput="fCol(this,10)"></th>
+    <th>Posted?<br><input class="srch" placeholder="all" oninput="fCol(this,11)"></th>
+  </tr></thead>
+  <tbody id="inv-body">`+
+  allInv.map(i=>`<tr class="cr inv-row" onclick="CI='${i.id}';CP='invoice-detail';R()">
+    <td style="font-weight:700;color:var(--navy)">${i.id}${i._uploaded?'<span class="badge bb" style="font-size:7px;margin-left:4px">Uploaded</span>':''}</td>
+    <td>${i.vendor}</td>
+    <td>${i.date.slice(5).replace('-','/')}</td>
+    <td>${i.rec.slice(5).replace('-','/')}</td>
+    <td style="font-size:10px">${i.due==='—'?'—':i.due.slice(5).replace('-','/')}</td>
+    <td style="font-size:10px;color:var(--tx2)">${i.po}</td>
+    <td style="color:${i.amt<0?'var(--red)':'var(--tx)'};font-weight:700">${f$(i.amt)}</td>
+    <td style="color:${i.tax>0?'var(--amber2)':'var(--tx3)'}">${i.tax>0?f$(i.tax):'—'}</td>
+    <td style="font-size:10px;color:var(--tx2)">${i.gl}</td>
+    <td>${pill(i.st)}</td>
+    <td style="font-weight:700;color:${aiC(i.ai)}">${i.ai}%</td>
+    <td>${i.posted?pill('posted','Posted ✓'):pill('unposted','Unposted')}</td>
+  </tr>`).join('')+`</tbody></table></div>`;
+}
+function fCol(inp,col){
+  var v=inp.value.toLowerCase();
+  document.querySelectorAll('.inv-row').forEach(row=>{
+    var c=[...row.querySelectorAll('td')][col];
+    if(c) row.style.display=c.textContent.toLowerCase().includes(v)?'':'none';
+  });
+}
+
+// TAB 2: EXCEPTIONS ───────────────────────────────────────
+function cTab2(cl,excInv){
+  if(!excInv.length)return`<div style="padding:40px;text-align:center;color:var(--teal2)">
+    <i class="ti ti-circle-check" style="font-size:40px;display:block;margin-bottom:12px" aria-hidden="true"></i>
+    <div style="font-size:14px;font-weight:800">No exceptions for ${cl.name}</div>
+    <div style="font-size:11px;color:var(--tx3);margin-top:4px">All invoices processed successfully ✓</div>
+  </div>`;
+  return `<div style="font-size:11px;color:var(--tx2);margin-bottom:11px;font-weight:500">${excInv.length} invoice${excInv.length>1?'s':''} need review. Click <strong>Open & review</strong> to see the full PDF and correction tools.</div>
+  <table class="tbl"><thead><tr><th>Invoice #</th><th>Vendor</th><th>Amount</th><th>PO #</th><th>AI</th><th>Flag</th><th>Action</th></tr></thead><tbody>`+
+  excInv.map(i=>`<tr class="cr" onclick="CI='${i.id}';CP='invoice-detail';R()">
+    <td style="font-weight:700;color:var(--navy)">${i.id}</td>
+    <td>${i.vendor}</td>
+    <td style="color:${i.amt<0?'var(--red)':'var(--tx)'};font-weight:700">${f$(i.amt)}</td>
+    <td style="font-size:10px;color:var(--tx2)">${i.po}</td>
+    <td style="font-weight:700;color:${aiC(i.ai)}">${i.ai}%</td>
+    <td style="max-width:200px;white-space:normal;font-size:10px">${i.flag}</td>
+    <td><button class="btn btn-p" style="font-size:9px;padding:3px 9px" onclick="event.stopPropagation();CI='${i.id}';CP='invoice-detail';R()"><i class="ti ti-file-search" aria-hidden="true"></i> Open & review</button></td>
+  </tr>`).join('')+`</tbody></table>`;
+}
+
+// TAB 3: CLIENT INFO ──────────────────────────────────────
+function cTab3(cl,cInv,posted){
+  var unposted=cInv.filter(i=>!i.posted).length;
+  return `<div class="g2">
+    <div class="card"><div class="ch"><span class="ct">Company details</span>
+      <button class="btn" style="font-size:10px" onclick="T('Edit mode enabled')"><i class="ti ti-edit" aria-hidden="true"></i> Edit</button>
+    </div><div class="cp">
+      ${[['Company',cl.name],['Industry',cl.industry],['Contact',cl.contact],['Email',cl.email],['Phone',cl.phone],['EIN / Tax ID',cl.ein],['Address',cl.addr],['Plan',cl.plan],['ERP software',cl.erp],['Approval threshold',f$(cl.approval)],['Intake email','invoices.'+cl.id+'@koreymalekcpa.com'],['Client since',cl.since]].map(([k,v])=>`<div class="frow"><span class="fn">${k}</span><span class="${k==='Intake email'||k==='Company'?'fvg':'fv'}" style="${k==='Intake email'?'font-family:var(--mono);font-size:9px':''}">${v}</span></div>`).join('')}
+    </div></div>
+    <div>
+      <div class="card" style="margin-bottom:12px"><div class="ch"><span class="ct">SLA performance — live</span></div><div class="cp">
+        ${[['Processing SLA (4hr)',100],['AI accuracy',Math.round(cl.ai)||94],['ERP delivery',100],['Portal uptime',100]].map(([l,v])=>`<div style="margin-bottom:9px"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px;font-weight:600"><span>${l}</span><span style="color:${v>=95?'var(--teal2)':'var(--amber2)'}">${v}%</span></div><div class="sla-bar"><div class="sla-fill ${v>=95?'sla-ok':'sla-w'}" style="width:${v}%"></div></div></div>`).join('')}
+      </div></div>
+      <div class="card"><div class="ch"><span class="ct">Posting status</span></div><div class="cp">
+        <div class="frow"><span class="fn">Posted to ${cl.erp}</span><span class="fvg">${posted.length} invoices ✓</span></div>
+        <div class="frow"><span class="fn">Not yet posted</span><span class="fv ${unposted>0?'warn':''}">${unposted} invoices${unposted>0?' ⚠':''}</span></div>
+        <div class="frow" style="border-bottom:none"><span class="fn">Last export</span><span class="fv">Today 09:17</span></div>
+      </div></div>
+    </div>
+  </div>`;
+}
+
+// TAB 4: ACCOUNT SETUP ────────────────────────────────────
+function cTab4(cl){
+  return `<div class="g2">
+    <div>
+      <div class="card" style="margin-bottom:12px"><div class="ch"><span class="ct">Accounting configuration</span></div><div class="cp">
+        <div class="inp-wrap"><label class="fl">ERP software</label>
+          <select><option ${cl.erp==='QuickBooks Online'?'selected':''}>QuickBooks Online</option><option ${cl.erp==='QuickBooks Desktop'?'selected':''}>QuickBooks Desktop</option><option ${cl.erp==='Xero'?'selected':''}>Xero</option><option ${cl.erp==='NetSuite'?'selected':''}>NetSuite</option><option ${cl.erp==='Sage Intacct'?'selected':''}>Sage Intacct</option></select>
+        </div>
+        <div class="inp-wrap"><label class="fl">Default payment terms</label>
+          <select><option>Net 30</option><option>Net 15</option><option>Net 60</option><option>Due on receipt</option></select>
+        </div>
+        <div class="inp-wrap"><label class="fl">Invoice approval threshold ($)</label>
+          <input class="inp" type="number" value="${cl.approval}">
+        </div>
+        <button class="btn btn-p" onclick="T('✓ Settings saved for ${cl.name}')"><i class="ti ti-device-floppy" aria-hidden="true"></i> Save settings</button>
+      </div></div>
+
+      <div class="card"><div class="ch"><span class="ct">Approval workflow</span><span class="badge bt">Active</span></div><div class="cp">
+        <div class="g2" style="margin-bottom:10px">
+          <div><label class="fl">Threshold</label><input class="inp" type="number" value="${cl.approval}"></div>
+          <div><label class="fl">Method</label><select><option>Email + SMS</option><option>Email only</option><option>Portal only</option></select></div>
+        </div>
+        <div class="g2" style="margin-bottom:10px">
+          <div><label class="fl">Primary approver</label><input class="inp" type="email" value="${cl.email}"></div>
+          <div><label class="fl">Backup approver</label><input class="inp" type="email" placeholder="backup@company.com"></div>
+        </div>
+        <div class="inp-wrap"><label class="fl">Expiry window: <span id="appr-exp-lbl-${cl.id}">24h</span></label>
+          <input type="range" min="4" max="72" value="24" style="width:100%;accent-color:var(--teal)" oninput="$('appr-exp-lbl-${cl.id}').textContent=this.value+'h'">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:12px">
+          <label style="display:flex;align-items:center;gap:7px;font-size:11px;cursor:pointer;padding:7px 10px;background:var(--bg);border-radius:8px;font-weight:500"><input type="checkbox" checked style="accent-color:var(--teal)"> Notify Korey Malek CPA if approval expires</label>
+          <label style="display:flex;align-items:center;gap:7px;font-size:11px;cursor:pointer;padding:7px 10px;background:var(--bg);border-radius:8px;font-weight:500"><input type="checkbox" checked style="accent-color:var(--teal)"> Require PO match for amounts over threshold</label>
+        </div>
+        <button class="btn btn-p" onclick="T('✓ Approval workflow saved for ${cl.name}')"><i class="ti ti-device-floppy" aria-hidden="true"></i> Save workflow</button>
+      </div></div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:12px"><div class="ch"><span class="ct">GL accounts</span>
+        <button class="btn btn-b" style="font-size:10px" onclick="OM('mo-coa')"><i class="ti ti-upload" aria-hidden="true"></i> Upload COA</button>
+      </div><div class="cp">
+        <div style="max-height:170px;overflow-y:auto;border:1px solid var(--bd);border-radius:8px">
+          ${glCodes.map(g=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 10px;border-bottom:1px solid var(--bg3);font-size:10px;font-weight:500">
+            <span>${g}</span>
+            <button class="btn" style="font-size:8px;padding:1px 6px" onclick="glCodes=glCodes.filter(x=>x!=='${g}');T('Removed: ${g}');R()"><i class="ti ti-x" aria-hidden="true"></i></button>
+          </div>`).join('')}
+        </div>
+        <div style="display:flex;gap:6px;margin-top:8px">
+          <input class="inp" type="text" id="new-gl" placeholder="e.g. 7100 · Equipment" style="flex:1">
+          <button class="btn btn-p" style="font-size:10px;padding:5px 10px" onclick="var v=$('new-gl').value.trim();if(v){glCodes.push(v);T('✓ Added: '+v);$('new-gl').value='';R();}"><i class="ti ti-plus" aria-hidden="true"></i> Add</button>
+        </div>
+      </div></div>
+      <div class="card"><div class="ch"><span class="ct">Cost centers</span></div><div class="cp">
+        <div style="max-height:130px;overflow-y:auto;border:1px solid var(--bd);border-radius:8px">
+          ${ccCodes.map(c=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 10px;border-bottom:1px solid var(--bg3);font-size:10px;font-weight:500">
+            <span>${c}</span>
+            <button class="btn" style="font-size:8px;padding:1px 6px" onclick="ccCodes=ccCodes.filter(x=>x!=='${c}');T('Removed');R()"><i class="ti ti-x" aria-hidden="true"></i></button>
+          </div>`).join('')}
+        </div>
+        <div style="display:flex;gap:6px;margin-top:8px">
+          <input class="inp" type="text" id="new-cc" placeholder="e.g. CC-006 · Miami Branch" style="flex:1">
+          <button class="btn btn-p" style="font-size:10px;padding:5px 10px" onclick="var v=$('new-cc').value.trim();if(v){ccCodes.push(v);T('✓ Added: '+v);$('new-cc').value='';R();}"><i class="ti ti-plus" aria-hidden="true"></i> Add</button>
+        </div>
+      </div></div>
+    </div>
+  </div>`;
+}
+
+// TAB 5: ACCESS & USERS ───────────────────────────────────
+function cTab5(cl){
+  var users=cl.users||[];
+  var firmAccess=teamMembers.filter(m=>m.clients.includes(CC));
+  return `<div class="g2">
+    <div class="card"><div class="ch"><span class="ct">Client users — ${cl.name}</span>
+      <button class="btn btn-p" style="font-size:10px" onclick="openInviteUser('${cl.id}','${cl.name}')"><i class="ti ti-user-plus" aria-hidden="true"></i> Invite user</button>
+    </div>
+    ${users.length?`<table class="tbl"><thead><tr><th>Name</th><th>Role</th><th>Email</th><th>Access</th><th>Last login</th><th>Edit</th></tr></thead><tbody>`+
+    users.map(u=>`<tr><td style="font-weight:700">${u.n}</td><td style="font-size:10px">${u.r}</td><td style="font-size:10px">${u.e}</td>
+      <td>${u.access==='Full'?pill('ok','Full'):u.access==='Approve + view'?`<span class="pill p-info">Approve</span>`:pill('p-neu','View')}</td>
+      <td style="font-size:10px;color:var(--tx2)">${u.last||'Never'}</td>
+      <td><button class="btn" style="font-size:9px;padding:2px 7px" onclick="T('Edit access for ${u.n}')"><i class="ti ti-edit" aria-hidden="true"></i></button></td>
+    </tr>`).join('')+`</tbody></table>`
+    :`<div style="padding:24px;text-align:center;color:var(--tx3)"><i class="ti ti-users" style="font-size:28px;display:block;margin-bottom:8px" aria-hidden="true"></i><div style="font-size:12px;font-weight:600">No client users yet</div><div style="font-size:10px;margin-top:4px">Click "Invite user" to give your client portal access</div></div>`}
+    </div>
+    <div class="card"><div class="ch"><span class="ct">Firm members with access</span></div>
+    <table class="tbl"><thead><tr><th>Member</th><th>Role</th><th>Access</th><th>Edit</th></tr></thead><tbody>`+
+    firmAccess.map(m=>`<tr><td style="font-weight:700">${m.name}</td><td style="font-size:10px">${m.role}</td>
+      <td>${pill('ok','Full access')}</td>
+      <td><button class="btn btn-b" style="font-size:9px;padding:2px 7px" onclick="openTeamEdit('${m.id}')"><i class="ti ti-edit" aria-hidden="true"></i> Edit</button></td>
+    </tr>`).join('')+`</tbody></table>
+    <div style="padding:10px 14px;font-size:10px;color:var(--tx2)">
+      To add a firm member: <span style="color:var(--teal2);cursor:pointer;font-weight:600" onclick="NAV(document.querySelector('[data-p=team]'))">My team →</span>
+    </div></div>
+  </div>`;
+}
+
+// ═══════ INVITE USER ══════════════════════════════════════
+function openInviteUser(clientId,clientName){
+  $('invite-sub').textContent='Give '+clientName+' access to their invoice portal';
+  $('iu-portal-url').textContent='invoices.'+clientId+'@koreymalekcpa.com';
+  $('iu-name').value='';$('iu-email').value='';$('iu-role').value='full';
+  $('mo-invite-user').dataset.cid=clientId;
+  updateIURoleDesc();
+  OM('mo-invite-user');
+}
+function updateIURoleDesc(){
+  var d={full:'Can view all invoices, approve exceptions, and download ERP files',approve:'Can approve or query invoices — cannot download ERP files',view:'Read-only access — can view invoice status only'};
+  var el=$('iu-role-desc');var sel=$('iu-role');
+  if(el&&sel)el.textContent=d[sel.value]||'';
+}
+function doInviteUser(){
+  var name=$('iu-name').value.trim();var email=$('iu-email').value.trim();
+  var role=$('iu-role').value;var clientId=$('mo-invite-user').dataset.cid;
+  if(!name){T('Please enter a name','warn');return;}
+  if(!email){T('Please enter an email','warn');return;}
+  var cl=clients.find(c=>c.id===clientId);
+  if(cl){
+    if(!cl.users)cl.users=[];
+    var accessLabel={full:'Full',approve:'Approve + view',view:'View only'}[role];
+    cl.users.push({n:name,r:'Client user',e:email,last:'Never',access:accessLabel});
+  }
+  CM();T('✓ Portal invite sent to '+email);
+  if(CP==='client'&&CC===clientId)R();
+}
+</script>
+<script>
+// ═══════ INVOICE DETAIL ═══════════════════════════════════
+function pgInvDetail(){
+  var allInv=[...invoices,...uploadedInvoices];
+  var inv=allInv.find(i=>i.id===CI);
+  if(!inv){CP='client';CCT=1;R();return '';}
+  var cl=clients.find(c=>c.id===inv.client);
+  var invNotes=notesDB[inv.id]||[];
+
+  return `<div class="bc">
+    <span onclick="CP='dashboard';R()">Dashboard</span><span class="bc-s">›</span>
+    <span onclick="CP='client';CCT=0;R()">${cl.name}</span><span class="bc-s">›</span>
+    <span onclick="CP='client';CCT=1;R()">Invoices</span><span class="bc-s">›</span>
+    <strong>${inv.id}</strong>
+  </div>`+
+  (inv.st==='review'?`<div style="background:rgba(245,166,35,.08);border:1.5px solid rgba(245,166,35,.3);border-radius:10px;padding:10px 13px;font-size:10px;color:#92400E;margin-bottom:12px;line-height:1.6;display:flex;gap:8px;align-items:flex-start">
+    <i class="ti ti-alert-triangle" style="font-size:16px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i>
+    <div><strong>Review needed:</strong> ${inv.flag}</div>
+  </div>`:'')+
+  `<div style="display:flex;align-items:center;gap:8px;margin-bottom:13px;flex-wrap:wrap">
+    <button class="btn" onclick="CP='client';CCT=1;R()"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back</button>
+    <span style="font-size:15px;font-weight:800;color:var(--navy)">${inv.id}</span>
+    ${pill(inv.st)}
+    <span style="font-size:11px;font-weight:700;color:${aiC(inv.ai)}">${inv.ai}% AI</span>
+    <div style="margin-left:auto;display:flex;gap:6px;flex-wrap:wrap">
+      <button class="btn" onclick="T('✓ ${inv.id}.pdf downloaded')"><i class="ti ti-download" aria-hidden="true"></i> PDF</button>
+      <button class="btn btn-b" onclick="$('email-subj').value='Invoice ${inv.id} — ${inv.vendor}';OM('mo-email')"><i class="ti ti-mail" aria-hidden="true"></i> Resend</button>
+      ${inv.posted
+        ?`<button class="btn" style="border-color:rgba(0,212,168,.3);color:var(--teal2)" onclick="inv.posted=false;T('✓ Marked as unposted');R()"><i class="ti ti-circle-check" aria-hidden="true"></i> Posted ✓</button>`
+        :`<button class="btn btn-p" onclick="inv.posted=true;cl=clients.find(c=>c.id==='${inv.client}');T('✓ Marked as posted to '+(cl?cl.erp:'ERP'));R()"><i class="ti ti-book-upload" aria-hidden="true"></i> Mark posted</button>`}
+      ${inv.st==='review'?`<button class="btn btn-p" onclick="showApproveModal('${inv.id}')"><i class="ti ti-check" aria-hidden="true"></i> Approve</button>`:''}
+    </div>
+  </div>`+
+  `<div class="inv-split">
+    <div class="pdf-pnl">
+      <div class="pdf-tb">
+        <i class="ti ti-file-type-pdf" style="color:rgba(255,255,255,.6);font-size:15px" aria-hidden="true"></i>
+        <span style="font-weight:600;font-size:11px;color:rgba(255,255,255,.8)">${inv.id}.pdf</span>
+        <span style="color:rgba(255,255,255,.3);font-size:10px">· ${inv.vendor}</span>
+        <div style="margin-left:auto;display:flex;gap:5px;align-items:center;flex-wrap:wrap">
+          <button class="zcbtn" onclick="setZ(Math.max(.5,pdfZ-.25))"><i class="ti ti-zoom-out" aria-hidden="true"></i></button>
+          <span id="zlbl" style="font-size:10px;min-width:36px;text-align:center;color:rgba(255,255,255,.6)">${Math.round(pdfZ*100)}%</span>
+          <button class="zcbtn" onclick="setZ(Math.min(2.5,pdfZ+.25))"><i class="ti ti-zoom-in" aria-hidden="true"></i></button>
+          <button class="zcbtn" onclick="rotDoc()" title="Rotate"><i class="ti ti-rotate-clockwise" aria-hidden="true"></i></button>
+          <button class="zcbtn ${hlMode?'active':''}" id="hl-btn" onclick="toggleHL()" title="Highlight"><i class="ti ti-highlight" aria-hidden="true"></i></button>
+          <button class="zcbtn" onclick="T('✓ PDF downloaded')"><i class="ti ti-download" aria-hidden="true"></i></button>
+        </div>
+      </div>
+      <div class="pdf-body" id="pdf-body">
+        <div class="pdf-doc" id="pdf-doc">${buildPDF(inv)}</div>
+      </div>
+    </div>
+    <div class="data-pnl">
+      <div class="dps">
+        <div class="dpl">Extracted fields</div>
+        <div class="frow"><span class="fn">Invoice #</span><span class="fvg">${inv.id}</span></div>
+        <div class="frow"><span class="fn">Vendor</span><span class="fvg">${inv.vendor}</span></div>
+        <div class="frow"><span class="fn">Tax ID</span><span class="fv">${inv.taxid}</span></div>
+        <div class="frow"><span class="fn">PO Number</span><span class="fv ${inv.po!=='—'?'fvg':''}">${inv.po}</span></div>
+        <div class="frow"><span class="fn">Invoice date</span><span class="fv">${inv.date}</span></div>
+        <div class="frow"><span class="fn">Due date</span><span class="fv">${inv.due}</span></div>
+        <div class="frow"><span class="fn">Terms</span><span class="fv">${inv.terms}</span></div>
+        <div class="frow"><span class="fn">Subtotal</span><span class="fv">${f$(inv.sub)}</span></div>
+        <div class="frow"><span class="fn">Tax</span><span class="fv ${inv.tax>0&&inv.flag.includes('Tax')?'warn':''}">${inv.tax>0?f$(inv.tax):'$0.00'}</span></div>
+        <div class="frow"><span class="fn">Total</span><span class="${inv.amt<0?'fv bad':'fvg'}" style="font-size:14px;font-weight:800">${f$(inv.amt)}</span></div>
+        <div class="frow" style="border-bottom:none"><span class="fn">Posted?</span><span class="fv ${inv.posted?'fvg':''}">${inv.posted?'✓ Posted to '+cl.erp:'Not posted yet'}</span></div>
+      </div>
+      <div class="dps">
+        <div class="dpl">GL coding</div>
+        <div style="margin-bottom:8px">
+          <div style="font-size:10px;color:var(--tx2);margin-bottom:4px;font-weight:600">GL account:</div>
+          ${glCodes.slice(0,7).map(g=>`<span class="chip-gl ${inv.gl===g?'on':''}" onclick="inv.gl='${g}';T('✓ GL: ${g}');R()">${g}</span>`).join('')}
+        </div>
+        <div style="margin-bottom:8px">
+          <div style="font-size:10px;color:var(--tx2);margin-bottom:4px;font-weight:600">Cost center:</div>
+          ${ccCodes.map(c=>`<span class="chip-gl ${inv.cc===c?'on':''}" onclick="inv.cc='${c}';T('✓ CC: ${c}');R()">${c}</span>`).join('')}
+        </div>
+        <div>
+          <div style="font-size:10px;color:var(--tx2);margin-bottom:4px;font-weight:600">Send coded invoice to:</div>
+          <select style="font-size:10px;padding:4px 8px" onchange="if(this.value)T('✓ Will be sent to: '+this.options[this.selectedIndex].text)">
+            <option value="">— select recipient —</option>
+            <option>AP Dept · ap@${CC}co.com</option>
+            <option>CFO approval</option><option>Owner sign-off</option>
+            <option>Korey Malek CPA (copy)</option>
+          </select>
+        </div>
+      </div>
+      <div class="dps">
+        <div class="dpl">Notes & comments</div>
+        <div id="notes-div">`+
+        (invNotes.length
+          ?invNotes.map(n=>`<div class="note-item"><div class="note-meta">${n.who} · ${n.t}</div><div>${n.text}</div></div>`).join('')
+          :`<div style="font-size:10px;color:var(--tx3);padding:4px 0">No notes yet</div>`)+
+        `</div>
+        <div style="display:flex;gap:6px;margin-top:8px">
+          <input class="inp" type="text" id="note-inp" placeholder="Add a note…" style="flex:1;font-size:10px">
+          <button class="btn btn-p" style="font-size:10px;padding:5px 10px" onclick="addNote('${inv.id}')"><i class="ti ti-send" aria-hidden="true"></i></button>
+        </div>
+      </div>
+      <div class="dps">
+        <div class="dpl">Audit trail</div>
+        <div class="tl-row"><div class="tld td-n"></div><span class="tlt">${inv.rec} 09:14</span><span>Received via email</span></div>
+        <div class="tl-row"><div class="tld td-n"></div><span class="tlt">${inv.rec} 09:16</span><span>AI extraction — ${inv.ai}% confidence</span></div>
+        ${inv.st==='processed'
+          ?`<div class="tl-row"><div class="tld td-ok"></div><span class="tlt">${inv.rec} 09:16</span><span>Auto-approved ✓</span></div>
+            <div class="tl-row"><div class="tld td-ok"></div><span class="tlt">${inv.rec} 09:17</span><span>${cl.erp} file generated</span></div>`
+          :`<div class="tl-row"><div class="tld td-w"></div><span class="tlt">${inv.rec} 09:16</span><span style="color:var(--amber2);font-weight:600">Flagged for review</span></div>`}
+        ${inv.posted?`<div class="tl-row"><div class="tld td-ok"></div><span class="tlt">Today</span><span>Posted to ${cl.erp}</span></div>`:''}
+        ${inv._uploaded?`<div class="tl-row"><div class="tld" style="background:var(--blue)"></div><span class="tlt">Today</span><span style="color:var(--blue)">Uploaded via portal · ${inv._filename||'file'}</span></div>`:''}
+      </div>
+      ${inv.st==='processed'?`<div class="dps"><div class="dpl">ERP output</div>
+        <div class="frow" style="border-bottom:none">
+          <span class="fn" style="display:flex;align-items:center;gap:5px"><i class="ti ti-circle-check" style="color:var(--teal)" aria-hidden="true"></i>${cl.erp} file ready</span>
+          <button class="btn btn-p" style="font-size:9px;padding:3px 9px" onclick="T('✓ ERP entry for ${inv.id} downloaded')"><i class="ti ti-download" aria-hidden="true"></i> Download</button>
+        </div>
+      </div>`:''}
+    </div>
+  </div>`;
+}
+
+function setZ(z){pdfZ=z;var d=$('pdf-doc');if(d)d.style.transform='scale('+z+') rotate('+pdfRot+'deg)';var l=$('zlbl');if(l)l.textContent=Math.round(z*100)+'%';}
+function rotDoc(){pdfRot=(pdfRot+90)%360;var d=$('pdf-doc');if(d)d.style.transform='scale('+pdfZ+') rotate('+pdfRot+'deg)';}
+function toggleHL(){hlMode=!hlMode;var b=$('hl-btn');if(b)b.classList.toggle('active',hlMode);T(hlMode?'Highlight mode ON — click text to highlight':'Highlight mode OFF');}
+function addNote(id){var inp=$('note-inp');if(!inp||!inp.value.trim())return;if(!notesDB[id])notesDB[id]=[];notesDB[id].push({who:'Korey Malek, CPA',t:new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}),text:inp.value.trim()});inp.value='';R();}
+
+function showApproveModal(invId){
+  var allInv=[...invoices,...uploadedInvoices];
+  var inv=allInv.find(i=>i.id===invId);if(!inv)return;
+  $('mo-sub').textContent=invId+' · '+inv.vendor+' · '+f$(inv.amt);
+  $('mo-flag').innerHTML='<i class="ti ti-alert-triangle" aria-hidden="true"></i> <strong>Flag:</strong> '+inv.flag;
+  $('ma-type').value=inv.amt<0?'CREDIT_NOTE':'INVOICE';
+  $('ma-amt').value=f$(inv.amt);$('ma-vendor').value=inv.vendor;$('ma-note').value='';
+  $('ma-btn').onclick=function(){
+    inv.st='processed';inv.posted=false;
+    var cl=clients.find(c=>c.id===inv.client);
+    if(cl){cl.exc=Math.max(0,cl.exc-1);if(!cl.proc)cl.proc=0;cl.proc++;}
+    CM();T('✓ '+invId+' approved — ERP file queued');
+    updateExcBadge();R();
+  };
+  OM('mo-approve');
+}
+
+// ═══════ REAL PDF MOCKS (by industry) ═════════════════════
+function buildPDF(inv){
+  var id=inv.id;
+  // Route to best-fit real-world invoice template
+  if(id.startsWith('SPK')||inv.client==='sparkle') return pdfCleaning(inv);
+  if(id.startsWith('GL')||inv.client==='greenlawn') return pdfLandscape(inv);
+  if(id.startsWith('SBG')||inv.client==='summit') return pdfConstruction(inv);
+  if(id==='WO-620399') return pdfAutoGlass(inv);
+  if(id==='CM838572P') return pdfCreditNote(inv);
+  if(id.startsWith('MT')||inv.client==='metro') return pdfWholesale(inv);
+  if(inv._uploaded) return pdfUploaded(inv);
+  return pdfGeneric(inv);
+}
+
+function pdfHead(name,addr,taxid){
+  return`<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+    <div>
+      <div style="font-size:16px;font-weight:700;color:#111;letter-spacing:-.3px">${name}</div>
+      <div style="font-size:8px;color:#555;margin-top:3px;line-height:1.6">${addr}</div>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:18px;font-weight:700;color:#111">INVOICE</div>
+      ${taxid?`<div style="font-size:8px;color:#777;margin-top:2px">Tax ID: ${taxid}</div>`:''}
+    </div>
+  </div><hr style="border:none;border-top:2px solid #111;margin:10px 0">`;
+}
+
+function pdfMeta(inv){
+  return`<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;font-size:9px">
+    <div><div style="color:#888;text-transform:uppercase;letter-spacing:.05em;font-size:7px">Invoice #</div><strong style="font-size:10px">${inv.id}</strong></div>
+    <div><div style="color:#888;text-transform:uppercase;letter-spacing:.05em;font-size:7px">Invoice Date</div><strong>${inv.date}</strong></div>
+    ${inv.po!=='—'?`<div><div style="color:#888;text-transform:uppercase;letter-spacing:.05em;font-size:7px">PO Number</div><strong style="color:#005a9c">${inv.po}</strong></div>`:''}
+    <div><div style="color:#888;text-transform:uppercase;letter-spacing:.05em;font-size:7px">Due Date</div><strong>${inv.due}</strong></div>
+    <div><div style="color:#888;text-transform:uppercase;letter-spacing:.05em;font-size:7px">Terms</div><strong>${inv.terms}</strong></div>
+  </div>`;
+}
+
+function pdfLines(lines){
+  return`<div style="margin-bottom:10px">
+    <div style="display:grid;grid-template-columns:3fr 1fr 1fr 1fr;gap:3px;font-size:7px;color:#888;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid #ccc;padding-bottom:4px;margin-bottom:5px">
+      <span>Description</span><span style="text-align:right">Qty</span><span style="text-align:right">Unit</span><span style="text-align:right">Total</span>
+    </div>`+
+    lines.map(l=>`<div style="display:grid;grid-template-columns:3fr 1fr 1fr 1fr;gap:3px;font-size:9px;padding:3px 0;border-bottom:1px solid #f0f0f0">
+      <span>${l[0]}</span><span style="text-align:right">${l[1]}</span><span style="text-align:right">${l[2]}</span><span style="text-align:right">${l[3]}</span>
+    </div>`).join('')+`</div>`;
+}
+
+function pdfTotals(sub,tax,total,note=''){
+  var isNeg=total<0;
+  return`<div style="margin-left:auto;max-width:200px">
+    <div style="display:flex;justify-content:space-between;font-size:9px;padding:2px 0"><span>Subtotal</span><span>${f$(sub)}</span></div>
+    ${tax>0?`<div style="display:flex;justify-content:space-between;font-size:9px;padding:2px 0;color:#666"><span>Tax</span><span>${f$(tax)}</span></div>`:''}
+    <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;border-top:2px solid #111;padding-top:5px;margin-top:4px;${isNeg?'color:#cc0000':''}"><span>${isNeg?'CREDIT TOTAL':'TOTAL DUE'}</span><span>${f$(total)}</span></div>
+  </div>${note?`<div style="margin-top:8px;font-size:8px;color:#888;line-height:1.5">${note}</div>`:''}`;
+}
+
+function pdfCleaning(inv){
+  var lines=inv.id==='SPK-0441'?[['Industrial Floor Cleaner 5gal x8','8','$62.50','$500.00'],['Green Guard Disinfectant 1gal x12','12','$18.42','$221.01'],['Shipping & Handling','1','$100.00','$100.00']]
+    :inv.id==='SPK-0442'?[['Staff Uniforms — Polo Shirts x15','15','$38.72','$580.80'],['Work Pants x10','10','$56.00','$560.00'],['Logo Embroidery','25','—','$—']]
+    :inv.id==='SPK-0443'?[['Vacuum Belt Kit 24-pack','2','$38.40','$76.80'],['Microfiber Mop Head x6','6','$42.00','$252.00'],['Parts & Miscellaneous','1','$118.32','$118.32']]
+    :[['Janitorial Supply Package A','1','$890.00','$890.00'],['Delivery Charge','1','$233.87','$233.87']];
+  return pdfHead(inv.vendor,'Professional Supply Division · see website for full address',inv.taxid)+
+    pdfMeta(inv)+`<div style="font-size:8px;color:#555;margin-bottom:10px">Bill to: ${clients.find(c=>c.id===inv.client)?.name||'Client'}</div>`+
+    pdfLines(lines)+pdfTotals(inv.sub,inv.tax,inv.amt,'Thank you for your business. Net 30 · Late fee 1.5%/month');
+}
+
+function pdfLandscape(inv){
+  var lines=inv.id==='GL-3301'?[['John Deere 1025R Tractor Lease — May 2026','1','$2,200.00','$2,200.00'],['Zero-Turn Mower Z370R Lease — May 2026','1','$1,400.00','$1,400.00'],['Trailer Lease — 14ft','1','$600.00','$600.00']]
+    :inv.id==='GL-3302'?[['Bermuda Grass Sod 1,200 sq ft','1,200','$1.80','$2,160.00'],['Landscape Rock 3/4" Brown 10 bags','10','$42.00','$420.00'],['Mulch Double Shred 20 bags','20','$18.64','$372.80'],['Fertilizer Pro-Grade 50lb x8','8','$41.50','$332.00'],['Irrigation Drip Line 100ft x12','12','$84.00','$1,008.00']]
+    :inv.id==='GL-3304'?[['Diesel Fuel 480 gallons','480','$3.82','$1,833.60'],['Premium Unleaded 280 gallons','280','$3.77','$1,055.80'],['Fuel Surcharge','1','$0.60','$0.60']]
+    :[['Landscape Materials & Supplies','1','$'+inv.sub.toLocaleString(),'$'+inv.sub.toLocaleString()]];
+  return pdfHead(inv.vendor,'Landscape & Outdoor Supply Division',inv.taxid||'TBD')+
+    pdfMeta(inv)+`<div style="font-size:8px;color:#555;margin-bottom:10px">Bill to: ${clients.find(c=>c.id===inv.client)?.name||'Client'} · Austin TX Service Area</div>`+
+    pdfLines(lines)+pdfTotals(inv.sub,inv.tax,inv.amt);
+}
+
+function pdfConstruction(inv){
+  var lines=inv.id==='SBG-7701'?[['2x4x8 Framing Lumber x2,400','2,400','$4.80','$11,520.00'],['3/4" Plywood 4x8 x180','180','$48.00','$8,640.00'],['Rebar #4 x800 sticks','800','$18.60','$14,880.00'],['Concrete Block 8x8x16 x400','400','$1.89','$756.00'],['Misc Hardware & Fasteners','—','—','$7,004.00']]
+    :inv.id==='SBG-7705'?[['ProClassic Interior Paint 5gal x8','8','$185.00','$1,480.00'],['Exterior Duration Paint 5gal x4','4','$220.00','$880.00'],['Primer 5gal x4','4','$120.00','$480.00'],['Brushes, Rollers, Supplies','1','$176.00','$176.00']]
+    :inv.id==='SBG-7707'?[['1/2" Grade 8 Hex Bolts Box 100ct x80','80','$48.00','$3,840.00'],['3/8" A325 Structural Bolts x2,000','2,000','$3.80','$7,600.00'],['Anchor Bolts Assortment x500','500','$6.20','$3,100.00'],['Structural Screws & Misc','1','$27,460.00','$27,460.00']]
+    :[['Construction Materials & Supplies','1','$'+inv.sub.toLocaleString(),'$'+inv.sub.toLocaleString()]];
+  return pdfHead(inv.vendor,'Building Materials Division · Pro Account',inv.taxid)+
+    `<div style="background:#1a3a5c;color:#fff;padding:6px 10px;border-radius:4px;font-size:8px;margin-bottom:10px;display:flex;justify-content:space-between">
+      <span>PRO CONTRACTOR ACCOUNT</span><span>Summit Building Group</span><span>Account #SBG-4420</span>
+    </div>`+
+    pdfMeta(inv)+pdfLines(lines)+pdfTotals(inv.sub,inv.tax,inv.amt,'Payment due net 30. Delivery to jobsite: Atlanta GA 30309. Driver signature required.');
+}
+
+function pdfAutoGlass(inv){
+  return pdfHead('PRIME GLASS','4471 Santa Ana St Suite F-G · Ontario CA 91761 · (909) 390-9011','27-1240448')+
+    pdfMeta(inv)+`<div style="font-size:8px;color:#555;margin-bottom:8px">Vehicle: 2022 Toyota Avalon 4Dr · Unit P208 · RO# 1514006 · Bill to: Crown Toyota</div>`+
+    pdfLines([['Windshield — Labor only','1','$165.00','$165.00'],['Glue Kit','1','$35.00','$35.00'],['Fuel Surcharge','1','$7.00','$7.00']])+
+    pdfTotals(200,0,207,'NET 30 · Install date: 05/13/2026 · Customer Copy');
+}
+
+function pdfCreditNote(inv){
+  return`<div style="line-height:1.65">
+    ${pdfHead('STINGRAY CHEVROLET','2002 N. Frontage Road · Plant City FL 33563 · (813) 359-5000','59-1234567')}
+    <div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:4px;padding:6px 10px;font-size:9px;color:#991b1b;margin-bottom:10px;font-weight:600;text-align:center">CREDIT MEMO — CUSTOMER COPY</div>
+    ${pdfMeta(inv)}
+    <div style="font-size:8px;color:#555;margin-bottom:8px">Bill to: Ferman on Florida Body Shop · 11025 N Florida Ave · Tampa FL 33612 · Acct #3707</div>
+    ${pdfLines([['84399430 — 7831 FASCIA (XFAS) · Return','1','$920.75','<span style="color:#dc2626">-$599.29</span>'],['Core Deposit CC-Reverse / SOR','1','—','<span style="color:#dc2626">-$75.00</span>']])}
+    <div style="margin-left:auto;max-width:200px">
+      <div style="display:flex;justify-content:space-between;font-size:9px;padding:2px 0;color:#dc2626"><span>Parts Credit</span><span>-$674.29</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:9px;padding:2px 0"><span>Tax</span><span>$0.00</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;border-top:2px solid #dc2626;padding-top:4px;margin-top:4px;color:#dc2626"><span>CREDIT TOTAL</span><span>-$674.29</span></div>
+    </div>
+    <div style="margin-top:10px;font-size:7px;color:#888">NO GOODS ACCEPTED WITHOUT THIS INVOICE WITHIN 10 DAYS · 10% HANDLING CHARGE ON RETURNS</div>
+  </div>`;
+}
+
+function pdfWholesale(inv){
+  var lines=inv.id==='MT-2201'?[['Industrial Parts Package #551','1','$6,200.00','$6,200.00'],['Expedite Fee','1','$800.00','$800.00'],['Shipping','1','$400.00','$400.00']]
+    :inv.id==='MT-2202'?[['Office Supply Bundle','1','$682.00','$682.00'],['Cleaning Supplies','1','$90.80','$90.80'],['Tax','1','$67.20','$67.20']]
+    :[['Freight Charges — LTL Shipment','1','$9,800.00','$9,800.00'],['Fuel Surcharge 8.7%','1','$752.60','$752.60'],['Residential Delivery','1','$107.40','$107.40']];
+  return pdfHead(inv.vendor,'Wholesale Distribution Division',inv.taxid)+
+    pdfMeta(inv)+`<div style="font-size:8px;color:#555;margin-bottom:10px">Ship to: Metro Supplies Inc · 320 Commerce Dr · Orlando FL 32801</div>`+
+    pdfLines(lines)+pdfTotals(inv.sub,inv.tax,inv.amt);
+}
+
+function pdfUploaded(inv){
+  // Dynamically generated for uploaded files
+  return pdfHead(inv.vendor||'Vendor Name','Address on file · Contact AP department',inv.taxid||'TBD')+
+    `<div style="background:#f0fdf4;border:1px solid #86efac;border-radius:4px;padding:6px 10px;font-size:9px;color:#166534;margin-bottom:10px;display:flex;gap:6px">
+      <span>✓</span><span>Extracted from uploaded file: <strong>${inv._filename||'uploaded-invoice.pdf'}</strong></span>
+    </div>`+
+    pdfMeta(inv)+
+    pdfLines([['Services / Goods Delivered',1,f$(inv.sub),f$(inv.sub)],...(inv.tax>0?[['Tax','—','—',f$(inv.tax)]]:[])])+
+    pdfTotals(inv.sub,inv.tax,inv.amt,'Verify all extracted fields against the original document before approving.');
+}
+
+function pdfGeneric(inv){
+  return pdfHead(inv.vendor,'See vendor records for address information',inv.taxid)+
+    pdfMeta(inv)+pdfLines([['Goods and services rendered',1,f$(inv.sub),f$(inv.sub)],...(inv.tax>0?[['Tax','—','—',f$(inv.tax)]]:[])])+
+    pdfTotals(inv.sub,inv.tax,inv.amt);
+}
+
+// ═══════ BELL ═════════════════════════════════════════════
+var bellOpen=false;
+function openBell(){
+  if(bellOpen){closeBell();return;}
+  bellOpen=true;
+  var panel=$('bell-panel');
+  var items=$('bell-items');
+  items.innerHTML=bellNotifs.map(n=>`<div onclick="bellRead['${n.id}']=true;(${n.go.toString()})()" style="padding:11px 15px;border-bottom:1px solid var(--bg3);cursor:pointer;display:flex;gap:11px;align-items:flex-start;background:${bellRead[n.id]?'var(--bg2)':'var(--bg)'};transition:background .1s" onmouseenter="this.style.background='var(--bg3)'" onmouseleave="this.style.background='${bellRead[n.id]?'var(--bg2)':'var(--bg)'}'">
+    <div style="width:34px;height:34px;border-radius:9px;background:${n.color}18;border:1.5px solid ${n.color}33;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+      <i class="ti ${n.icon}" style="color:${n.color};font-size:16px" aria-hidden="true"></i>
+    </div>
+    <div style="flex:1;min-width:0">
+      <div style="font-size:11px;font-weight:700;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${bellRead[n.id]?'':' <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--blue);margin-right:4px;vertical-align:middle"></span>'}${n.title}</div>
+      <div style="font-size:10px;color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${n.body}</div>
+      <div style="font-size:9px;color:var(--tx3);margin-top:2px;font-weight:600">${n.time}</div>
+    </div>
+  </div>`).join('');
+  panel.style.display='block';
+  setTimeout(()=>document.addEventListener('click',outsideBell,{once:true}),100);
+}
+function outsideBell(e){
+  var p=$('bell-panel'),b=$('bell-btn');
+  if(p&&!p.contains(e.target)&&b&&!b.contains(e.target))closeBell();
+}
+function closeBell(){bellOpen=false;$('bell-panel').style.display='none';}
+function markAllRead(){
+  bellNotifs.forEach(n=>bellRead[n.id]=true);
+  var d=$('bell-dot');if(d)d.style.display='none';
+  if(bellOpen){closeBell();openBell();}
+}
+
+// ═══════ INIT ═════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded',function(){
+  G('s-login');
+  // Drag-drop enhancement
+  document.addEventListener('dragover',function(e){
+    var dz=e.target.closest('.drop-zone');
+    if(dz){e.preventDefault();dz.classList.add('drag-over');}
+  });
+  document.addEventListener('dragleave',function(e){
+    var dz=e.target.closest('.drop-zone');
+    if(dz&&!dz.contains(e.relatedTarget))dz.classList.remove('drag-over');
+  });
+  document.addEventListener('drop',function(e){
+    var dz=e.target.closest('.drop-zone');
+    if(dz){
+      e.preventDefault();dz.classList.remove('drag-over');
+      if(e.dataTransfer.files.length)handleFiles(e.dataTransfer.files);
+    }
+  });
+});
+</script>
+</body>
+</html>
